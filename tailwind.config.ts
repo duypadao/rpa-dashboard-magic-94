@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,23 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning))',
+					foreground: 'hsl(var(--warning-foreground))'
+				},
+				error: {
+					DEFAULT: 'hsl(var(--error))',
+					foreground: 'hsl(var(--error-foreground))'
+				},
+				info: {
+					DEFAULT: 'hsl(var(--info))',
+					foreground: 'hsl(var(--info-foreground))'
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +101,58 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-subtle': {
+					'0%, 100%': { opacity: 1 },
+					'50%': { opacity: 0.7 },
+				},
+				'fade-in': {
+					'0%': { opacity: 0 },
+					'100%': { opacity: 1 },
+				},
+				'fade-out': {
+					'0%': { opacity: 1 },
+					'100%': { opacity: 0 },
+				},
+				'slide-up': {
+					'0%': { transform: 'translateY(20px)', opacity: 0 },
+					'100%': { transform: 'translateY(0)', opacity: 1 },
+				},
+				'slide-down': {
+					'0%': { transform: 'translateY(-20px)', opacity: 0 },
+					'100%': { transform: 'translateY(0)', opacity: 1 },
+				},
+				'slide-in-right': {
+					'0%': { transform: 'translateX(20px)', opacity: 0 },
+					'100%': { transform: 'translateX(0)', opacity: 1 },
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: 0 },
+					'100%': { transform: 'scale(1)', opacity: 1 },
+				},
+				'blur-in': {
+					'0%': { filter: 'blur(5px)', opacity: 0 },
+					'100%': { filter: 'blur(0)', opacity: 1 },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-subtle': 'pulse-subtle 2s infinite ease-in-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'fade-out': 'fade-out 0.3s ease-in',
+				'slide-up': 'slide-up 0.4s ease-out',
+				'slide-down': 'slide-down 0.4s ease-out',
+				'slide-in-right': 'slide-in-right 0.4s ease-out',
+				'scale-in': 'scale-in 0.3s ease-out',
+				'blur-in': 'blur-in 0.4s ease-out',
+			},
+			backdropFilter: {
+				'none': 'none',
+				'blur': 'blur(8px)',
+			},
+			transitionDuration: {
+				'2000': '2000ms',
 			}
 		}
 	},
