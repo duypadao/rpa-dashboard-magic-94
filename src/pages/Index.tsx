@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import StatusCard from "@/components/StatusCard";
 import AiInsights from "@/components/AiInsights";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
   Select, 
@@ -14,7 +13,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Robot } from "@/data/robots";
-import { Filter, RefreshCw, Search } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import { apiService } from "@/services/api";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -29,7 +28,6 @@ const Index = () => {
     data: robots = [], 
     isLoading: robotsLoading,
     isError: robotsError,
-    refetch: refetchRobots
   } = useQuery({
     queryKey: ['robots'],
     queryFn: apiService.getRobots,
@@ -44,21 +42,21 @@ const Index = () => {
     queryFn: apiService.getInsights,
   });
 
-  // Handle refresh button click
-  const handleRefresh = () => {
-    refetchRobots();
-    toast({
-      title: "Refreshing data",
-      description: "The dashboard is being updated with the latest data.",
-    });
-  };
-
   const filteredRobots = robots.filter((robot) => {
     const matchesSearch = robot.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || robot.status === statusFilter;
     const matchesResult = resultFilter === "all" || robot.lastResult === resultFilter;
     return matchesSearch && matchesStatus && matchesResult;
   });
+
+  // Handle stat card clicks for filtering
+  const handleStatCardClick = (status: string) => {
+    setStatusFilter(status);
+    toast({
+      title: `Filtered by ${status}`,
+      description: `Showing only robots with '${status}' status`,
+    });
+  };
 
   // Show error if robots data fetching failed
   useEffect(() => {
@@ -73,48 +71,51 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">RPA Dashboard</h1>
-          <p className="text-muted-foreground">
-            Monitor and manage all RPA robots from a central location
-          </p>
-        </div>
-        <Button className="flex items-center" onClick={handleRefresh}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${robotsLoading ? 'animate-spin' : ''}`} />
-          {robotsLoading ? "Refreshing..." : "Refresh"}
-        </Button>
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold tracking-tight">RPA Dashboard</h1>
+        <p className="text-muted-foreground">
+          Monitor and manage all RPA robots from a central location
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="glass rounded-lg p-4 flex items-center justify-between">
+        <div 
+          className="glass rounded-lg p-4 flex items-center justify-between cursor-pointer transition-all hover:shadow-md"
+          onClick={() => handleStatCardClick("all")}
+        >
           <div>
             <div className="text-sm text-muted-foreground">Total Robots</div>
             <div className="text-2xl font-semibold">{robots.length}</div>
           </div>
-          <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
+          <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center">
             <span className="text-primary text-lg">⚙️</span>
           </div>
         </div>
-        <div className="glass rounded-lg p-4 flex items-center justify-between">
+        <div 
+          className="glass rounded-lg p-4 flex items-center justify-between cursor-pointer transition-all hover:shadow-md"
+          onClick={() => handleStatCardClick("running")}
+        >
           <div>
             <div className="text-sm text-muted-foreground">Running</div>
             <div className="text-2xl font-semibold">
               {robots.filter((r) => r.status === "running").length}
             </div>
           </div>
-          <div className="h-8 w-8 bg-success/10 rounded-full flex items-center justify-center">
+          <div className="h-10 w-10 bg-success/10 rounded-full flex items-center justify-center">
             <span className="text-success text-lg">▶️</span>
           </div>
         </div>
-        <div className="glass rounded-lg p-4 flex items-center justify-between">
+        <div 
+          className="glass rounded-lg p-4 flex items-center justify-between cursor-pointer transition-all hover:shadow-md"
+          onClick={() => handleStatCardClick("error")}
+        >
           <div>
             <div className="text-sm text-muted-foreground">Issues</div>
             <div className="text-2xl font-semibold">
               {robots.filter((r) => r.status === "error").length}
             </div>
           </div>
-          <div className="h-8 w-8 bg-error/10 rounded-full flex items-center justify-center">
+          <div className="h-10 w-10 bg-error/10 rounded-full flex items-center justify-center">
             <span className="text-error text-lg">⚠️</span>
           </div>
         </div>
@@ -171,7 +172,6 @@ const Index = () => {
                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-3"></div>
                     <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-3"></div>
                     <div className="flex justify-between">
-                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
                       <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
                     </div>
                   </div>

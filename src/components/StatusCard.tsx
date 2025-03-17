@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, Play, Settings, XCircle } from "lucide-react";
+import { Clock, XCircle } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import { Robot } from "@/data/robots";
 import { cn } from "@/lib/utils";
@@ -63,15 +63,8 @@ const StatusCard = ({ robot, className, style }: StatusCardProps) => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0 gap-2">
-        <Button variant="outline" size="sm" className="flex-1">
-          <Play className="h-3 w-3 mr-1" />
-          Run
-        </Button>
-        <Button variant="ghost" size="sm">
-          <Settings className="h-3 w-3" />
-        </Button>
-        <Button variant="ghost" size="sm" asChild>
+      <CardFooter className="p-4 pt-0">
+        <Button variant="ghost" size="sm" className="w-full" asChild>
           <Link to={`/robot/${robot.id}`}>Details</Link>
         </Button>
       </CardFooter>

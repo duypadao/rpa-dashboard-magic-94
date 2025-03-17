@@ -5,11 +5,12 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
-import ProcessFlow from "@/components/ProcessFlow";
+import HorizontalProcessFlow from "@/components/HorizontalProcessFlow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Clock, Play, StopCircle } from "lucide-react";
+import { ArrowLeft, Clock, Info } from "lucide-react";
 import { apiService } from "@/services/api";
 import { useToast } from "@/components/ui/use-toast";
+import AiInsights from "@/components/AiInsights";
 
 const RobotDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,6 +46,23 @@ const RobotDetail = () => {
     queryKey: ['history'],
     queryFn: apiService.getHistoryData,
   });
+
+  // Fetch insights with React Query
+  const { 
+    data: insights = [], 
+    isLoading: insightsLoading 
+  } = useQuery({
+    queryKey: ['insights'],
+    queryFn: apiService.getInsights,
+  });
+
+  // Handle inform button click
+  const handleInform = () => {
+    toast({
+      title: "Notification sent",
+      description: `A notification about ${robot?.name} has been sent to the team.`,
+    });
+  };
 
   // Show errors if data fetching failed
   if (robotError) {
@@ -118,19 +136,10 @@ const RobotDetail = () => {
             <h1 className="text-2xl font-semibold tracking-tight">{robot.name}</h1>
             <p className="text-muted-foreground">{robot.description}</p>
           </div>
-          <div className="flex gap-2">
-            {robot.status === "running" ? (
-              <Button variant="outline" className="gap-2">
-                <StopCircle className="h-4 w-4" />
-                Stop
-              </Button>
-            ) : (
-              <Button className="gap-2">
-                <Play className="h-4 w-4" />
-                Run Now
-              </Button>
-            )}
-          </div>
+          <Button variant="outline" className="gap-2" onClick={handleInform}>
+            <Info className="h-4 w-4" />
+            Inform
+          </Button>
         </div>
       </div>
 
@@ -166,6 +175,7 @@ const RobotDetail = () => {
         <TabsList className="mb-4">
           <TabsTrigger value="process">Process Status</TabsTrigger>
           <TabsTrigger value="history">Run History</TabsTrigger>
+          <TabsTrigger value="insights">AI Insights</TabsTrigger>
         </TabsList>
         <TabsContent value="process" className="animate-fade-in">
           <Card>
@@ -175,15 +185,10 @@ const RobotDetail = () => {
             <CardContent>
               {processLoading ? (
                 <div className="space-y-4 animate-pulse">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex">
-                      <div className="h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 mr-3"></div>
-                      <div className="flex-1 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                    </div>
-                  ))}
+                  <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
                 </div>
               ) : (
-                <ProcessFlow nodes={processNodes} />
+                <HorizontalProcessFlow nodes={processNodes} />
               )}
             </CardContent>
           </Card>
@@ -247,6 +252,9 @@ const RobotDetail = () => {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+        <TabsContent value="insights" className="animate-fade-in">
+          <AiInsights insights={insights} isLoading={insightsLoading} />
         </TabsContent>
       </Tabs>
     </Layout>
