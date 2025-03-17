@@ -51,7 +51,7 @@ const Sidebar = () => {
                 const isActive = location.pathname === item.path;
                 return (
                   <SidebarMenuItem key={item.path}>
-                    <SidebarMenuButton asChild active={isActive}>
+                    <SidebarMenuButton asChild isActive={isActive}>
                       <Link to={item.path} className="flex items-center">
                         <item.icon className="mr-2 h-4 w-4" />
                         <span>{item.title}</span>

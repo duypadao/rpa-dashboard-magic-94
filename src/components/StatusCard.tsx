@@ -6,13 +6,15 @@ import { Clock, Play, Settings, XCircle } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import { Robot } from "@/data/robots";
 import { cn } from "@/lib/utils";
+import { CSSProperties } from "react";
 
 interface StatusCardProps {
   robot: Robot;
   className?: string;
+  style?: CSSProperties;
 }
 
-const StatusCard = ({ robot, className }: StatusCardProps) => {
+const StatusCard = ({ robot, className, style }: StatusCardProps) => {
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
@@ -27,7 +29,10 @@ const StatusCard = ({ robot, className }: StatusCardProps) => {
   };
 
   return (
-    <Card className={cn("overflow-hidden transition-all duration-300 hover:shadow-md", className)}>
+    <Card 
+      className={cn("overflow-hidden transition-all duration-300 hover:shadow-md", className)}
+      style={style}
+    >
       <CardHeader className="p-4 pb-0">
         <div className="flex justify-between items-start">
           <CardTitle className="text-base font-medium">{robot.name}</CardTitle>

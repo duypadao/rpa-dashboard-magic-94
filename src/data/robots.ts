@@ -1,4 +1,7 @@
 
+import { Insight } from "@/components/AiInsights";
+import { ProcessNode } from "@/components/ProcessFlow";
+
 export interface Robot {
   id: string;
   name: string;
@@ -84,8 +87,8 @@ export const robots: Robot[] = [
   },
 ];
 
-export const getProcessNodes = (robotId: string) => {
-  const nodes = [
+export const getProcessNodes = (robotId: string): ProcessNode[] => {
+  const nodes: ProcessNode[] = [
     {
       id: "node1",
       name: "Initialize Process",
@@ -259,7 +262,7 @@ export const getTrendData = () => {
   ];
 };
 
-export const getAiInsights = () => {
+export const getAiInsights = (): Insight[] => {
   return [
     {
       id: "insight1",
