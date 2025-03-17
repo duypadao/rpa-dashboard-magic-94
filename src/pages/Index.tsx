@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import StatusCard from "@/components/StatusCard";
 import AiInsights from "@/components/AiInsights";
@@ -12,13 +13,45 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { robots, getAiInsights } from "@/data/robots";
+import { Robot } from "@/data/robots";
 import { Filter, RefreshCw, Search } from "lucide-react";
+import { apiService } from "@/services/api";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [resultFilter, setResultFilter] = useState("all");
+  const { toast } = useToast();
+
+  // Fetch robots with React Query
+  const { 
+    data: robots = [], 
+    isLoading: robotsLoading,
+    isError: robotsError,
+    refetch: refetchRobots
+  } = useQuery({
+    queryKey: ['robots'],
+    queryFn: apiService.getRobots,
+  });
+
+  // Fetch insights with React Query
+  const { 
+    data: insights = [], 
+    isLoading: insightsLoading 
+  } = useQuery({
+    queryKey: ['insights'],
+    queryFn: apiService.getInsights,
+  });
+
+  // Handle refresh button click
+  const handleRefresh = () => {
+    refetchRobots();
+    toast({
+      title: "Refreshing data",
+      description: "The dashboard is being updated with the latest data.",
+    });
+  };
 
   const filteredRobots = robots.filter((robot) => {
     const matchesSearch = robot.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -27,7 +60,16 @@ const Index = () => {
     return matchesSearch && matchesStatus && matchesResult;
   });
 
-  const insights = getAiInsights();
+  // Show error if robots data fetching failed
+  useEffect(() => {
+    if (robotsError) {
+      toast({
+        title: "Error loading robots",
+        description: "Could not fetch robot data. Using local data as fallback.",
+        variant: "destructive",
+      });
+    }
+  }, [robotsError, toast]);
 
   return (
     <Layout>
@@ -38,9 +80,9 @@ const Index = () => {
             Monitor and manage all RPA robots from a central location
           </p>
         </div>
-        <Button className="flex items-center">
-          <RefreshCw className="mr-2 h-4 w-4" />
-          Refresh
+        <Button className="flex items-center" onClick={handleRefresh}>
+          <RefreshCw className={`mr-2 h-4 w-4 ${robotsLoading ? 'animate-spin' : ''}`} />
+          {robotsLoading ? "Refreshing..." : "Refresh"}
         </Button>
       </div>
 
@@ -121,7 +163,20 @@ const Index = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredRobots.length > 0 ? (
+              {robotsLoading ? (
+                // Show loading state
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div key={`skeleton-${index}`} className="glass rounded-lg p-4 h-40 animate-pulse">
+                    <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-3"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-3"></div>
+                    <div className="flex justify-between">
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                    </div>
+                  </div>
+                ))
+              ) : filteredRobots.length > 0 ? (
                 filteredRobots.map((robot, index) => (
                   <StatusCard 
                     key={robot.id} 
@@ -139,7 +194,10 @@ const Index = () => {
           </div>
         </div>
         <div>
-          <AiInsights insights={insights} />
+          <AiInsights 
+            insights={insights} 
+            isLoading={insightsLoading} 
+          />
         </div>
       </div>
     </Layout>

@@ -1,20 +1,91 @@
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
 import ProcessFlow from "@/components/ProcessFlow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getRobotById, getProcessNodes, getHistoryData } from "@/data/robots";
 import { ArrowLeft, Clock, Play, StopCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { apiService } from "@/services/api";
+import { useToast } from "@/components/ui/use-toast";
 
 const RobotDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const robot = getRobotById(id || "");
-  const processNodes = getProcessNodes(id || "");
-  const historyData = getHistoryData();
+  const { toast } = useToast();
+  
+  // Fetch robot data with React Query
+  const { 
+    data: robot, 
+    isLoading: robotLoading,
+    isError: robotError
+  } = useQuery({
+    queryKey: ['robot', id],
+    queryFn: () => apiService.getRobotById(id || ""),
+    enabled: !!id, // Only run query if id exists
+  });
+
+  // Fetch process nodes with React Query
+  const { 
+    data: processNodes = [], 
+    isLoading: processLoading,
+    isError: processError 
+  } = useQuery({
+    queryKey: ['robotProcess', id],
+    queryFn: () => apiService.getProcessSteps(id || ""),
+    enabled: !!id, // Only run query if id exists
+  });
+
+  // Fetch history data with React Query
+  const { 
+    data: historyData = [], 
+    isLoading: historyLoading 
+  } = useQuery({
+    queryKey: ['history'],
+    queryFn: apiService.getHistoryData,
+  });
+
+  // Show errors if data fetching failed
+  if (robotError) {
+    toast({
+      title: "Error loading robot details",
+      description: "Could not fetch robot details. Using local data as fallback.",
+      variant: "destructive",
+    });
+  }
+
+  if (processError) {
+    toast({
+      title: "Error loading process data",
+      description: "Could not fetch process flow data. Using local data as fallback.",
+      variant: "destructive",
+    });
+  }
+
+  // Show loading state
+  if (robotLoading) {
+    return (
+      <Layout>
+        <Button variant="ghost" asChild className="mb-4 -ml-3">
+          <Link to="/" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Link>
+        </Button>
+        <div className="glass rounded-lg p-6 animate-pulse">
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            ))}
+          </div>
+          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!robot) {
     return (
@@ -102,7 +173,18 @@ const RobotDetail = () => {
               <CardTitle>Current Process Flow</CardTitle>
             </CardHeader>
             <CardContent>
-              <ProcessFlow nodes={processNodes} />
+              {processLoading ? (
+                <div className="space-y-4 animate-pulse">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="flex">
+                      <div className="h-6 w-6 rounded-full bg-gray-200 dark:bg-gray-700 mr-3"></div>
+                      <div className="flex-1 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ProcessFlow nodes={processNodes} />
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -112,48 +194,57 @@ const RobotDetail = () => {
               <CardTitle>Run History</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="rounded-md border">
-                <table className="min-w-full divide-y divide-border">
-                  <thead>
-                    <tr className="bg-muted/50">
-                      <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Date
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Result
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Duration
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-border">
-                    {historyData.map((item, index) => (
-                      <tr key={index} className="hover:bg-muted/20 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {item.date}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                              item.result === "success"
-                                ? "bg-success/10 text-success"
-                                : item.result === "warning"
-                                ? "bg-warning/10 text-warning"
-                                : "bg-error/10 text-error"
-                            }`}
-                          >
-                            {item.result.charAt(0).toUpperCase() + item.result.slice(1)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {item.duration}
-                        </td>
+              {historyLoading ? (
+                <div className="rounded-md border p-4 animate-pulse">
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4"></div>
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-md border">
+                  <table className="min-w-full divide-y divide-border">
+                    <thead>
+                      <tr className="bg-muted/50">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          Date
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          Result
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                          Duration
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-border dark:bg-transparent">
+                      {historyData.map((item, index) => (
+                        <tr key={index} className="hover:bg-muted/20 transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            {item.date}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span
+                              className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
+                                item.result === "success"
+                                  ? "bg-success/10 text-success"
+                                  : item.result === "warning"
+                                  ? "bg-warning/10 text-warning"
+                                  : "bg-error/10 text-error"
+                              }`}
+                            >
+                              {item.result.charAt(0).toUpperCase() + item.result.slice(1)}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
+                            {item.duration}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
