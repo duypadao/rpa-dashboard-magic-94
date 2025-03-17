@@ -5,7 +5,7 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
-import HorizontalProcessFlow from "@/components/HorizontalProcessFlow";
+import ProcessFlow from "@/components/ProcessFlow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Clock, Info } from "lucide-react";
 import { apiService } from "@/services/api";
@@ -188,7 +188,7 @@ const RobotDetail = () => {
                   <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
                 </div>
               ) : (
-                <HorizontalProcessFlow nodes={processNodes} />
+                <ProcessFlow nodes={processNodes} />
               )}
             </CardContent>
           </Card>
