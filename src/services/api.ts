@@ -1,6 +1,7 @@
 import { Robot } from "@/data/robots";
 import { ProcessNode } from "@/components/ProcessFlow";
 import { Insight } from "@/components/AiInsights";
+import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
 
 // API response types
 export interface RobotResponse {
@@ -146,6 +147,25 @@ export const apiService = {
       // Import and return mock data as fallback
       const { getAiInsights } = await import("@/data/robots");
       return getAiInsights();
+    }
+  },
+  
+  // Fetch invoice history data for a specific robot
+  async getInvoiceHistory(robotId: string): Promise<InvoiceHistoryItem[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/robots/${robotId}/invoices`);
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching invoice history for robot ${robotId}:`, error);
+      
+      // Import and return mock data as fallback
+      const { getInvoiceHistory } = await import("@/data/robots");
+      return getInvoiceHistory(robotId);
     }
   },
   

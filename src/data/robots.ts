@@ -1,6 +1,6 @@
-
 import { Insight } from "@/components/AiInsights";
 import { ProcessNode } from "@/components/ProcessFlow";
+import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
 
 export interface Robot {
   id: string;
@@ -123,7 +123,6 @@ export const getProcessNodes = (robotId: string): ProcessNode[] => {
     },
   ];
 
-  // Customize nodes based on robot status
   if (robotId === "3" || robotId === "8") {
     return [
       ...nodes.slice(0, 3),
@@ -312,4 +311,69 @@ export const getAiInsights = (): Insight[] => {
       robot: "Invoice Processing Bot"
     },
   ];
+};
+
+export const getInvoiceHistory = (robotId: string): InvoiceHistoryItem[] => {
+  if (robotId === "1") {
+    return [
+      {
+        supplierName: "Acme Corp",
+        invoiceNo: "INV-2023-001",
+        result: "success",
+        date: "2023-10-15 14:30",
+        duration: "2m 12s"
+      },
+      {
+        supplierName: "Globex Industries",
+        invoiceNo: "GLB-5532",
+        result: "success",
+        date: "2023-10-15 12:15",
+        duration: "1m 55s"
+      },
+      {
+        supplierName: "Stark Enterprises",
+        invoiceNo: "SE-OCT-441",
+        result: "warning",
+        date: "2023-10-14 16:45",
+        duration: "3m 02s"
+      },
+      {
+        supplierName: "Wayne Industries",
+        invoiceNo: "WI/10/2023/118",
+        result: "success",
+        date: "2023-10-14 10:30",
+        duration: "1m 48s"
+      },
+      {
+        supplierName: "Acme Corp",
+        invoiceNo: "INV-2023-002",
+        result: "failure",
+        date: "2023-10-13 09:15",
+        duration: "0m 35s"
+      },
+      {
+        supplierName: "LexCorp",
+        invoiceNo: "LC23440",
+        result: "success",
+        date: "2023-10-12 14:20",
+        duration: "2m 05s"
+      },
+      {
+        supplierName: "Oscorp",
+        invoiceNo: "OSC-INV-2210",
+        result: "success",
+        date: "2023-10-11 11:05",
+        duration: "1m 59s"
+      },
+      {
+        supplierName: "Globex Industries",
+        invoiceNo: "GLB-5533",
+        result: "success", 
+        date: "2023-10-10 15:40",
+        duration: "2m 02s"
+      }
+    ];
+  }
+  
+  return [];
 };

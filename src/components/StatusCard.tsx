@@ -27,6 +27,14 @@ const StatusCard = ({ robot, className, style }: StatusCardProps) => {
         return null;
     }
   };
+  
+  // Determine the correct route based on the robot
+  const getLinkPath = () => {
+    if (robot.id === "1") {
+      return `/invoice/${robot.id}`;
+    }
+    return `/robot/${robot.id}`;
+  };
 
   return (
     <Card 
@@ -65,7 +73,7 @@ const StatusCard = ({ robot, className, style }: StatusCardProps) => {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button variant="outline" size="sm" className="w-full gap-2" asChild>
-          <Link to={`/robot/${robot.id}`}>
+          <Link to={getLinkPath()}>
             Details
             <ArrowRight className="h-4 w-4" />
           </Link>
