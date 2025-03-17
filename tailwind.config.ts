@@ -19,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				chakra: ['ChakraPetch', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -79,6 +83,10 @@ export default {
 					DEFAULT: 'hsl(var(--info))',
 					foreground: 'hsl(var(--info-foreground))'
 				},
+				// Dark mode theme color
+				tech: {
+					DEFAULT: '#7defe6',
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

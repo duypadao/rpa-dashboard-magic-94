@@ -1,5 +1,5 @@
 
-import { Bell, Search, Settings } from "lucide-react";
+import { Bell, Moon, Search, Settings, Sun } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { 
@@ -12,10 +12,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Switch } from "@/components/ui/switch";
+import { useTheme } from "./ThemeProvider";
+import { useState } from "react";
 
 const Navbar = () => {
+  const { theme, setTheme } = useTheme();
+  const [isDark, setIsDark] = useState(theme === "dark");
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    setIsDark(newTheme === "dark");
+  };
+
   return (
-    <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b">
+    <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SidebarTrigger />
@@ -35,6 +47,16 @@ const Navbar = () => {
         </div>
         
         <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Sun className="h-4 w-4 dark:text-muted-foreground" />
+            <Switch 
+              checked={isDark} 
+              onCheckedChange={toggleTheme}
+              className="data-[state=checked]:bg-cyan-500"
+            />
+            <Moon className="h-4 w-4 text-muted-foreground dark:text-white" />
+          </div>
+          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
