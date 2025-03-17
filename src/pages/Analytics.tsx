@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import SuccessRateChart from "@/components/charts/SuccessRateChart";
@@ -18,6 +17,13 @@ const Analytics = () => {
     queryKey: ['analytics', 'trends'],
     queryFn: apiService.getTrendData,
   });
+
+  // Define data keys for the trend chart
+  const trendDataKeys = [
+    { key: "success", color: "hsl(var(--success))", name: "Success" },
+    { key: "failure", color: "hsl(var(--error))", name: "Failure" },
+    { key: "duration", color: "hsl(var(--primary))", name: "Duration (min)" }
+  ];
 
   return (
     <Layout>
@@ -39,7 +45,7 @@ const Analytics = () => {
                 <div className="animate-pulse h-4/5 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
               </div>
             ) : (
-              <TrendChart data={trendData} />
+              <TrendChart data={trendData} dataKeys={trendDataKeys} />
             )}
           </CardContent>
         </Card>
