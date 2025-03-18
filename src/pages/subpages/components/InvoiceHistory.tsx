@@ -23,6 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export interface InvoiceHistoryItem {
   supplierId: string;
@@ -321,20 +322,22 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
       </CardContent>
       
       <Dialog open={processDialogOpen} onOpenChange={setProcessDialogOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
           </DialogHeader>
           
-          <div className="py-4">
-            {processFlowLoading ? (
-              <div className="space-y-4 animate-pulse">
-                <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-              </div>
-            ) : (
-              <ProcessFlow nodes={processFlowData} />
-            )}
-          </div>
+          <ScrollArea className="h-[60vh]">
+            <div className="py-4 px-2">
+              {processFlowLoading ? (
+                <div className="space-y-4 animate-pulse">
+                  <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                </div>
+              ) : (
+                <ProcessFlow nodes={processFlowData} />
+              )}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </Card>
