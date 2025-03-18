@@ -50,7 +50,8 @@ export const mapProcessStepsToNodes = (steps: ProcessStepResponse[]): ProcessNod
 };
 
 // API Endpoints
-const API_BASE_URL = "https://localhost:7009/rpa/dashboard"; // Replace with your actual API URL
+//const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
+const API_BASE_URL = "http://ros:8112/rpa/dashboard";
 
 // API service
 export const apiService = {
