@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Search, List, ChevronDown, ChevronUp, SlidersHorizontal } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import ProcessFlow from "@/components/ProcessFlow";
 import { useQuery } from "@tanstack/react-query";
@@ -325,6 +325,9 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
         <DialogContent className="max-w-3xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
+            <DialogDescription>
+              Detailed visualization of the invoice processing steps and their statuses.
+            </DialogDescription>
           </DialogHeader>
           
           <ScrollArea className="h-[60vh]">
