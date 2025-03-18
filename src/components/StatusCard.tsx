@@ -30,7 +30,7 @@ const StatusCard = ({ robot, className, style }: StatusCardProps) => {
   
   // Determine the correct route based on the robot
   const getLinkPath = () => {
-    if (robot.id === "1") {
+    if (robot.id == "1") {
       return `/invoice/${robot.id}`;
     }
     return `/robot/${robot.id}`;

@@ -113,23 +113,22 @@ export const apiService = {
   },
   
   // Fetch history data
-  async getHistoryData(): Promise<any[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/history`);
+  // async getHistoryData(): Promise<any[]> {
+  //   try {
+  //     const response = await fetch(`${API_BASE_URL}/history`);
       
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`API error: ${response.status}`);
+  //     }
       
-      return await response.json();
-    } catch (error) {
-      console.error("Error fetching history data:", error);
-      
-      // Import and return mock data as fallback
-      const { getHistoryData } = await import("@/data/robots");
-      return getHistoryData();
-    }
-  },
+  //     return await response.json();
+  //   } catch (error) {
+  //     console.error("Error fetching history data:", error);
+  //     // Import and return mock data as fallback
+  //     //const { getHistoryData } = await import("@/data/robots");
+  //     //return getHistoryData();
+  //   }
+  // },
   
   // Fetch insights
   async getInsights(): Promise<Insight[]> {
@@ -153,7 +152,7 @@ export const apiService = {
   // Fetch invoice history data for a specific robot
   async getInvoiceHistory(robotId: string): Promise<InvoiceHistoryItem[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/robots/${robotId}/invoices`);
+      const response = await fetch(`${API_BASE_URL}/robots/history/invoices`);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -162,10 +161,6 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error(`Error fetching invoice history for robot ${robotId}:`, error);
-      
-      // Import and return mock data as fallback
-      const { getInvoiceHistory } = await import("@/data/robots");
-      return getInvoiceHistory(robotId);
     }
   },
   

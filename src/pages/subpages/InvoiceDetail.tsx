@@ -8,7 +8,7 @@ import ProcessFlow from "@/components/ProcessFlow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock } from "lucide-react";
 import { apiService } from "@/services/api";
-import { RobotCommonInfo } from "@/components/RobotCommonInfo";
+import  RobotCommonInfo from "@/components/RobotCommonInfo";
 import InvoiceHistory from "./components/InvoiceHistory";
 import InvoiceAnalytics from "./components/InvoiceAnalytics";
 

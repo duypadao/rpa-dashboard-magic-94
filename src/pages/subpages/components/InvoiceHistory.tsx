@@ -5,7 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export interface InvoiceHistoryItem {
   supplierName: string;
   invoiceNo: string;
-  result: "success" | "warning" | "failure";
+  resultType: "success" | "warning" | "failure";
+  result: string,
   date: string;
   duration: string;
 }
@@ -49,9 +50,9 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                       <TableCell>{invoice.invoiceNo}</TableCell>
                       <TableCell>
                         <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                          invoice.result === "success"
+                          invoice.resultType === "success"
                             ? "bg-success/10 text-success"
-                            : invoice.result === "warning"
+                            : invoice.resultType === "warning"
                             ? "bg-warning/10 text-warning"
                             : "bg-error/10 text-error"
                         }`}>

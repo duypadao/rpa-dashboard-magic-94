@@ -39,13 +39,13 @@ const RobotDetail = () => {
   });
 
   // Fetch history data with React Query
-  const { 
-    data: historyData = [], 
-    isLoading: historyLoading 
-  } = useQuery({
-    queryKey: ['history'],
-    queryFn: apiService.getHistoryData,
-  });
+  // const { 
+  //   data: historyData = [], 
+  //   isLoading: historyLoading 
+  // } = useQuery({
+  //   queryKey: ['history'],
+  //   queryFn: apiService.getHistoryData,
+  // });
 
   // Fetch insights with React Query
   const { 
@@ -198,7 +198,7 @@ const RobotDetail = () => {
             <CardHeader>
               <CardTitle>Run History</CardTitle>
             </CardHeader>
-            <CardContent>
+            {/* <CardContent>
               {historyLoading ? (
                 <div className="rounded-md border p-4 animate-pulse">
                   <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4"></div>
@@ -250,7 +250,7 @@ const RobotDetail = () => {
                   </table>
                 </div>
               )}
-            </CardContent>
+            </CardContent> */}
           </Card>
         </TabsContent>
         <TabsContent value="insights" className="animate-fade-in">

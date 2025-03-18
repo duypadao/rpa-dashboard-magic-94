@@ -28,7 +28,7 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
 
     // Calculate success rates by supplier
     const supplierSuccessRates = Object.entries(supplierGroups).map(([name, invoices]) => {
-      const successCount = invoices.filter(inv => inv.result === 'success').length;
+      const successCount = invoices.filter(inv => inv.resultType === 'success').length;
       const rate = (successCount / invoices.length) * 100;
       return { name, rate, count: invoices.length };
     });
@@ -57,7 +57,7 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
       },
       {
         id: "insight3",
-        title: `Total of ${data.length} invoices processed, with ${data.filter(d => d.result === 'success').length} successful outcomes.`,
+        title: `Total of ${data.length} invoices processed, with ${data.filter(d => d.resultType === 'success').length} successful outcomes.`,
         icon: <BrainCircuit className="h-5 w-5 text-info" />
       }
     ];
