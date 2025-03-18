@@ -90,7 +90,7 @@ const InvoiceDetail = () => {
 
       <Tabs defaultValue="process" className="mb-6">
         <TabsList className="mb-4">
-          {robot.status == "running" ? (<TabsTrigger value="process">Process Status</TabsTrigger>) : <></>}
+          <TabsTrigger value="process">{robot.status == "running" ? "" : "Last"} Process Status</TabsTrigger>
           <TabsTrigger value="history">Run History</TabsTrigger>
           <TabsTrigger value="analytics">AI Analytics</TabsTrigger>
         </TabsList>
@@ -98,7 +98,7 @@ const InvoiceDetail = () => {
         <TabsContent value="process" className="animate-fade-in">
           <Card>
             <CardHeader>
-              <CardTitle>Current Process Flow</CardTitle>
+              <CardTitle>{robot.status == "running" ? "Current" : "Last"} Process Flow</CardTitle>
             </CardHeader>
             <CardContent>
               {processLoading ? (
