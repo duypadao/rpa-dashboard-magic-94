@@ -3,6 +3,7 @@ import { ProcessNode } from "@/components/ProcessFlow";
 import { Insight } from "@/components/AiInsights";
 import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
 import { InvoiceOverViewItem } from "@/pages/subpages/components/InvoiceOverView";
+import dayjs from "dayjs";
 
 // API response types
 export interface RobotResponse {
@@ -114,9 +115,10 @@ export const apiService = {
   },
   
   // Fetch process flow for an invoice
-  async getProcessNodes(invoiceNo: string): Promise<ProcessNode[]> {
+  async getProcessNodes(invoice: InvoiceHistoryItem): Promise<ProcessNode[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/invoices/${invoiceNo}/flow`);
+      const date = dayjs(invoice.date, "YYYY-MM-DD HH:mm:ss").format("YYYYMMDD")
+      const response = await fetch(`${API_BASE_URL}/robots/invoice/flow/${date}/${invoice.supplierId}/${invoice.invoiceNo}`);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -125,7 +127,7 @@ export const apiService = {
       const data: ProcessStepResponse[] = await response.json();
       return mapProcessStepsToNodes(data);
     } catch (error) {
-      console.error(`Error fetching process flow for invoice ${invoiceNo}:`, error);
+      console.error(`Error fetching process flow for invoice ${invoice.invoiceNo}:`, error);
       
       // Return mock data as fallback
       const { getProcessNodes } = await import("@/data/robots");

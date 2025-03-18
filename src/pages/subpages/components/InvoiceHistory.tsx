@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export interface InvoiceHistoryItem {
+  supplierId: string;
   supplierName: string;
   invoiceNo: string;
   resultType: "success" | "warning" | "failure";
@@ -45,12 +46,13 @@ type SortOrder = 'asc' | 'desc';
 
 const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedInvoice, setSelectedInvoice] = useState<string | null>(null);
   const [processDialogOpen, setProcessDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [resultFilter, setResultFilter] = useState<'all' | 'success' | 'warning' | 'failure'>('all');
+  const [invoiceSelected, setInvoiceSelected] = useState<InvoiceHistoryItem>(null);
+
   
   const itemsPerPage = 10;
 
@@ -99,13 +101,13 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
     data: processFlowData = [], 
     isLoading: processFlowLoading 
   } = useQuery({
-    queryKey: ['invoiceFlow', selectedInvoice],
-    queryFn: () => apiService.getProcessNodes(selectedInvoice || ""),
-    enabled: !!selectedInvoice,
+    queryKey: ['invoiceFlow', invoiceSelected],
+    queryFn: () => apiService.getProcessNodes(invoiceSelected),
+    enabled: !! invoiceSelected,
   });
   
-  const handleCheckProcess = (invoiceNo: string) => {
-    setSelectedInvoice(invoiceNo);
+  const handleCheckProcess = (invoice: InvoiceHistoryItem) => {
+    setInvoiceSelected(invoice);
     setProcessDialogOpen(true);
   };
   
@@ -291,7 +293,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                             variant="outline" 
                             size="sm"
                             className="hover:bg-primary/10 transition-colors"
-                            onClick={() => handleCheckProcess(invoice.invoiceNo)}
+                            onClick={() => handleCheckProcess(invoice)}
                           >
                             <List className="h-4 w-4 mr-1" />
                             Check Process
@@ -337,7 +339,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
       <Dialog open={processDialogOpen} onOpenChange={setProcessDialogOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>
-            <DialogTitle>Process Flow for Invoice {selectedInvoice}</DialogTitle>
+            <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
           </DialogHeader>
           
           <div className="py-4">
