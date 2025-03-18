@@ -4,14 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
-import ProcessFlow from "@/components/ProcessFlow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock } from "lucide-react";
 import { apiService } from "@/services/api";
-import  RobotCommonInfo from "@/components/RobotCommonInfo";
+import RobotCommonInfo from "@/components/RobotCommonInfo";
 import InvoiceHistory from "./components/InvoiceHistory";
 import InvoiceAnalytics from "./components/InvoiceAnalytics";
-import InvoiceOverView from "./components/InvoiceOverview";
+import InvoiceOverView from "./components/InvoiceOverView";
 
 const InvoiceDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,17 +26,6 @@ const InvoiceDetail = () => {
     enabled: !!id, // Only run query if id exists
   });
 
-  // Fetch process nodes with React Query
-  const { 
-    data: processNodes = [], 
-    isLoading: processLoading,
-    isError: processError 
-  } = useQuery({
-    queryKey: ['robotProcess', id],
-    queryFn: () => apiService.getProcessSteps(id || ""),
-    enabled: !!id, // Only run query if id exists
-  });
-
   // Fetch invoice history data
   const { 
     data: invoiceHistory = [], 
@@ -48,7 +36,7 @@ const InvoiceDetail = () => {
     enabled: !!id,
   });
 
-  // Fetch invoice history data
+  // Fetch invoice overview data
   const { 
     data: invoiceOverView = [], 
     isLoading: overViewLoading 
@@ -102,30 +90,12 @@ const InvoiceDetail = () => {
       <Tabs defaultValue="overview" className="mb-6">
         <TabsList className="mb-4">
           <TabsTrigger value="overview">Over View</TabsTrigger>
-          <TabsTrigger value="process">{robot.status == "running" ? "" : "Last"} Process Status</TabsTrigger>
           <TabsTrigger value="history">Run History</TabsTrigger>
           <TabsTrigger value="analytics">AI Analytics</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="animate-fade-in">
           <InvoiceOverView invoiceData={invoiceOverView} isLoading={overViewLoading} />
-        </TabsContent>
-
-        <TabsContent value="process" className="animate-fade-in">
-          <Card>
-            <CardHeader>
-              <CardTitle>{robot.status == "running" ? "Current" : "Last"} Process Flow</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {processLoading ? (
-                <div className="space-y-4 animate-pulse">
-                  <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                </div>
-              ) : (
-                <ProcessFlow nodes={processNodes} />
-              )}
-            </CardContent>
-          </Card>
         </TabsContent>
         
         <TabsContent value="history" className="animate-fade-in">

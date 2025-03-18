@@ -2,7 +2,7 @@ import { Robot } from "@/data/robots";
 import { ProcessNode } from "@/components/ProcessFlow";
 import { Insight } from "@/components/AiInsights";
 import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
-import { InvoiceOverViewItem } from "@/pages/subpages/components/InvoiceOverview";
+import { InvoiceOverViewItem } from "@/pages/subpages/components/InvoiceOverView";
 
 // API response types
 export interface RobotResponse {
@@ -113,44 +113,27 @@ export const apiService = {
     }
   },
   
-  // Fetch history data
-  // async getHistoryData(): Promise<any[]> {
-  //   try {
-  //     const response = await fetch(`${API_BASE_URL}/history`);
-      
-  //     if (!response.ok) {
-  //       throw new Error(`API error: ${response.status}`);
-  //     }
-      
-  //     return await response.json();
-  //   } catch (error) {
-  //     console.error("Error fetching history data:", error);
-  //     // Import and return mock data as fallback
-  //     //const { getHistoryData } = await import("@/data/robots");
-  //     //return getHistoryData();
-  //   }
-  // },
-  
-  // Fetch insights
-  async getInsights(): Promise<Insight[]> {
+  // Fetch process flow for an invoice
+  async getProcessNodes(invoiceNo: string): Promise<ProcessNode[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/insights`);
+      const response = await fetch(`${API_BASE_URL}/invoices/${invoiceNo}/flow`);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
       
-      return await response.json();
+      const data: ProcessStepResponse[] = await response.json();
+      return mapProcessStepsToNodes(data);
     } catch (error) {
-      console.error("Error fetching insights:", error);
+      console.error(`Error fetching process flow for invoice ${invoiceNo}:`, error);
       
-      // Import and return mock data as fallback
-      const { getAiInsights } = await import("@/data/robots");
-      return getAiInsights();
+      // Return mock data as fallback
+      const { getProcessNodes } = await import("@/data/robots");
+      return getProcessNodes("mock");
     }
   },
   
-  // Fetch invoice history data for a specific robot
+  // Fetch invoice overview data
   async getInvoiceOverView(robotId: string): Promise<InvoiceOverViewItem[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/robots/invoice/overview`);
@@ -180,7 +163,7 @@ export const apiService = {
     }
   },
   
-  // Other API methods can be added here
+  // Other API methods
   async getSuccessRateData() {
     try {
       const response = await fetch(`${API_BASE_URL}/analytics/success-rate`);
@@ -214,6 +197,24 @@ export const apiService = {
       // Import and return mock data as fallback
       const { getTrendData } = await import("@/data/robots");
       return getTrendData();
+    }
+  },
+  
+  async getInsights() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/insights`);
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching insights:", error);
+      
+      // Import and return mock data as fallback
+      const { getAiInsights } = await import("@/data/robots");
+      return getAiInsights();
     }
   }
 };
