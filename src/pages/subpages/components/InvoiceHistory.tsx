@@ -53,37 +53,33 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   const [resultFilter, setResultFilter] = useState<'all' | 'success' | 'warning' | 'failure'>('all');
   
   const itemsPerPage = 10;
+
+  const processedData = useMemo(() => {
+    return [...invoiceData]
+      .filter(invoice => {
+        const matchesSearch =
+          invoice.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          invoice.invoiceNo.toLowerCase().includes(searchTerm.toLowerCase());
   
-  // Filter data based on search term and result filter
-  const filteredData = useMemo(() => {
-    return invoiceData.filter(invoice => {
-      const matchesSearch = 
-        invoice.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        invoice.invoiceNo.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesResult = resultFilter === 'all' || invoice.resultType === resultFilter;
-      
-      return matchesSearch && matchesResult;
-    });
-  }, [invoiceData, searchTerm, resultFilter]);
+        const matchesResult = resultFilter === 'all' || invoice.resultType === resultFilter;
   
-  // Sort the filtered data
-  const sortedData = useMemo(() => {
-    return [...filteredData].sort((a, b) => {
-      let aValue = a[sortField];
-      let bValue = b[sortField];
-      
-      // Handle string comparison for lexicographic ordering
-      return sortOrder === 'asc' 
-        ? String(aValue).localeCompare(String(bValue)) 
-        : String(bValue).localeCompare(String(aValue));
-    });
-  }, [filteredData, sortField, sortOrder]);
+        return matchesSearch && matchesResult;
+      })
+      .sort((a, b) => {
+        let aValue = a[sortField];
+        let bValue = b[sortField];
   
-  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+        return sortOrder === 'asc'
+          ? String(aValue).localeCompare(String(bValue))
+          : String(bValue).localeCompare(String(aValue));
+      });
+  }, [invoiceData, searchTerm, resultFilter, sortField, sortOrder]);
+  
+  
+  const totalPages = Math.ceil(processedData.length / itemsPerPage);
   
   // Get current page data
-  const currentInvoices = sortedData.slice(
+  const currentInvoices = processedData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
