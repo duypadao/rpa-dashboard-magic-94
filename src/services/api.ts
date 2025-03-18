@@ -17,33 +17,34 @@ export interface RobotResponse {
 }
 
 export interface ProcessStepResponse {
-  Step: string;
-  ResultStep: "Done" | "Error" | "Executing" | "InProgress";
+  id: number;
+  name: string;
   startTime?: string;
   endTime?: string;
   duration?: string;
-  errorMessage?: string;
+  status: "success" | "failure" | "in-progress" | "pending";
+  error?: string | null;
 }
 
 // Map API response to our app's data structure
 export const mapProcessStepsToNodes = (steps: ProcessStepResponse[]): ProcessNode[] => {
-  return steps.map((step, index) => {
+  return steps.map((step) => {
     // Map API status to our component's status type
     const statusMap: Record<string, "success" | "failure" | "in-progress" | "pending"> = {
-      Done: "success",
-      Error: "failure",
-      Executing: "in-progress",
-      InProgress: "pending"
+      success: "success",
+      failure: "failure",
+      "in-progress": "in-progress",
+      pending: "pending"
     };
     
     return {
-      id: `node${index + 1}`,
-      name: step.Step,
-      status: statusMap[step.ResultStep],
+      id: `node${step.id}`,
+      name: step.name,
+      status: statusMap[step.status] || "pending",
       startTime: step.startTime,
       endTime: step.endTime,
       duration: step.duration,
-      error: step.errorMessage
+      error: step.error || undefined
     };
   });
 };

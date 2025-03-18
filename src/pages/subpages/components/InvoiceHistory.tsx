@@ -1,6 +1,4 @@
-
-import { useState, useMemo } from "react";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
@@ -53,7 +51,6 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   const [resultFilter, setResultFilter] = useState<'all' | 'success' | 'warning' | 'failure'>('all');
   const [invoiceSelected, setInvoiceSelected] = useState<InvoiceHistoryItem>(null);
 
-  
   const itemsPerPage = 10;
 
   const processedData = useMemo(() => {
@@ -77,16 +74,13 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
       });
   }, [invoiceData, searchTerm, resultFilter, sortField, sortOrder]);
   
-  
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   
-  // Get current page data
   const currentInvoices = processedData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
   
-  // Function to handle sort toggle
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -96,7 +90,6 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
     }
   };
   
-  // Fetch process flow data when an invoice is selected
   const { 
     data: processFlowData = [], 
     isLoading: processFlowLoading 
@@ -111,26 +104,19 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
     setProcessDialogOpen(true);
   };
   
-  // Function to render pagination items with ellipsis for large number of pages
   const renderPaginationItems = () => {
-    // Always show first page, last page, current page, and pages adjacent to current
     const pagesToShow = new Set<number>();
     
-    // Always include first and last page
     pagesToShow.add(1);
     pagesToShow.add(totalPages);
     
-    // Include current page and 1 page before and after
     for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
       pagesToShow.add(i);
     }
     
-    // Convert to array and sort
     const pagesArray = Array.from(pagesToShow).sort((a, b) => a - b);
     
-    // Render pages with ellipsis when there's a gap
     return pagesArray.map((page, index) => {
-      // If there's a gap of more than 1 page, show ellipsis
       if (index > 0 && page - pagesArray[index - 1] > 1) {
         return (
           <React.Fragment key={`ellipsis-${index}`}>
@@ -177,7 +163,6 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Filter controls */}
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -187,7 +172,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
-                    setCurrentPage(1); // Reset to first page on search
+                    setCurrentPage(1);
                   }}
                 />
               </div>
@@ -335,7 +320,6 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
         )}
       </CardContent>
       
-      {/* Process Flow Dialog */}
       <Dialog open={processDialogOpen} onOpenChange={setProcessDialogOpen}>
         <DialogContent className="max-w-3xl">
           <DialogHeader>

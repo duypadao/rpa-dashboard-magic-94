@@ -1,7 +1,4 @@
-
-import { useState, useMemo } from "react";
-import React from "react";
-import StatusBadge from "@/components/StatusBadge";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -52,7 +49,6 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
   
   const itemsPerPage = 10;
   
-  // Filter data based on search term and status filter
   const filteredData = useMemo(() => {
     return invoiceData.filter(invoice => {
       const matchesSearch = 
@@ -66,20 +62,17 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
     });
   }, [invoiceData, searchTerm, statusFilter]);
   
-  // Sort the filtered data
   const sortedData = useMemo(() => {
     return [...filteredData].sort((a, b) => {
       let aValue = a[sortField];
       let bValue = b[sortField];
       
-      // Handle string comparison separately for lexicographic ordering
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return sortOrder === 'asc' 
           ? aValue.localeCompare(bValue) 
           : bValue.localeCompare(aValue);
       }
       
-      // Handle numeric comparison
       return sortOrder === 'asc' 
         ? (aValue > bValue ? 1 : -1) 
         : (aValue < bValue ? 1 : -1);
@@ -88,13 +81,11 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
   
   const totalPages = Math.ceil(sortedData.length / itemsPerPage);
   
-  // Get current page data
   const currentInvoices = sortedData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
   
-  // Function to handle sort toggle
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -104,7 +95,6 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
     }
   };
   
-  // Generate avatar initials from supplier name
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -114,7 +104,6 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
       .substring(0, 2);
   };
   
-  // Generate random pastel background color for avatars
   const getAvatarColor = (name: string) => {
     const colors = [
       "bg-red-200 text-red-800",
@@ -127,31 +116,23 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
       "bg-teal-200 text-teal-800"
     ];
     
-    // Use supplier name to deterministically pick a color
     const index = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
     return colors[index];
   };
   
-  // Function to render pagination items with ellipsis for large number of pages
   const renderPaginationItems = () => {
-    // Always show first page, last page, current page, and pages adjacent to current
     const pagesToShow = new Set<number>();
     
-    // Always include first and last page
     pagesToShow.add(1);
     pagesToShow.add(totalPages);
     
-    // Include current page and 1 page before and after
     for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
       pagesToShow.add(i);
     }
     
-    // Convert to array and sort
     const pagesArray = Array.from(pagesToShow).sort((a, b) => a - b);
     
-    // Render pages with ellipsis when there's a gap
     return pagesArray.map((page, index) => {
-      // If there's a gap of more than 1 page, show ellipsis
       if (index > 0 && page - pagesArray[index - 1] > 1) {
         return (
           <React.Fragment key={`ellipsis-${index}`}>
@@ -198,7 +179,6 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Filter controls */}
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -208,7 +188,7 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
-                    setCurrentPage(1); // Reset to first page on search
+                    setCurrentPage(1);
                   }}
                 />
               </div>
@@ -360,3 +340,4 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
 };
 
 export default InvoiceOverView;
+
