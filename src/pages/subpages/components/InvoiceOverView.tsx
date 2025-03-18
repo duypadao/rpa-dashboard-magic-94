@@ -1,26 +1,29 @@
 
+import StatusBadge from "@/components/StatusBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export interface InvoiceHistoryItem {
+export interface InvoiceOverViewItem {
+  id: number;
+  supplierId: string;
   supplierName: string;
-  invoiceNo: string;
-  resultType: "success" | "warning" | "failure";
-  result: string,
-  date: string;
-  duration: string;
+  inLineDate: string,
+  accumulatedInvoice: number,
+  status: "running" | "idle";
+  invoiceInqueueQuantity: number;
+  lastRunTime: string;
 }
 
-interface InvoiceHistoryProps {
-  invoiceData: InvoiceHistoryItem[];
+interface InvoiceOverViewProps {
+  invoiceData: InvoiceOverViewItem[];
   isLoading: boolean;
 }
 
-const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
+const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Invoice Processing History This Month</CardTitle>
+        <CardTitle>Invoice Over View</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -35,37 +38,35 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Id</TableHead>
+                  <TableHead>SAPID</TableHead>
                   <TableHead>Supplier Name</TableHead>
-                  <TableHead>Invoice No</TableHead>
-                  <TableHead>Result</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Duration</TableHead>
+                  <TableHead>InLine Date</TableHead>
+                  <TableHead>Invoice Created</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>In Queue</TableHead>
+                  <TableHead>Last Run Time</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {invoiceData.length > 0 ? (
                   invoiceData.map((invoice, index) => (
                     <TableRow key={index}>
+                      <TableCell>{invoice.id}</TableCell>
+                      <TableCell>{invoice.supplierId}</TableCell>
                       <TableCell>{invoice.supplierName}</TableCell>
-                      <TableCell>{invoice.invoiceNo}</TableCell>
+                      <TableCell>{invoice.inLineDate}</TableCell>
+                      <TableCell>{invoice.accumulatedInvoice}</TableCell>
                       <TableCell>
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                          invoice.resultType === "success"
-                            ? "bg-success/10 text-success"
-                            : invoice.resultType === "warning"
-                            ? "bg-warning/10 text-warning"
-                            : "bg-error/10 text-error"
-                        }`}>
-                          {invoice.result.charAt(0).toUpperCase() + invoice.result.slice(1)}
-                        </span>
+                        <StatusBadge status={invoice.status} />
                       </TableCell>
-                      <TableCell>{invoice.date}</TableCell>
-                      <TableCell>{invoice.duration}</TableCell>
+                      <TableCell>{invoice.invoiceInqueueQuantity}</TableCell>
+                      <TableCell>{invoice.lastRunTime}</TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center">No invoice history available</TableCell>
+                    <TableCell colSpan={5} className="text-center">No invoice overview available</TableCell>
                   </TableRow>
                 )}
               </TableBody>
@@ -77,4 +78,4 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   );
 };
 
-export default InvoiceHistory;
+export default InvoiceOverView;

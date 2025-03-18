@@ -11,6 +11,7 @@ import { apiService } from "@/services/api";
 import  RobotCommonInfo from "@/components/RobotCommonInfo";
 import InvoiceHistory from "./components/InvoiceHistory";
 import InvoiceAnalytics from "./components/InvoiceAnalytics";
+import InvoiceOverView from "./components/InvoiceOverview";
 
 const InvoiceDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,6 +45,16 @@ const InvoiceDetail = () => {
   } = useQuery({
     queryKey: ['invoiceHistory', id],
     queryFn: () => apiService.getInvoiceHistory(id || ""),
+    enabled: !!id,
+  });
+
+  // Fetch invoice history data
+  const { 
+    data: invoiceOverView = [], 
+    isLoading: overViewLoading 
+  } = useQuery({
+    queryKey: ['invoiceOverView', id],
+    queryFn: () => apiService.getInvoiceOverView(id || ""),
     enabled: !!id,
   });
 
@@ -88,13 +99,18 @@ const InvoiceDetail = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="process" className="mb-6">
+      <Tabs defaultValue="overview" className="mb-6">
         <TabsList className="mb-4">
+          <TabsTrigger value="overview">Over View</TabsTrigger>
           <TabsTrigger value="process">{robot.status == "running" ? "" : "Last"} Process Status</TabsTrigger>
           <TabsTrigger value="history">Run History</TabsTrigger>
           <TabsTrigger value="analytics">AI Analytics</TabsTrigger>
         </TabsList>
         
+        <TabsContent value="overview" className="animate-fade-in">
+          <InvoiceOverView invoiceData={invoiceOverView} isLoading={overViewLoading} />
+        </TabsContent>
+
         <TabsContent value="process" className="animate-fade-in">
           <Card>
             <CardHeader>
