@@ -10,6 +10,7 @@ export interface Robot {
   lastResult: "success" | "failure" | "warning";
   duration: string;
   description?: string;
+  defaultProcessFlow?: string[];
 }
 
 export const robots: Robot[] = [
@@ -21,6 +22,7 @@ export const robots: Robot[] = [
     lastResult: "success",
     duration: "45m 12s",
     description: "Processes invoice PDFs and enters data into accounting system",
+    defaultProcessFlow: ["Initialize Process", "Extract Data", "Transform Data", "Load Data", "Validation", "Process Complete"]
   },
   {
     id: "2",
@@ -30,6 +32,7 @@ export const robots: Robot[] = [
     lastResult: "success",
     duration: "12m 30s",
     description: "Automates new customer data entry and verification workflow",
+    defaultProcessFlow: ["Start Onboarding", "Collect Customer Data", "Verify Identity", "Create Account", "Send Welcome Email"]
   },
   {
     id: "3",
@@ -39,6 +42,7 @@ export const robots: Robot[] = [
     lastResult: "failure",
     duration: "2m 18s",
     description: "Processes new orders and updates inventory management system",
+    defaultProcessFlow: ["Receive Order", "Check Inventory", "Process Payment", "Update Stock Levels", "Generate Shipping Label", "Complete Order"]
   },
   {
     id: "4",
@@ -48,6 +52,7 @@ export const robots: Robot[] = [
     lastResult: "warning",
     duration: "1h 05m",
     description: "Transfers employee data between HR systems",
+    defaultProcessFlow: ["Connect to Source System", "Extract Employee Data", "Transform Data Format", "Validate Data", "Load to Target System", "Verify Migration"]
   },
   {
     id: "5",
@@ -57,6 +62,7 @@ export const robots: Robot[] = [
     lastResult: "success",
     duration: "3h 22m",
     description: "Generates and distributes monthly performance reports",
+    defaultProcessFlow: ["Collect Data", "Process Statistics", "Generate Charts", "Compile Report", "Send to Stakeholders"]
   },
   {
     id: "6",
@@ -66,6 +72,7 @@ export const robots: Robot[] = [
     lastResult: "success",
     duration: "Running...",
     description: "Classifies and routes customer emails to appropriate departments",
+    defaultProcessFlow: ["Monitor Inbox", "Read Email", "Analyze Content", "Determine Category", "Route to Department", "Log Activity"]
   },
   {
     id: "7",
@@ -75,6 +82,7 @@ export const robots: Robot[] = [
     lastResult: "success",
     duration: "25m 42s",
     description: "Validates data integrity across multiple systems",
+    defaultProcessFlow: ["Connect to Data Sources", "Extract Records", "Compare Values", "Identify Discrepancies", "Generate Report", "Log Results"]
   },
   {
     id: "8",
@@ -84,6 +92,7 @@ export const robots: Robot[] = [
     lastResult: "failure",
     duration: "5m 03s",
     description: "Handles customer service ticket assignment and prioritization",
+    defaultProcessFlow: ["Monitor Ticket Queue", "Analyze Ticket Content", "Determine Priority", "Assign to Department", "Send Notifications", "Update Ticket Status"]
   },
 ];
 

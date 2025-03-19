@@ -1,6 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import StatusCard from "@/components/StatusCard";
 import AiInsights from "@/components/AiInsights";
@@ -22,6 +22,7 @@ const Index = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [resultFilter, setResultFilter] = useState("all");
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   // Fetch robots with React Query
   const { 
@@ -48,6 +49,15 @@ const Index = () => {
     const matchesResult = resultFilter === "all" || robot.lastResult === resultFilter;
     return matchesSearch && matchesStatus && matchesResult;
   });
+
+  // Handle robot selection to navigate to detail page with state
+  const handleRobotSelect = (robot: Robot) => {
+    if (robot.id === "1") {
+      navigate(`/invoice/${robot.id}`);
+    } else {
+      navigate(`/robot/${robot.id}`, { state: { robot } });
+    }
+  };
 
   // Handle stat card clicks for filtering
   const handleStatCardClick = (status: string) => {
@@ -181,8 +191,9 @@ const Index = () => {
                   <StatusCard 
                     key={robot.id} 
                     robot={robot} 
-                    className="animate-scale-in" 
+                    className="animate-scale-in cursor-pointer" 
                     style={{ animationDelay: `${index * 50}ms` }}
+                    onClick={() => handleRobotSelect(robot)}
                   />
                 ))
               ) : (

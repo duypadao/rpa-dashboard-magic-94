@@ -14,6 +14,7 @@ export interface RobotResponse {
   lastResult: "success" | "failure" | "warning";
   duration: string;
   description?: string;
+  defaultProcessFlow?: string[]; // Added default process flow
 }
 
 export interface ProcessStepResponse {
@@ -49,6 +50,17 @@ export const mapProcessStepsToNodes = (steps: ProcessStepResponse[]): ProcessNod
   });
 };
 
+// Map default process flow to nodes
+export const mapDefaultProcessFlowToNodes = (names: string[]): ProcessNode[] => {
+  return names.map((name, index) => {
+    return {
+      id: `node${index + 1}`,
+      name: name,
+      status: "pending",
+    };
+  });
+};
+
 // API Endpoints
 //const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
 const API_BASE_URL = "http://ros:8112/rpa/dashboard";
@@ -76,7 +88,7 @@ export const apiService = {
     }
   },
   
-  // Fetch a single robot by ID
+  // We'll keep getRobotById for backward compatibility, but it won't be used in main flow
   async getRobotById(id: string): Promise<Robot | undefined> {
     try {
       const response = await fetch(`${API_BASE_URL}/robots/${id}`);
@@ -96,7 +108,7 @@ export const apiService = {
     }
   },
   
-  // Fetch process steps for a robot
+  // Get detailed process steps for a running robot
   async getProcessSteps(robotId: string): Promise<ProcessNode[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/robots/${robotId}/process`);
@@ -114,6 +126,16 @@ export const apiService = {
       const { getProcessNodes } = await import("@/data/robots");
       return getProcessNodes(robotId);
     }
+  },
+  
+  // Get default process flow based on robot definition
+  getDefaultProcessFlow(robot: Robot): ProcessNode[] {
+    if (!robot.defaultProcessFlow || robot.defaultProcessFlow.length === 0) {
+      // Return empty array if no default process flow
+      return [];
+    }
+    
+    return mapDefaultProcessFlowToNodes(robot.defaultProcessFlow);
   },
   
   // Fetch process flow for an invoice

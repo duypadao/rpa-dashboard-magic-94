@@ -12,9 +12,10 @@ interface StatusCardProps {
   robot: Robot;
   className?: string;
   style?: CSSProperties;
+  onClick?: () => void;
 }
 
-const StatusCard = ({ robot, className, style }: StatusCardProps) => {
+const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
@@ -27,19 +28,12 @@ const StatusCard = ({ robot, className, style }: StatusCardProps) => {
         return null;
     }
   };
-  
-  // Determine the correct route based on the robot
-  const getLinkPath = () => {
-    if (robot.id == "1") {
-      return `/invoice/${robot.id}`;
-    }
-    return `/robot/${robot.id}`;
-  };
 
   return (
     <Card 
       className={cn("overflow-hidden transition-all duration-300 hover:shadow-md", className)}
       style={style}
+      onClick={onClick}
     >
       <CardHeader className="p-4 pb-0">
         <div className="flex justify-between items-start">
@@ -72,11 +66,9 @@ const StatusCard = ({ robot, className, style }: StatusCardProps) => {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button variant="outline" size="sm" className="w-full gap-2" asChild>
-          <Link to={getLinkPath()}>
-            Details
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+        <Button variant="outline" size="sm" className="w-full gap-2">
+          Details
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </CardFooter>
     </Card>
