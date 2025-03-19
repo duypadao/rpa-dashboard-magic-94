@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Info } from "lucide-react";
-import { Robot } from "@/data/robots";
+import { Robot } from "@/types/robots";
 import { useToast } from "@/components/ui/use-toast";
 
 interface RobotCommonInfoProps {

@@ -12,10 +12,11 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { Robot } from "@/data/robots";
+import { Robot } from "@/types/robots";
 import { Filter, Search } from "lucide-react";
 import { apiService } from "@/services/api";
 import { useToast } from "@/components/ui/use-toast";
+import { Insight } from "@/components/AiInsights";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +25,6 @@ const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Fetch robots with React Query
   const { 
     data: robots = [], 
     isLoading: robotsLoading,
@@ -34,14 +34,49 @@ const Index = () => {
     queryFn: apiService.getRobots,
   });
 
-  // Fetch insights with React Query
-  const { 
-    data: insights = [], 
-    isLoading: insightsLoading 
-  } = useQuery({
-    queryKey: ['insights'],
-    queryFn: apiService.getInsights,
-  });
+  const generateInsightsFromRobots = (robots: Robot[]): Insight[] => {
+    if (!robots.length) return [];
+    
+    const insights: Insight[] = [
+      {
+        id: "1",
+        title: "Robot Performance Overview",
+        description: `${robots.filter(r => r.status === "running").length} out of ${robots.length} robots are currently running.`,
+        type: "optimization",
+        severity: "medium"
+      },
+      {
+        id: "2",
+        title: "Most Successful Robot",
+        description: `${robots.filter(r => r.lastResult === "success").sort((a, b) => b.description?.length || 0 - a.description?.length || 0)[0]?.name || robots[0].name} has the highest success rate.`,
+        type: "prediction",
+        severity: "low"
+      },
+      {
+        id: "3",
+        title: "Process Complexity",
+        description: `${robots.sort((a, b) => (b.defaultProcessFlow?.length || 0) - (a.defaultProcessFlow?.length || 0))[0]?.name || robots[0].name} has the most complex workflow with ${robots.sort((a, b) => (b.defaultProcessFlow?.length || 0) - (a.defaultProcessFlow?.length || 0))[0]?.defaultProcessFlow?.length || 0} steps.`,
+        type: "anomaly",
+        severity: "medium"
+      },
+      {
+        id: "4",
+        title: "Resource Utilization",
+        description: `${robots.filter(r => r.status === "idle").length} robots are currently idle and available for new tasks.`,
+        type: "optimization",
+        severity: "low"
+      },
+      {
+        id: "5",
+        title: "Error Detection",
+        description: `${robots.filter(r => r.status === "error").length} robots need attention due to execution errors.`,
+        type: "anomaly",
+        severity: "high"
+      }
+    ];
+    
+    return insights.sort(() => 0.5 - Math.random()).slice(0, 5);
+  };
 
   const filteredRobots = robots.filter((robot) => {
     const matchesSearch = robot.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -50,7 +85,6 @@ const Index = () => {
     return matchesSearch && matchesStatus && matchesResult;
   });
 
-  // Handle robot selection to navigate to detail page with state
   const handleRobotSelect = (robot: Robot) => {
     if (robot.id === "1") {
       navigate(`/invoice/${robot.id}`);
@@ -59,7 +93,6 @@ const Index = () => {
     }
   };
 
-  // Handle stat card clicks for filtering
   const handleStatCardClick = (status: string) => {
     setStatusFilter(status);
     toast({
@@ -68,7 +101,6 @@ const Index = () => {
     });
   };
 
-  // Show error if robots data fetching failed
   useEffect(() => {
     if (robotsError) {
       toast({
@@ -78,6 +110,27 @@ const Index = () => {
       });
     }
   }, [robotsError, toast]);
+
+  const insights = generateInsightsFromRobots(robots);
+
+  const getRobotColor = (robot: Robot, index: number) => {
+    const colors = [
+      "bg-blue-100 border-blue-300 dark:bg-blue-900/20 dark:border-blue-700",
+      "bg-green-100 border-green-300 dark:bg-green-900/20 dark:border-green-700",
+      "bg-purple-100 border-purple-300 dark:bg-purple-900/20 dark:border-purple-700",
+      "bg-amber-100 border-amber-300 dark:bg-amber-900/20 dark:border-amber-700",
+      "bg-teal-100 border-teal-300 dark:bg-teal-900/20 dark:border-teal-700",
+      "bg-indigo-100 border-indigo-300 dark:bg-indigo-900/20 dark:border-indigo-700",
+      "bg-rose-100 border-rose-300 dark:bg-rose-900/20 dark:border-rose-700",
+      "bg-cyan-100 border-cyan-300 dark:bg-cyan-900/20 dark:border-cyan-700",
+    ];
+    
+    if (robot.id === "1") {
+      return "bg-gradient-to-r from-amber-100 to-orange-100 border-orange-300 shadow-md dark:from-amber-900/30 dark:to-orange-900/30 dark:border-orange-700";
+    }
+    
+    return colors[index % colors.length];
+  };
 
   return (
     <Layout>
@@ -175,7 +228,6 @@ const Index = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {robotsLoading ? (
-                // Show loading state
                 Array.from({ length: 4 }).map((_, index) => (
                   <div key={`skeleton-${index}`} className="glass rounded-lg p-4 h-40 animate-pulse">
                     <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
@@ -191,7 +243,7 @@ const Index = () => {
                   <StatusCard 
                     key={robot.id} 
                     robot={robot} 
-                    className="animate-scale-in cursor-pointer" 
+                    className={`animate-scale-in cursor-pointer ${getRobotColor(robot, index)}`}
                     style={{ animationDelay: `${index * 50}ms` }}
                     onClick={() => handleRobotSelect(robot)}
                   />
@@ -207,7 +259,7 @@ const Index = () => {
         <div>
           <AiInsights 
             insights={insights} 
-            isLoading={insightsLoading} 
+            isLoading={robotsLoading} 
           />
         </div>
       </div>

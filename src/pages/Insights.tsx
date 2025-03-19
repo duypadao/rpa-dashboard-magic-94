@@ -5,15 +5,24 @@ import AiInsights from "@/components/AiInsights";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { getAiInsights } from "@/data/robots";
+import { apiService } from "@/services/api";
 import { Bot, MessageSquare, PlusCircle, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
 
 const Insights = () => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const insights = getAiInsights();
   const { toast } = useToast();
+  
+  // Fetch insights with React Query
+  const { 
+    data: insights = [], 
+    isLoading: insightsLoading 
+  } = useQuery({
+    queryKey: ['insights'],
+    queryFn: apiService.getInsights,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

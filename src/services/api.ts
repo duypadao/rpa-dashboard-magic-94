@@ -49,13 +49,13 @@ export const mapProcessStepsToNodes = (steps: ProcessStepResponse[]): ProcessNod
   });
 };
 
-// Map default process flow to nodes
+// Map default process flow to nodes - always set as success status
 export const mapDefaultProcessFlowToNodes = (names: string[]): ProcessNode[] => {
   return names.map((name, index) => {
     return {
       id: `node${index + 1}`,
       name: name,
-      status: "pending",
+      status: "success", // Always set as success
     };
   });
 };
@@ -81,13 +81,53 @@ export const apiService = {
     } catch (error) {
       console.error("Error fetching robots:", error);
       
-      // Import and return mock data as fallback
-      const { robots } = await import("@/data/robots");
-      return robots;
+      // Create and return mock data as fallback
+      return [
+        {
+          id: "1",
+          name: "Invoice Processing Robot",
+          status: "running",
+          lastRunTime: "2023-06-15 14:30:22",
+          lastResult: "success",
+          duration: "45m 12s",
+          description: "Processes vendor invoices and updates the accounting system",
+          defaultProcessFlow: ["Extract Invoice Data", "Validate Invoice", "Match with PO", "Post to ERP", "Send Confirmation"]
+        },
+        {
+          id: "2",
+          name: "Order Fulfillment Bot",
+          status: "idle",
+          lastRunTime: "2023-06-15 10:15:00",
+          lastResult: "success",
+          duration: "32m 45s",
+          description: "Processes customer orders and coordinates fulfillment",
+          defaultProcessFlow: ["Receive Order", "Check Inventory", "Process Payment", "Generate Shipping Label", "Send Confirmation"]
+        },
+        {
+          id: "3",
+          name: "HR Onboarding Assistant",
+          status: "error",
+          lastRunTime: "2023-06-14 16:20:10",
+          lastResult: "failure",
+          duration: "15m 30s",
+          description: "Automates employee onboarding documentation and system access",
+          defaultProcessFlow: ["Create User Accounts", "Send Welcome Email", "Provision System Access", "Schedule Training", "Notify Manager"]
+        },
+        {
+          id: "4",
+          name: "Supplier Management Bot",
+          status: "paused",
+          lastRunTime: "2023-06-13 09:45:30",
+          lastResult: "warning",
+          duration: "1h 10m",
+          description: "Manages supplier information and performance monitoring",
+          defaultProcessFlow: ["Update Supplier Database", "Validate Contact Info", "Check Performance Metrics", "Generate Report", "Send Updates"]
+        }
+      ];
     }
   },
   
-  // We'll keep getRobotById for backward compatibility, but it won't be used in main flow
+  // Get robot by ID
   async getRobotById(id: string): Promise<Robot | undefined> {
     try {
       const response = await fetch(`${API_BASE_URL}/robots/${id}`);
@@ -101,9 +141,9 @@ export const apiService = {
     } catch (error) {
       console.error(`Error fetching robot ${id}:`, error);
       
-      // Import and return mock data as fallback
-      const { getRobotById } = await import("@/data/robots");
-      return getRobotById(id);
+      // Find in mock data
+      const robots = await this.getRobots();
+      return robots.find(robot => robot.id === id);
     }
   },
   
@@ -127,7 +167,7 @@ export const apiService = {
     }
   },
   
-  // Get default process flow based on robot definition
+  // Get default process flow based on robot definition - always with success status
   getDefaultProcessFlow(robot: Robot): ProcessNode[] {
     if (!robot.defaultProcessFlow || robot.defaultProcessFlow.length === 0) {
       // Return empty array if no default process flow
@@ -225,7 +265,8 @@ export const apiService = {
     }
   },
   
-  async getInsights() {
+  // Get AI insights based on robots
+  async getInsights(): Promise<Insight[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/insights`);
       
@@ -237,9 +278,49 @@ export const apiService = {
     } catch (error) {
       console.error("Error fetching insights:", error);
       
-      // Import and return mock data as fallback
-      const { getAiInsights } = await import("@/data/robots");
-      return getAiInsights();
+      // Generate mock insights
+      return [
+        {
+          id: "1",
+          title: "Invoice Processing Performance",
+          description: "Invoice processing has improved by 15% in the last week",
+          type: "optimization",
+          severity: "medium",
+          robot: "Invoice Processing Robot"
+        },
+        {
+          id: "2",
+          title: "Order Bot Error Pattern",
+          description: "Order Fulfillment Bot shows recurring errors on Tuesdays",
+          type: "anomaly",
+          severity: "high",
+          robot: "Order Fulfillment Bot"
+        },
+        {
+          id: "3",
+          title: "Onboarding Process Delay",
+          description: "HR Onboarding Assistant is taking 20% longer than usual",
+          type: "anomaly",
+          severity: "medium",
+          robot: "HR Onboarding Assistant"
+        },
+        {
+          id: "4",
+          title: "Supplier Database Growth",
+          description: "Supplier database growing rapidly, consider optimization",
+          type: "prediction",
+          severity: "low",
+          robot: "Supplier Management Bot"
+        },
+        {
+          id: "5",
+          title: "Invoice Volume Trend",
+          description: "Invoice volume expected to increase by 30% next month",
+          type: "prediction",
+          severity: "medium",
+          robot: "Invoice Processing Robot"
+        }
+      ];
     }
   }
 };

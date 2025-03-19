@@ -1,10 +1,9 @@
 
-import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, XCircle, ArrowRight } from "lucide-react";
 import StatusBadge from "./StatusBadge";
-import { Robot } from "@/data/robots";
+import { Robot } from "@/types/robots";
 import { cn } from "@/lib/utils";
 import { CSSProperties } from "react";
 
@@ -63,6 +62,11 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
               Duration: {robot.duration}
             </div>
           </div>
+          {robot.description && (
+            <div className="text-sm text-muted-foreground line-clamp-2">
+              {robot.description}
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
