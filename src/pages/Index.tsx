@@ -52,7 +52,7 @@ const Index = () => {
 
   // Handle robot selection to navigate to detail page with state
   const handleRobotSelect = (robot: Robot) => {
-    if (robot.id === "1") {
+    if (robot.id == "1") {
       navigate(`/invoice/${robot.id}`);
     } else {
       navigate(`/robot/${robot.id}`, { state: { robot } });
