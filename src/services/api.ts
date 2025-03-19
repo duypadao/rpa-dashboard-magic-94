@@ -1,4 +1,4 @@
-import { ProcessNode } from "@/components/ProcessFlow";
+import { ProcessNode, Robot, RunHistoryItem } from "@/types/robots";
 import { Insight } from "@/components/AiInsights";
 import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
 import { InvoiceOverViewItem } from "@/pages/subpages/components/InvoiceOverView";
@@ -64,6 +64,75 @@ export const mapDefaultProcessFlowToNodes = (names: string[]): ProcessNode[] => 
 const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
 //const API_BASE_URL = "http://ros:8112/rpa/dashboard";
 
+// Mock data for fallbacks
+const mockRobots: Robot[] = [
+  {
+    id: "1",
+    name: "Invoice Processing Robot",
+    status: "running",
+    lastRunTime: "2023-06-15 14:30:22",
+    lastResult: "success",
+    duration: "45m 12s",
+    description: "Processes vendor invoices and updates the accounting system",
+    defaultProcessFlow: ["Extract Invoice Data", "Validate Invoice", "Match with PO", "Post to ERP", "Send Confirmation"]
+  },
+  {
+    id: "2",
+    name: "Order Fulfillment Bot",
+    status: "idle",
+    lastRunTime: "2023-06-15 10:15:00",
+    lastResult: "success",
+    duration: "32m 45s",
+    description: "Processes customer orders and coordinates fulfillment",
+    defaultProcessFlow: ["Receive Order", "Check Inventory", "Process Payment", "Generate Shipping Label", "Send Confirmation"]
+  },
+  {
+    id: "3",
+    name: "HR Onboarding Assistant",
+    status: "error",
+    lastRunTime: "2023-06-14 16:20:10",
+    lastResult: "failure",
+    duration: "15m 30s",
+    description: "Automates employee onboarding documentation and system access",
+    defaultProcessFlow: ["Create User Accounts", "Send Welcome Email", "Provision System Access", "Schedule Training", "Notify Manager"]
+  },
+  {
+    id: "4",
+    name: "Supplier Management Bot",
+    status: "paused",
+    lastRunTime: "2023-06-13 09:45:30",
+    lastResult: "warning",
+    duration: "1h 10m",
+    description: "Manages supplier information and performance monitoring",
+    defaultProcessFlow: ["Update Supplier Database", "Validate Contact Info", "Check Performance Metrics", "Generate Report", "Send Updates"]
+  }
+];
+
+const mockProcessNodes: ProcessNode[] = [
+  { id: "node1", name: "Start Process", status: "success" },
+  { id: "node2", name: "Extract Data", status: "success" },
+  { id: "node3", name: "Validate Information", status: "in-progress" },
+  { id: "node4", name: "Process Documents", status: "pending" },
+  { id: "node5", name: "Complete Task", status: "pending" }
+];
+
+const mockSuccessRateData = [
+  { name: "Mon", success: 85, failure: 15 },
+  { name: "Tue", success: 78, failure: 22 },
+  { name: "Wed", success: 90, failure: 10 },
+  { name: "Thu", success: 82, failure: 18 },
+  { name: "Fri", success: 88, failure: 12 },
+  { name: "Sat", success: 95, failure: 5 },
+  { name: "Sun", success: 92, failure: 8 }
+];
+
+const mockTrendData = [
+  { name: "Week 1", invoices: 120, average: 10, issues: 5 },
+  { name: "Week 2", invoices: 140, average: 9, issues: 8 },
+  { name: "Week 3", invoices: 160, average: 11, issues: 6 },
+  { name: "Week 4", invoices: 180, average: 8, issues: 3 }
+];
+
 // API service
 export const apiService = {
   // Fetch all robots
@@ -81,49 +150,8 @@ export const apiService = {
     } catch (error) {
       console.error("Error fetching robots:", error);
       
-      // Create and return mock data as fallback
-      return [
-        {
-          id: "1",
-          name: "Invoice Processing Robot",
-          status: "running",
-          lastRunTime: "2023-06-15 14:30:22",
-          lastResult: "success",
-          duration: "45m 12s",
-          description: "Processes vendor invoices and updates the accounting system",
-          defaultProcessFlow: ["Extract Invoice Data", "Validate Invoice", "Match with PO", "Post to ERP", "Send Confirmation"]
-        },
-        {
-          id: "2",
-          name: "Order Fulfillment Bot",
-          status: "idle",
-          lastRunTime: "2023-06-15 10:15:00",
-          lastResult: "success",
-          duration: "32m 45s",
-          description: "Processes customer orders and coordinates fulfillment",
-          defaultProcessFlow: ["Receive Order", "Check Inventory", "Process Payment", "Generate Shipping Label", "Send Confirmation"]
-        },
-        {
-          id: "3",
-          name: "HR Onboarding Assistant",
-          status: "error",
-          lastRunTime: "2023-06-14 16:20:10",
-          lastResult: "failure",
-          duration: "15m 30s",
-          description: "Automates employee onboarding documentation and system access",
-          defaultProcessFlow: ["Create User Accounts", "Send Welcome Email", "Provision System Access", "Schedule Training", "Notify Manager"]
-        },
-        {
-          id: "4",
-          name: "Supplier Management Bot",
-          status: "paused",
-          lastRunTime: "2023-06-13 09:45:30",
-          lastResult: "warning",
-          duration: "1h 10m",
-          description: "Manages supplier information and performance monitoring",
-          defaultProcessFlow: ["Update Supplier Database", "Validate Contact Info", "Check Performance Metrics", "Generate Report", "Send Updates"]
-        }
-      ];
+      // Return mock data as fallback
+      return mockRobots;
     }
   },
   
@@ -142,8 +170,7 @@ export const apiService = {
       console.error(`Error fetching robot ${id}:`, error);
       
       // Find in mock data
-      const robots = await this.getRobots();
-      return robots.find(robot => robot.id === id);
+      return mockRobots.find(robot => robot.id === id);
     }
   },
   
@@ -161,9 +188,8 @@ export const apiService = {
     } catch (error) {
       console.error(`Error fetching process for robot ${robotId}:`, error);
       
-      // Import and return mock data as fallback
-      const { getProcessNodes } = await import("@/data/robots");
-      return getProcessNodes(robotId);
+      // Return mock data as fallback
+      return mockProcessNodes;
     }
   },
   
@@ -193,8 +219,7 @@ export const apiService = {
       console.error(`Error fetching process flow for invoice ${invoice.invoiceNo}:`, error);
       
       // Return mock data as fallback
-      const { getProcessNodes } = await import("@/data/robots");
-      return getProcessNodes("mock");
+      return mockProcessNodes;
     }
   },
   
@@ -210,6 +235,7 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error(`Error fetching invoice overview for robot ${robotId}:`, error);
+      return [];
     }
   },
   
@@ -225,6 +251,7 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error(`Error fetching invoice history for robot ${robotId}:`, error);
+      return [];
     }
   },
   
@@ -241,9 +268,8 @@ export const apiService = {
     } catch (error) {
       console.error("Error fetching success rate data:", error);
       
-      // Import and return mock data as fallback
-      const { getSuccessRateData } = await import("@/data/robots");
-      return getSuccessRateData();
+      // Return mock data as fallback
+      return mockSuccessRateData;
     }
   },
   
@@ -259,9 +285,8 @@ export const apiService = {
     } catch (error) {
       console.error("Error fetching trend data:", error);
       
-      // Import and return mock data as fallback
-      const { getTrendData } = await import("@/data/robots");
-      return getTrendData();
+      // Return mock data as fallback
+      return mockTrendData;
     }
   },
   
