@@ -42,7 +42,7 @@ const RobotDetail = () => {
     if (!robot) return [];
     
     // For Invoice Processing Bot (id: 1), we'll use existing logic
-    if (robot.id === "1") {
+    if (robot.id == "1") {
       return []; // This case is handled separately in InvoiceDetail.tsx
     }
     

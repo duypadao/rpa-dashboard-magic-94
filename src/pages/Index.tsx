@@ -86,7 +86,7 @@ const Index = () => {
   });
 
   const handleRobotSelect = (robot: Robot) => {
-    if (robot.id === "1") {
+    if (robot.id == "1") {
       navigate(`/invoice/${robot.id}`);
     } else {
       navigate(`/robot/${robot.id}`, { state: { robot } });
@@ -125,7 +125,7 @@ const Index = () => {
       "bg-cyan-100 border-cyan-300 dark:bg-cyan-900/20 dark:border-cyan-700",
     ];
     
-    if (robot.id === "1") {
+    if (robot.id == "1") {
       return "bg-gradient-to-r from-amber-100 to-orange-100 border-orange-300 shadow-md dark:from-amber-900/30 dark:to-orange-900/30 dark:border-orange-700";
     }
     
