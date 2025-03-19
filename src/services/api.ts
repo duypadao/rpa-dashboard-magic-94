@@ -1,4 +1,3 @@
-import { Robot } from "@/data/robots";
 import { ProcessNode } from "@/components/ProcessFlow";
 import { Insight } from "@/components/AiInsights";
 import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
