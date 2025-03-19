@@ -12,7 +12,7 @@ import { apiService } from "@/services/api";
 import { useToast } from "@/components/ui/use-toast";
 import AiInsights from "@/components/AiInsights";
 import RobotCommonInfo from "@/components/RobotCommonInfo";
-import { Robot } from "@/data/robots";
+import { Robot } from "@/types/robots";
 import { useMemo } from "react";
 
 const RobotDetail = () => {

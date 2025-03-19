@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Clock, XCircle, ArrowRight } from "lucide-react";
 import StatusBadge from "./StatusBadge";
-import { Robot } from "@/data/robots";
+import { Robot } from "@/types/robots";
 import { cn } from "@/lib/utils";
 import { CSSProperties } from "react";
 
