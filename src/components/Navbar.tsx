@@ -1,6 +1,5 @@
 
-import { Bell, Moon, Search, Settings, Sun } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Bell, Moon, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -32,17 +31,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <SidebarTrigger />
           <div className="flex items-center gap-2">
-            <div className="font-semibold text-xl">RPA Dashboard</div>
-          </div>
-        </div>
-        
-        <div className="flex-1 max-w-md mx-12">
-          <div className="relative w-full">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search robots..."
-              className="w-full pl-8 bg-background/50"
-            />
+            <div className="font-semibold text-xl text-primary">RPA Dashboard</div>
           </div>
         </div>
         
@@ -60,7 +49,7 @@ const Navbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
+                <Bell className="h-5 w-5 text-primary" />
                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-error text-[10px] font-medium text-error-foreground">
                   3
                 </span>
@@ -82,7 +71,7 @@ const Navbar = () => {
           </DropdownMenu>
           
           <Button variant="ghost" size="icon">
-            <Settings className="h-5 w-5" />
+            <Settings className="h-5 w-5 text-primary" />
           </Button>
           
           <DropdownMenu>

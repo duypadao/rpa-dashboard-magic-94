@@ -67,6 +67,11 @@ const RobotDetail = () => {
     });
   };
 
+  // Check if current robot is the Invoice Processing Robot
+  const isInvoiceRobot = useMemo(() => {
+    return robot?.name.includes("Invoice") || robot?.id === "1";
+  }, [robot]);
+
   // Show errors if data fetching failed
   if (robotError) {
     toast({
@@ -122,7 +127,7 @@ const RobotDetail = () => {
       <RobotCommonInfo robot={robot} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <Card>
+        <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Status</CardTitle>
           </CardHeader>
@@ -130,7 +135,7 @@ const RobotDetail = () => {
             <StatusBadge status={robot.status} className="text-sm" />
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Last Run</CardTitle>
           </CardHeader>
@@ -139,7 +144,7 @@ const RobotDetail = () => {
             <span>{robot.lastRunTime}</span>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Duration</CardTitle>
           </CardHeader>
@@ -152,10 +157,10 @@ const RobotDetail = () => {
       <Tabs defaultValue="process" className="mb-6">
         <TabsList className="mb-4">
           <TabsTrigger value="process">Process Flow</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
+          {isInvoiceRobot && <TabsTrigger value="insights">AI Insights</TabsTrigger>}
         </TabsList>
         <TabsContent value="process" className="animate-fade-in">
-          <Card>
+          <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
             <CardHeader>
               <CardTitle>Default Process Flow</CardTitle>
             </CardHeader>
@@ -166,9 +171,11 @@ const RobotDetail = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="insights" className="animate-fade-in">
-          <AiInsights insights={insights} isLoading={insightsLoading} />
-        </TabsContent>
+        {isInvoiceRobot && (
+          <TabsContent value="insights" className="animate-fade-in">
+            <AiInsights insights={insights} isLoading={insightsLoading} />
+          </TabsContent>
+        )}
       </Tabs>
     </Layout>
   );

@@ -14,6 +14,18 @@ interface StatusCardProps {
   onClick?: () => void;
 }
 
+// Robot color mapping for consistent UI
+const robotColorMap: Record<string, string> = {
+  "Invoice Processing Robot": "from-cyan-500/10 to-cyan-600/5 border-cyan-500/20 hover:border-cyan-500/30",
+  "Data Extraction Bot": "from-purple-500/10 to-purple-600/5 border-purple-500/20 hover:border-purple-500/30",
+  "Email Automation Bot": "from-amber-500/10 to-amber-600/5 border-amber-500/20 hover:border-amber-500/30",
+  "Document Processing Bot": "from-green-500/10 to-green-600/5 border-green-500/20 hover:border-green-500/30",
+  "Customer Service Bot": "from-pink-500/10 to-pink-600/5 border-pink-500/20 hover:border-pink-500/30",
+  "HR Automation Bot": "from-blue-500/10 to-blue-600/5 border-blue-500/20 hover:border-blue-500/30",
+  "Inventory Management Bot": "from-red-500/10 to-red-600/5 border-red-500/20 hover:border-red-500/30",
+  "default": "from-gray-500/10 to-gray-600/5 border-gray-500/20 hover:border-gray-500/30"
+};
+
 const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
   const getResultIcon = () => {
     switch (robot.lastResult) {
@@ -28,9 +40,21 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
     }
   };
 
+  // Get color class based on robot name or default if not found
+  const colorClass = robotColorMap[robot.name] || robotColorMap.default;
+  
+  // Special highlight for Invoice Processing Robot
+  const isInvoiceRobot = robot.name.includes("Invoice");
+  const highlightClass = isInvoiceRobot ? "ring-2 ring-primary/30 dark:ring-primary/20" : "";
+
   return (
     <Card 
-      className={cn("overflow-hidden transition-all duration-300 hover:shadow-md", className)}
+      className={cn(
+        "overflow-hidden transition-all duration-300 hover:shadow-md bg-gradient-to-br", 
+        colorClass,
+        highlightClass,
+        className
+      )}
       style={style}
       onClick={onClick}
     >
