@@ -42,7 +42,7 @@ const Sidebar = () => {
   
   return (
     <ShadcnSidebar>
-      <SidebarContent>
+      <SidebarContent className="mt-16"> {/* Added top margin to avoid navbar overlap */}
         <SidebarGroup>
           <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>

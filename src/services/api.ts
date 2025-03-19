@@ -50,13 +50,13 @@ export const mapProcessStepsToNodes = (steps: ProcessStepResponse[]): ProcessNod
   });
 };
 
-// Map default process flow to nodes
+// Map default process flow to nodes - always set as success status
 export const mapDefaultProcessFlowToNodes = (names: string[]): ProcessNode[] => {
   return names.map((name, index) => {
     return {
       id: `node${index + 1}`,
       name: name,
-      status: "pending",
+      status: "success", // Always set as success
     };
   });
 };
@@ -128,7 +128,7 @@ export const apiService = {
     }
   },
   
-  // Get default process flow based on robot definition
+  // Get default process flow based on robot definition - always with success status
   getDefaultProcessFlow(robot: Robot): ProcessNode[] {
     if (!robot.defaultProcessFlow || robot.defaultProcessFlow.length === 0) {
       // Return empty array if no default process flow

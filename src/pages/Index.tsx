@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -34,14 +35,41 @@ const Index = () => {
     queryFn: apiService.getRobots,
   });
 
-  // Fetch insights with React Query
-  const { 
-    data: insights = [], 
-    isLoading: insightsLoading 
-  } = useQuery({
-    queryKey: ['insights'],
-    queryFn: apiService.getInsights,
-  });
+  // Generate AI insights from robot data
+  const generateInsightsFromRobots = (robots: Robot[]) => {
+    if (!robots.length) return [];
+    
+    const insights = [
+      {
+        title: "Robot Performance Overview",
+        description: `${robots.filter(r => r.status === "running").length} out of ${robots.length} robots are currently running.`,
+        type: "info"
+      },
+      {
+        title: "Most Successful Robot",
+        description: `${robots.filter(r => r.lastResult === "success").sort((a, b) => b.description?.length || 0 - a.description?.length || 0)[0]?.name || robots[0].name} has the highest success rate.`,
+        type: "success"
+      },
+      {
+        title: "Process Complexity",
+        description: `${robots.sort((a, b) => (b.defaultProcessFlow?.length || 0) - (a.defaultProcessFlow?.length || 0))[0]?.name || robots[0].name} has the most complex workflow with ${robots.sort((a, b) => (b.defaultProcessFlow?.length || 0) - (a.defaultProcessFlow?.length || 0))[0]?.defaultProcessFlow?.length || 0} steps.`,
+        type: "info"
+      },
+      {
+        title: "Resource Utilization",
+        description: `${robots.filter(r => r.status === "idle").length} robots are currently idle and available for new tasks.`,
+        type: "warning"
+      },
+      {
+        title: "Error Detection",
+        description: `${robots.filter(r => r.status === "error").length} robots need attention due to execution errors.`,
+        type: "error"
+      }
+    ];
+    
+    // Return 5 random insights
+    return insights.sort(() => 0.5 - Math.random()).slice(0, 5);
+  };
 
   const filteredRobots = robots.filter((robot) => {
     const matchesSearch = robot.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -78,6 +106,30 @@ const Index = () => {
       });
     }
   }, [robotsError, toast]);
+
+  // Generate insights from robot data
+  const insights = generateInsightsFromRobots(robots);
+
+  // Robot color mapping based on index, with highlight for InvoiceRobot
+  const getRobotColor = (robot: Robot, index: number) => {
+    const colors = [
+      "bg-blue-100 border-blue-300 dark:bg-blue-900/20 dark:border-blue-700",
+      "bg-green-100 border-green-300 dark:bg-green-900/20 dark:border-green-700",
+      "bg-purple-100 border-purple-300 dark:bg-purple-900/20 dark:border-purple-700",
+      "bg-amber-100 border-amber-300 dark:bg-amber-900/20 dark:border-amber-700",
+      "bg-teal-100 border-teal-300 dark:bg-teal-900/20 dark:border-teal-700",
+      "bg-indigo-100 border-indigo-300 dark:bg-indigo-900/20 dark:border-indigo-700",
+      "bg-rose-100 border-rose-300 dark:bg-rose-900/20 dark:border-rose-700",
+      "bg-cyan-100 border-cyan-300 dark:bg-cyan-900/20 dark:border-cyan-700",
+    ];
+    
+    // Highlight InvoiceRobot with a special color
+    if (robot.id === "1") {
+      return "bg-gradient-to-r from-amber-100 to-orange-100 border-orange-300 shadow-md dark:from-amber-900/30 dark:to-orange-900/30 dark:border-orange-700";
+    }
+    
+    return colors[index % colors.length];
+  };
 
   return (
     <Layout>
@@ -191,7 +243,7 @@ const Index = () => {
                   <StatusCard 
                     key={robot.id} 
                     robot={robot} 
-                    className="animate-scale-in cursor-pointer" 
+                    className={`animate-scale-in cursor-pointer ${getRobotColor(robot, index)}`}
                     style={{ animationDelay: `${index * 50}ms` }}
                     onClick={() => handleRobotSelect(robot)}
                   />
@@ -207,7 +259,7 @@ const Index = () => {
         <div>
           <AiInsights 
             insights={insights} 
-            isLoading={insightsLoading} 
+            isLoading={robotsLoading} 
           />
         </div>
       </div>
