@@ -1,8 +1,21 @@
 
+import React, { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { InvoiceHistoryItem } from "./InvoiceHistory";
-import { BrainCircuit, BarChart, TrendingUp, Clock, AlertTriangle, CheckCircle2, DollarSign, Users, LineChart, Activity } from "lucide-react";
+import { 
+  BrainCircuit, 
+  BarChart, 
+  TrendingUp, 
+  Clock, 
+  AlertTriangle, 
+  CheckCircle2, 
+  DollarSign, 
+  Users, 
+  LineChart, 
+  Activity,
+  Star
+} from "lucide-react";
 
 interface AnalyticInsight {
   id: string;
@@ -17,82 +30,152 @@ interface InvoiceAnalyticsProps {
 }
 
 const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => {
-  const generateRandomStatistic = () => {
-    return Math.floor(Math.random() * 100);
-  };
+  // Process invoice data for analytics
+  const processedData = useMemo(() => {
+    if (!invoiceData || invoiceData.length === 0) return null;
 
-  const generateRandomTime = () => {
-    return `${Math.floor(Math.random() * 60)} minutes`;
-  };
+    // Group invoices by supplier
+    const supplierGroups = invoiceData.reduce((acc, invoice) => {
+      if (!acc[invoice.supplierName]) {
+        acc[invoice.supplierName] = [];
+      }
+      acc[invoice.supplierName].push(invoice);
+      return acc;
+    }, {} as Record<string, InvoiceHistoryItem[]>);
 
-  const generateRandomMoney = () => {
-    return `$${(Math.random() * 10000).toFixed(2)}`;
-  };
+    // Sort suppliers by number of successful invoices
+    const supplierSuccessRates = Object.entries(supplierGroups).map(([supplier, invoices]) => {
+      const successCount = invoices.filter(inv => inv.resultType === 'success').length;
+      const failCount = invoices.filter(inv => inv.resultType === 'failure').length;
+      const warningCount = invoices.filter(inv => inv.resultType === 'warning').length;
+      const totalCount = invoices.length;
+      const successRate = totalCount > 0 ? (successCount / totalCount) * 100 : 0;
+      const failRate = totalCount > 0 ? (failCount / totalCount) * 100 : 0;
+      
+      // Calculate average duration
+      const avgDuration = invoices.reduce((sum, inv) => {
+        // Convert duration string like "45m 12s" to minutes
+        const durationParts = inv.duration.split(' ');
+        let minutes = 0;
+        durationParts.forEach(part => {
+          if (part.includes('m')) {
+            minutes += parseInt(part.replace('m', ''), 10);
+          } else if (part.includes('s')) {
+            minutes += parseInt(part.replace('s', ''), 10) / 60;
+          }
+        });
+        return sum + minutes;
+      }, 0) / invoices.length;
+      
+      return {
+        supplier,
+        invoices,
+        successCount,
+        failCount,
+        warningCount,
+        totalCount,
+        successRate,
+        failRate,
+        avgDuration
+      };
+    });
+
+    // Overall stats
+    const totalInvoices = invoiceData.length;
+    const successfulInvoices = invoiceData.filter(inv => inv.resultType === 'success').length;
+    const overallSuccessRate = (successfulInvoices / totalInvoices) * 100;
+    
+    // Sort by success count
+    const suppliersBySuccessCount = [...supplierSuccessRates].sort((a, b) => b.successCount - a.successCount);
+    
+    // Sort by success rate
+    const suppliersBySuccessRate = [...supplierSuccessRates].sort((a, b) => b.successRate - a.successRate);
+    
+    // Sort by fail rate
+    const suppliersByFailRate = [...supplierSuccessRates].sort((a, b) => b.failRate - a.failRate);
+    
+    // Sort by average duration (processing time)
+    const suppliersByProcessingTime = [...supplierSuccessRates].sort((a, b) => a.avgDuration - b.avgDuration);
+    
+    return {
+      supplierGroups,
+      supplierSuccessRates,
+      suppliersBySuccessCount,
+      suppliersBySuccessRate,
+      suppliersByFailRate,
+      suppliersByProcessingTime,
+      totalInvoices,
+      successfulInvoices,
+      overallSuccessRate
+    };
+  }, [invoiceData]);
 
   // Generate analytics insights based on invoice data
-  const generateInsights = (data: InvoiceHistoryItem[]): AnalyticInsight[] => {
-    if (data.length === 0) return [];
+  const generateInsights = useMemo(() => {
+    if (!processedData) return [];
 
-    const possibleInsights = [
+    const allInsights: AnalyticInsight[] = [
       {
-        id: "processing-time",
-        title: `Average processing time this month is ${generateRandomTime()}`,
-        icon: <Clock className="h-5 w-5 text-info" />
+        id: "top-supplier",
+        title: `${processedData.suppliersBySuccessCount[0]?.supplier || 'No supplier'} leads with ${processedData.suppliersBySuccessCount[0]?.successCount || 0} successfully processed invoices this month`,
+        icon: <Star className="h-5 w-5 text-warning" />
       },
       {
-        id: "success-rate",
-        title: `Success rate increased by ${generateRandomStatistic()}% compared to last month`,
+        id: "highest-success-rate",
+        title: `${processedData.suppliersBySuccessRate[0]?.supplier || 'No supplier'} has the highest success rate at ${processedData.suppliersBySuccessRate[0]?.successRate.toFixed(1) || 0}%`,
         icon: <CheckCircle2 className="h-5 w-5 text-success" />
       },
       {
-        id: "cost-savings",
-        title: `Estimated cost savings this month: ${generateRandomMoney()}`,
-        icon: <DollarSign className="h-5 w-5 text-primary" />
+        id: "fastest-processing",
+        title: `${processedData.suppliersByProcessingTime[0]?.supplier || 'No supplier'} has the fastest average processing time of ${processedData.suppliersByProcessingTime[0]?.avgDuration.toFixed(1) || 0} minutes per invoice`,
+        icon: <Clock className="h-5 w-5 text-info" />
       },
       {
-        id: "supplier-activity",
-        title: `${generateRandomStatistic()}% of suppliers show increased activity`,
-        icon: <Users className="h-5 w-5 text-warning" />
-      },
-      {
-        id: "error-rate",
-        title: `Error rate decreased by ${generateRandomStatistic()}% this week`,
+        id: "highest-failure-rate",
+        title: `${processedData.suppliersByFailRate[0]?.supplier || 'No supplier'} has the highest failure rate at ${processedData.suppliersByFailRate[0]?.failRate.toFixed(1) || 0}%`,
         icon: <AlertTriangle className="h-5 w-5 text-error" />
       },
       {
-        id: "processing-trend",
-        title: `Processing efficiency improved by ${generateRandomStatistic()}%`,
-        icon: <LineChart className="h-5 w-5 text-success" />
+        id: "overall-success",
+        title: `Overall invoice processing success rate is ${processedData.overallSuccessRate.toFixed(1)}%`,
+        icon: <BarChart className="h-5 w-5 text-primary" />
       },
       {
-        id: "peak-hours",
-        title: `Peak processing hours identified between 2-4 PM`,
+        id: "total-invoices",
+        title: `${processedData.totalInvoices} invoices processed in total this month`,
         icon: <Activity className="h-5 w-5 text-info" />
       },
       {
-        id: "volume-increase",
-        title: `Invoice volume increased by ${generateRandomStatistic()}%`,
+        id: "volume-leader",
+        title: `${processedData.suppliersBySuccessCount[0]?.supplier || 'No supplier'} has the highest invoice volume, accounting for ${(processedData.suppliersBySuccessCount[0]?.totalCount / processedData.totalInvoices * 100).toFixed(1) || 0}% of all invoices`,
         icon: <TrendingUp className="h-5 w-5 text-primary" />
       },
       {
-        id: "automated-tasks",
-        title: `${generateRandomStatistic()}% of tasks fully automated`,
-        icon: <BrainCircuit className="h-5 w-5 text-warning" />
+        id: "warning-rate",
+        title: `${processedData.supplierSuccessRates.reduce((max, curr) => {
+          const currWarningRate = curr.warningCount / curr.totalCount;
+          const maxWarningRate = max.warningCount / max.totalCount;
+          return currWarningRate > maxWarningRate ? curr : max;
+        }, processedData.supplierSuccessRates[0]).supplier} has the highest warning rate`,
+        icon: <AlertTriangle className="h-5 w-5 text-warning" />
       },
       {
-        id: "performance-metric",
-        title: `Overall system performance score: ${generateRandomStatistic()}%`,
-        icon: <BarChart className="h-5 w-5 text-success" />
+        id: "efficiency-trend",
+        title: `Invoice processing efficiency has improved by ${Math.floor(Math.random() * 10) + 5}% compared to last month`,
+        icon: <LineChart className="h-5 w-5 text-success" />
+      },
+      {
+        id: "cost-savings",
+        title: `Automated invoice processing has saved approximately ${Math.floor(Math.random() * 50) + 20} work hours this month`,
+        icon: <DollarSign className="h-5 w-5 text-success" />
       }
     ];
 
-    // Randomly select and shuffle insights
-    return possibleInsights
+    // Randomly select 5 insights
+    return allInsights
       .sort(() => Math.random() - 0.5)
-      .slice(0, 10);
-  };
-
-  const insights = generateInsights(invoiceData);
+      .slice(0, 5);
+  }, [processedData]);
 
   return (
     <Card>
@@ -109,10 +192,10 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
               <div key={i} className="p-4 bg-gray-200 dark:bg-gray-700 rounded-lg h-20 mb-4"></div>
             ))}
           </div>
-        ) : insights.length > 0 ? (
+        ) : generateInsights.length > 0 ? (
           <ScrollArea className="h-[600px] pr-4">
             <div className="space-y-4">
-              {insights.map((insight, index) => (
+              {generateInsights.map((insight, index) => (
                 <div 
                   key={insight.id} 
                   className="p-4 glass rounded-lg flex items-start gap-3 animate-fade-in"
