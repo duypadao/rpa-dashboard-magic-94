@@ -11,7 +11,7 @@ import {
   SidebarMenuButton, 
   SidebarMenuItem 
 } from "@/components/ui/sidebar";
-import { BarChart3, Home, Info, Settings, Zap } from "lucide-react";
+import { Home, Info, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
@@ -21,19 +21,9 @@ const menuItems = [
     icon: Home,
   },
   {
-    title: "Analytics",
-    path: "/analytics",
-    icon: BarChart3,
-  },
-  {
     title: "AI Insights",
     path: "/insights",
     icon: Zap,
-  },
-  {
-    title: "Settings",
-    path: "/settings",
-    icon: Settings,
   },
 ];
 

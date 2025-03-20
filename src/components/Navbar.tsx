@@ -1,5 +1,5 @@
 
-import { Bell, Moon, Settings, Sun } from "lucide-react";
+import { Bell, Globe, Moon, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -18,11 +18,18 @@ import { useState } from "react";
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const [isDark, setIsDark] = useState(theme === "dark");
+  const [language, setLanguage] = useState<"en" | "zh">("en");
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     setIsDark(newTheme === "dark");
+  };
+
+  const changeLanguage = (lang: "en" | "zh") => {
+    setLanguage(lang);
+    // In a real app, this would trigger language changes throughout the app
+    console.log(`Language changed to: ${lang}`);
   };
 
   return (
@@ -36,6 +43,30 @@ const Navbar = () => {
         </div>
         
         <div className="flex items-center gap-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Globe className="h-5 w-5 text-primary" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Language</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                className={language === "en" ? "bg-muted" : ""}
+                onClick={() => changeLanguage("en")}
+              >
+                English
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                className={language === "zh" ? "bg-muted" : ""}
+                onClick={() => changeLanguage("zh")}
+              >
+                中文 (Chinese)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <div className="flex items-center gap-2">
             <Sun className="h-4 w-4 dark:text-muted-foreground" />
             <Switch 
