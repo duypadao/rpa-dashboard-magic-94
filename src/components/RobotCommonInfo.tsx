@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Info } from "lucide-react";
 import { Robot } from "@/types/robots";
 import { useToast } from "@/components/ui/use-toast";
+import { useLanguage } from "./LanguageProvider";
 
 interface RobotCommonInfoProps {
   robot: Robot;
@@ -11,11 +12,12 @@ interface RobotCommonInfoProps {
 
 const RobotCommonInfo = ({ robot }: RobotCommonInfoProps) => {
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const handleInform = () => {
     toast({
-      title: "Notification sent",
-      description: `A notification about ${robot.name} has been sent to the team.`,
+      title: t('notificationSent'),
+      description: `${t('notificationSentDesc')} ${robot.name} ${t('notificationSentDescEnd')}.`,
     });
   };
 
@@ -24,7 +26,7 @@ const RobotCommonInfo = ({ robot }: RobotCommonInfoProps) => {
       <Button variant="ghost" asChild className="mb-4 -ml-3">
         <Link to="/" className="flex items-center">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Dashboard
+          {t('backToDashboard')}
         </Link>
       </Button>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -34,7 +36,7 @@ const RobotCommonInfo = ({ robot }: RobotCommonInfoProps) => {
         </div>
         <Button variant="outline" className="gap-2" onClick={handleInform}>
           <Info className="h-4 w-4" />
-          Inform
+          {t('inform')}
         </Button>
       </div>
     </div>

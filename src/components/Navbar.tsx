@@ -13,12 +13,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "./ThemeProvider";
+import { useLanguage } from "./LanguageProvider";
 import { useState } from "react";
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
   const [isDark, setIsDark] = useState(theme === "dark");
-  const [language, setLanguage] = useState<"en" | "zh">("en");
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -28,7 +29,6 @@ const Navbar = () => {
 
   const changeLanguage = (lang: "en" | "zh") => {
     setLanguage(lang);
-    // In a real app, this would trigger language changes throughout the app
     console.log(`Language changed to: ${lang}`);
   };
 
@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <SidebarTrigger />
           <div className="flex items-center gap-2">
-            <div className="font-semibold text-xl text-primary">RPA Dashboard</div>
+            <div className="font-semibold text-xl text-primary">{t('dashboard')}</div>
           </div>
         </div>
         
@@ -50,7 +50,7 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Language</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 className={language === "en" ? "bg-muted" : ""}
@@ -87,14 +87,14 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('notifications')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="max-h-80 overflow-auto">
                 {[1, 2, 3].map((i) => (
                   <DropdownMenuItem key={i} className="p-3 cursor-pointer flex flex-col items-start gap-1">
-                    <div className="font-medium">RPA Robot Error</div>
-                    <div className="text-sm text-muted-foreground">Invoice Processing Robot #1 has encountered an error</div>
-                    <div className="text-xs text-muted-foreground">10 min ago</div>
+                    <div className="font-medium">{t('robotError')}</div>
+                    <div className="text-sm text-muted-foreground">{t('invoiceRobotError')}</div>
+                    <div className="text-xs text-muted-foreground">10 {t('timeAgo')}</div>
                   </DropdownMenuItem>
                 ))}
               </div>
@@ -115,12 +115,12 @@ const Navbar = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{t('myAccount')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>{t('profile')}</DropdownMenuItem>
+              <DropdownMenuItem>{t('settings')}</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
+              <DropdownMenuItem>{t('logout')}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

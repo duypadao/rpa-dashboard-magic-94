@@ -1,5 +1,4 @@
 
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +10,12 @@ import RobotCommonInfo from "@/components/RobotCommonInfo";
 import InvoiceHistory from "./components/InvoiceHistory";
 import InvoiceAnalytics from "./components/InvoiceAnalytics";
 import InvoiceOverView from "./components/InvoiceOverView";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const InvoiceDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { t } = useLanguage();
+  // Hard-coded ID for Invoice Processing Robot
+  const INVOICE_ROBOT_ID = "1";
   
   // Fetch robot data with React Query
   const { 
@@ -21,9 +23,8 @@ const InvoiceDetail = () => {
     isLoading: robotLoading,
     isError: robotError
   } = useQuery({
-    queryKey: ['robot', id],
-    queryFn: () => apiService.getRobotById(id || ""),
-    enabled: !!id, // Only run query if id exists
+    queryKey: ['robot', INVOICE_ROBOT_ID],
+    queryFn: () => apiService.getRobotById(INVOICE_ROBOT_ID),
   });
 
   // Fetch invoice history data
@@ -31,9 +32,8 @@ const InvoiceDetail = () => {
     data: invoiceHistory = [], 
     isLoading: historyLoading 
   } = useQuery({
-    queryKey: ['invoiceHistory', id],
-    queryFn: () => apiService.getInvoiceHistory(id || ""),
-    enabled: !!id,
+    queryKey: ['invoiceHistory', INVOICE_ROBOT_ID],
+    queryFn: () => apiService.getInvoiceHistory(INVOICE_ROBOT_ID),
   });
 
   // Fetch invoice overview data
@@ -41,9 +41,8 @@ const InvoiceDetail = () => {
     data: invoiceOverView = [], 
     isLoading: overViewLoading 
   } = useQuery({
-    queryKey: ['invoiceOverView', id],
-    queryFn: () => apiService.getInvoiceOverView(id || ""),
-    enabled: !!id,
+    queryKey: ['invoiceOverView', INVOICE_ROBOT_ID],
+    queryFn: () => apiService.getInvoiceOverView(INVOICE_ROBOT_ID),
   });
 
   if (robotLoading) {
@@ -62,7 +61,7 @@ const InvoiceDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('status')}</CardTitle>
           </CardHeader>
           <CardContent>
             <StatusBadge status={robot.status} className="text-sm" />
@@ -70,7 +69,7 @@ const InvoiceDetail = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Last Run</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('lastRun')}</CardTitle>
           </CardHeader>
           <CardContent className="flex items-center">
             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -79,7 +78,7 @@ const InvoiceDetail = () => {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Duration</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('duration')}</CardTitle>
           </CardHeader>
           <CardContent>
             <span>{robot.duration}</span>
@@ -90,8 +89,8 @@ const InvoiceDetail = () => {
       <Tabs defaultValue="overview" className="mb-6">
         <TabsList className="mb-4">
           <TabsTrigger value="overview">Over View</TabsTrigger>
-          <TabsTrigger value="history">Run History</TabsTrigger>
-          <TabsTrigger value="analytics">AI Analytics</TabsTrigger>
+          <TabsTrigger value="history">{t('history')}</TabsTrigger>
+          <TabsTrigger value="analytics">{t('analytics')}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="animate-fade-in">

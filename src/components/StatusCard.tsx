@@ -6,6 +6,7 @@ import StatusBadge from "./StatusBadge";
 import { Robot } from "@/types/robots";
 import { cn } from "@/lib/utils";
 import { CSSProperties } from "react";
+import { useLanguage } from "./LanguageProvider";
 
 interface StatusCardProps {
   robot: Robot;
@@ -27,6 +28,8 @@ const robotColorMap: Record<string, string> = {
 };
 
 const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
+  const { t } = useLanguage();
+  
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
@@ -37,6 +40,19 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
         return <XCircle className="h-4 w-4 text-error" />;
       default:
         return null;
+    }
+  };
+  
+  const getResultText = (result: string) => {
+    switch (result) {
+      case "success":
+        return t('success');
+      case "warning":
+        return t('warning');
+      case "failure":
+        return t('failure');
+      default:
+        return result;
     }
   };
 
@@ -68,22 +84,22 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
         <div className="space-y-4">
           <div className="flex items-center text-sm text-muted-foreground">
             <Clock className="mr-2 h-4 w-4" />
-            <span>Last run: {robot.lastRunTime}</span>
+            <span>{t('lastRun')}: {robot.lastRunTime}</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center text-sm">
-              <span className="mr-1">Result:</span>
+              <span className="mr-1">{t('result')}:</span>
               <span className={cn(
                 robot.lastResult === "success" && "text-success",
                 robot.lastResult === "warning" && "text-warning",
                 robot.lastResult === "failure" && "text-error"
               )}>
-                {robot.lastResult.charAt(0).toUpperCase() + robot.lastResult.slice(1)}
+                {getResultText(robot.lastResult)}
                 {getResultIcon()}
               </span>
             </div>
             <div className="text-sm">
-              Duration: {robot.duration}
+              {t('duration')}: {robot.duration}
             </div>
           </div>
           {robot.description && (
@@ -95,7 +111,7 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button variant="outline" size="sm" className="w-full gap-2">
-          Details
+          {t('details')}
           <ArrowRight className="h-4 w-4" />
         </Button>
       </CardFooter>

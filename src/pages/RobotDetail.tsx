@@ -1,5 +1,5 @@
 
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate, useEffect } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -7,18 +7,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
 import ProcessFlow from "@/components/ProcessFlow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Clock, Info } from "lucide-react";
+import { ArrowLeft, Clock } from "lucide-react";
 import { apiService } from "@/services/api";
 import { useToast } from "@/components/ui/use-toast";
 import AiInsights from "@/components/AiInsights";
 import RobotCommonInfo from "@/components/RobotCommonInfo";
 import { Robot } from "@/types/robots";
 import { useMemo } from "react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const RobotDetail = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
+  
+  // Check if this is the Invoice Robot and redirect if needed
+  useEffect(() => {
+    if (id === "1") {
+      navigate("/invoice", { replace: true });
+    }
+  }, [id, navigate]);
   
   // Get robot data from router state if available
   const robotFromState = location.state?.robot as Robot | undefined;
@@ -59,14 +69,6 @@ const RobotDetail = () => {
     queryFn: apiService.getInsights,
   });
 
-  // Handle inform button click
-  const handleInform = () => {
-    toast({
-      title: "Notification sent",
-      description: `A notification about ${robot?.name} has been sent to the team.`,
-    });
-  };
-
   // Check if current robot is the Invoice Processing Robot
   const isInvoiceRobot = useMemo(() => {
     return robot?.name.includes("Invoice") || robot?.id === "1";
@@ -88,7 +90,7 @@ const RobotDetail = () => {
         <Button variant="ghost" asChild className="mb-4 -ml-3">
           <Link to="/" className="flex items-center">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
+            {t('backToDashboard')}
           </Link>
         </Button>
         <div className="glass rounded-lg p-6 animate-pulse">
@@ -114,7 +116,7 @@ const RobotDetail = () => {
           <Button asChild>
             <Link to="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
+              {t('backToDashboard')}
             </Link>
           </Button>
         </div>
@@ -129,7 +131,7 @@ const RobotDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('status')}</CardTitle>
           </CardHeader>
           <CardContent>
             <StatusBadge status={robot.status} className="text-sm" />
@@ -137,7 +139,7 @@ const RobotDetail = () => {
         </Card>
         <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Last Run</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('lastRun')}</CardTitle>
           </CardHeader>
           <CardContent className="flex items-center">
             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -146,7 +148,7 @@ const RobotDetail = () => {
         </Card>
         <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Duration</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('duration')}</CardTitle>
           </CardHeader>
           <CardContent>
             <span>{robot.duration}</span>
@@ -156,13 +158,13 @@ const RobotDetail = () => {
 
       <Tabs defaultValue="process" className="mb-6">
         <TabsList className="mb-4">
-          <TabsTrigger value="process">Process Flow</TabsTrigger>
-          {isInvoiceRobot && <TabsTrigger value="insights">AI Insights</TabsTrigger>}
+          <TabsTrigger value="process">{t('processFlow')}</TabsTrigger>
+          {isInvoiceRobot && <TabsTrigger value="insights">{t('aiInsightsTab')}</TabsTrigger>}
         </TabsList>
         <TabsContent value="process" className="animate-fade-in">
           <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">
             <CardHeader>
-              <CardTitle>Default Process Flow</CardTitle>
+              <CardTitle>{t('defaultProcessFlow')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="max-h-[600px] overflow-y-auto">

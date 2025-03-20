@@ -13,22 +13,24 @@ import {
 } from "@/components/ui/sidebar";
 import { Home, Info, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const menuItems = [
-  {
-    title: "Overview",
-    path: "/",
-    icon: Home,
-  },
-  {
-    title: "AI Insights",
-    path: "/insights",
-    icon: Zap,
-  },
-];
+import { useLanguage } from "./LanguageProvider";
 
 const Sidebar = () => {
   const location = useLocation();
+  const { t } = useLanguage();
+  
+  const menuItems = [
+    {
+      title: t('overviewTab'),
+      path: "/",
+      icon: Home,
+    },
+    {
+      title: t('aiInsightsTab'),
+      path: "/insights",
+      icon: Zap,
+    },
+  ];
   
   return (
     <ShadcnSidebar>
