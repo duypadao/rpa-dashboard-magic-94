@@ -155,44 +155,6 @@ export const apiService = {
     }
   },
   
-  // Get robot by ID
-  async getRobotById(id: string): Promise<Robot | undefined> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/robots/${id}`);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      const data: RobotResponse = await response.json();
-      return data as Robot;
-    } catch (error) {
-      console.error(`Error fetching robot ${id}:`, error);
-      
-      // Find in mock data
-      return mockRobots.find(robot => robot.id === id);
-    }
-  },
-  
-  // Get detailed process steps for a running robot
-  async getProcessSteps(robotId: string): Promise<ProcessNode[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/robots/${robotId}/process`);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      const data: ProcessStepResponse[] = await response.json();
-      return mapProcessStepsToNodes(data);
-    } catch (error) {
-      console.error(`Error fetching process for robot ${robotId}:`, error);
-      
-      // Return mock data as fallback
-      return mockProcessNodes;
-    }
-  },
-  
   // Get default process flow based on robot definition - always with success status
   getDefaultProcessFlow(robot: Robot): ProcessNode[] {
     if (!robot.defaultProcessFlow || robot.defaultProcessFlow.length === 0) {

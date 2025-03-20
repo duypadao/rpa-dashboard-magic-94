@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -110,13 +109,13 @@ const Index = () => {
   }, [robots]);
 
   // Navigate to robot detail page
-  const handleRobotClick = (robotId: string) => {
+  const handleRobotClick = (robot: Robot) => {
     // Check if this is the Invoice Robot
-    if (robotId === "1") {
+    if (robot.id === "1") {
       navigate("/invoice");
     } else {
-      // For all other robots, navigate to the robot/:id page
-      navigate(`/robot/${robotId}`);
+      // For all other robots, navigate to the robot/:id page with robot data
+      navigate(`/robot/${robot.id}`, { state: { robot } });
     }
   };
 
@@ -211,7 +210,7 @@ const Index = () => {
                 <StatusCard 
                   key={robot.id} 
                   robot={robot} 
-                  onClick={() => handleRobotClick(robot.id)}
+                  onClick={() => handleRobotClick(robot)}
                   className={`cursor-pointer hover:shadow-md transition-all duration-300 ${view === "list" ? "md:max-w-full" : ""}`}
                 />
               ))}

@@ -1,3 +1,4 @@
+
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect as reactUseEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -30,29 +31,15 @@ const RobotDetail = () => {
     }
   }, [id, navigate]);
   
-  // Get robot data from router state if available
-  const robotFromState = location.state?.robot as Robot | undefined;
-  
-  // Fetch robot data with React Query only if not provided in state
-  const { 
-    data: fetchedRobot, 
-    isLoading: robotLoading,
-    isError: robotError
-  } = useQuery({
-    queryKey: ['robot', id],
-    queryFn: () => apiService.getRobotById(id || ""),
-    enabled: !!id && !robotFromState, // Only run query if id exists and we don't have the robot data
-  });
-  
-  // Use robot from state or fetched data
-  const robot = robotFromState || fetchedRobot;
+  // Get robot data from router state
+  const robot = location.state?.robot as Robot | undefined;
   
   // Generate process nodes based on robot type
   const processNodes = useMemo(() => {
     if (!robot) return [];
     
     // For Invoice Processing Bot (id: 1), we'll use existing logic
-    if (robot.id == "1") {
+    if (robot.id === "1") {
       return []; // This case is handled separately in InvoiceDetail.tsx
     }
     
@@ -74,17 +61,20 @@ const RobotDetail = () => {
     return robot?.name.includes("Invoice") || robot?.id === "1";
   }, [robot]);
 
-  // Show errors if data fetching failed
-  if (robotError) {
-    toast({
-      title: "Error loading robot details",
-      description: "Could not fetch robot details. Using local data as fallback.",
-      variant: "destructive",
-    });
-  }
+  // If no robot data from state, redirect to home
+  reactUseEffect(() => {
+    if (!robot && id) {
+      toast({
+        title: "Robot data not available",
+        description: "Returning to dashboard to get robot information",
+        variant: "destructive",
+      });
+      navigate("/", { replace: true });
+    }
+  }, [robot, id, navigate, toast]);
 
   // Show loading state
-  if (robotLoading || (!robot && !robotError)) {
+  if (!robot) {
     return (
       <Layout>
         <Button variant="ghost" asChild className="mb-4 -ml-3">
@@ -102,23 +92,6 @@ const RobotDetail = () => {
             ))}
           </div>
           <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (!robot) {
-    return (
-      <Layout>
-        <div className="flex flex-col items-center justify-center h-[60vh]">
-          <h2 className="text-xl font-semibold mb-2">Robot not found</h2>
-          <p className="text-muted-foreground mb-4">The robot you are looking for does not exist.</p>
-          <Button asChild>
-            <Link to="/">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t('backToDashboard')}
-            </Link>
-          </Button>
         </div>
       </Layout>
     );
