@@ -1,6 +1,5 @@
-
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect as reactUseEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,7 @@ const RobotDetail = () => {
   const { t } = useLanguage();
   
   // Check if this is the Invoice Robot and redirect if needed
-  useEffect(() => {
+  reactUseEffect(() => {
     if (id === "1") {
       navigate("/invoice", { replace: true });
     }
