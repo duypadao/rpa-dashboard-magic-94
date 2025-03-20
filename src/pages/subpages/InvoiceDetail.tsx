@@ -15,16 +15,14 @@ import { useLanguage } from "@/components/LanguageProvider";
 const InvoiceDetail = () => {
   const { t } = useLanguage();
   // Hard-coded ID for Invoice Processing Robot
-  const INVOICE_ROBOT_ID = "1";
   
-  // Fetch robot data with React Query
+  //Fetch robot data with React Query
   const { 
     data: robot, 
     isLoading: robotLoading,
-    isError: robotError
   } = useQuery({
-    queryKey: ['robot', INVOICE_ROBOT_ID],
-    queryFn: () => apiService.getRobotById(INVOICE_ROBOT_ID),
+    queryKey: ['invoiceRobot'],
+    queryFn: () => apiService.getInvoiceRobot(),
   });
 
   // Fetch invoice history data
@@ -32,8 +30,8 @@ const InvoiceDetail = () => {
     data: invoiceHistory = [], 
     isLoading: historyLoading 
   } = useQuery({
-    queryKey: ['invoiceHistory', INVOICE_ROBOT_ID],
-    queryFn: () => apiService.getInvoiceHistory(INVOICE_ROBOT_ID),
+    queryKey: ['invoiceHistory'],
+    queryFn: () => apiService.getInvoiceHistory(),
   });
 
   // Fetch invoice overview data
@@ -41,8 +39,8 @@ const InvoiceDetail = () => {
     data: invoiceOverView = [], 
     isLoading: overViewLoading 
   } = useQuery({
-    queryKey: ['invoiceOverView', INVOICE_ROBOT_ID],
-    queryFn: () => apiService.getInvoiceOverView(INVOICE_ROBOT_ID),
+    queryKey: ['invoiceOverView'],
+    queryFn: () => apiService.getInvoiceOverView(),
   });
 
   if (robotLoading) {

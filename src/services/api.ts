@@ -4,6 +4,10 @@ import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
 import { InvoiceOverViewItem } from "@/pages/subpages/components/InvoiceOverView";
 import dayjs from "dayjs";
 
+// API Endpoints
+//const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
+const API_BASE_URL = "http://ros:8112/rpa/dashboard";
+
 // API response types
 export interface RobotResponse {
   id: string;
@@ -60,9 +64,6 @@ export const mapDefaultProcessFlowToNodes = (names: string[]): ProcessNode[] => 
   });
 };
 
-// API Endpoints
-//const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
-const API_BASE_URL = "http://ros:8112/rpa/dashboard";
 
 // Mock data for fallbacks
 const mockRobots: Robot[] = [
@@ -184,9 +185,24 @@ export const apiService = {
       return mockProcessNodes;
     }
   },
+  //Fetch invocie robot
+  async getInvoiceRobot(): Promise<Robot | undefined> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/robots/invoice`);
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data: RobotResponse = await response.json();
+      return data as Robot;
+    } catch (error) {
+      console.error(`Error fetching invoice robot `, error);
+    }
+  },
   
   // Fetch invoice overview data
-  async getInvoiceOverView(robotId: string): Promise<InvoiceOverViewItem[]> {
+  async getInvoiceOverView(): Promise<InvoiceOverViewItem[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/robots/invoice/overview`);
       
@@ -196,13 +212,13 @@ export const apiService = {
       
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching invoice overview for robot ${robotId}:`, error);
+      console.error(`Error fetching invoice overview `, error);
       return [];
     }
   },
   
   // Fetch invoice history data for a specific robot
-  async getInvoiceHistory(robotId: string): Promise<InvoiceHistoryItem[]> {
+  async getInvoiceHistory(): Promise<InvoiceHistoryItem[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/robots/invoice/history`);
       
@@ -212,7 +228,7 @@ export const apiService = {
       
       return await response.json();
     } catch (error) {
-      console.error(`Error fetching invoice history for robot ${robotId}:`, error);
+      console.error(`Error fetching invoice history for :`, error);
       return [];
     }
   },
