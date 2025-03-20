@@ -5,10 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import StatusCard from "@/components/StatusCard";
 import { apiService } from "@/services/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BrainCircuit, Bot, Search as SearchIcon, SlidersHorizontal } from "lucide-react";
+import { BrainCircuit, Bot, Search as SearchIcon, SlidersHorizontal, LayoutGrid, ArrowUpDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,12 +18,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Robot } from "@/types/robots";
 import { useLanguage } from "@/components/LanguageProvider";
+import AiInsights from "@/components/AiInsights";
 
 const Index = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [view, setView] = useState<"grid" | "list">("grid");
   
   // Fetch robots with React Query
   const { data: robots = [], isLoading, isError } = useQuery({
@@ -117,131 +120,117 @@ const Index = () => {
     }
   };
 
-  const getContent = () => {
-    if (isLoading) {
-      return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-48 animate-pulse bg-muted rounded-lg"></div>
-          ))}
-        </div>
-      );
-    }
-
-    if (isError || !robots.length) {
-      return (
-        <div className="flex flex-col items-center justify-center h-[40vh] text-center">
-          <h2 className="text-xl font-semibold mb-2">{t('couldNotLoadRobots')}</h2>
-          <p className="text-muted-foreground">{t('tryAgainLater')}</p>
-        </div>
-      );
-    }
-
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredRobots.map((robot) => (
-          <StatusCard 
-            key={robot.id} 
-            robot={robot} 
-            onClick={() => handleRobotClick(robot.id)}
-            className="cursor-pointer"
-          />
-        ))}
-      </div>
-    );
-  };
-
   return (
     <Layout>
-      <div className="mb-6">
-        <h1 className="text-3xl font-semibold tracking-tight">{t('robotStatusOverview')}</h1>
-        <p className="text-muted-foreground">{t('monitorAllRobots')}</p>
-      </div>
-
-      {/* Search and filter controls */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative w-full sm:w-64">
-          <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder={t('searchRobots')}
-            className="pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      {/* Header section with title and search controls */}
+      <div className="mb-8 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight">{t('robotStatusOverview')}</h1>
+            <p className="text-muted-foreground">{t('monitorAllRobots')}</p>
+          </div>
+          
+          {/* Search and filter controls */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative w-full sm:w-64">
+              <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder={t('searchRobots')}
+                className="pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-10">
+                  <SlidersHorizontal className="h-4 w-4 mr-2" />
+                  {t('filterByStatus')}: {statusFilter === 'all' ? t('allRobots') : t(statusFilter)}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setStatusFilter("all")}>
+                  {t('allRobots')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("running")}>
+                  {t('running')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("stopped")}>
+                  {t('stopped')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("error")}>
+                  {t('error')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-10"
+              onClick={() => setView(view === "grid" ? "list" : "grid")}
+            >
+              {view === "grid" ? (
+                <ArrowUpDown className="h-4 w-4 mr-2" />
+              ) : (
+                <LayoutGrid className="h-4 w-4 mr-2" />
+              )}
+              {view === "grid" ? "List View" : "Grid View"}
+            </Button>
+          </div>
         </div>
         
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="sm:ml-auto h-10">
-              <SlidersHorizontal className="h-4 w-4 mr-2" />
-              {t('filterByStatus')}: {statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setStatusFilter("all")}>
-              {t('allRobots')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setStatusFilter("running")}>
-              {t('running')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setStatusFilter("stopped")}>
-              {t('stopped')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setStatusFilter("error")}>
-              {t('error')}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Separator />
       </div>
 
-      {getContent()}
-
-      {/* AI Insights section */}
-      {!isLoading && !isError && robots.length > 0 && (
-        <Card className="mt-8 animate-fade-in">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <BrainCircuit className="h-5 w-5 mr-2 text-primary" />
-              {t('aiInsights')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {insights.length > 0 ? (
-              insights.map((insight, index) => (
-                <div
-                  key={insight.id}
-                  className="p-3 glass rounded-lg hover:shadow-sm transition-all duration-300"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-sm font-semibold">{insight.title}</h3>
-                    <div className={`text-xs px-2 py-0.5 rounded-full ${
-                      insight.severity === "high" 
-                        ? "bg-error/10 text-error"
-                        : insight.severity === "medium"
-                        ? "bg-warning/10 text-warning"
-                        : "bg-info/10 text-info"
-                    }`}>
-                      {insight.type}
-                    </div>
-                  </div>
-                  <p className="text-xs text-muted-foreground mb-1">{insight.description}</p>
-                  {insight.robot && (
-                    <div className="text-xs text-muted-foreground">
-                      {t('robot')}: <span className="font-medium">{insight.robot}</span>
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="flex items-center justify-center py-6 text-muted-foreground">
-                <Bot className="mr-2 h-5 w-5" />
-                {t('noInsightsAvailable')}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
+      {/* Main content area with robots and insights side by side */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        {/* Robots section */}
+        <div className="md:col-span-8">
+          <div className="mb-4">
+            <h2 className="text-xl font-medium">{t('robotsOverview')}</h2>
+          </div>
+          
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-48 animate-pulse bg-muted rounded-lg"></div>
+              ))}
+            </div>
+          ) : isError || !robots.length ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center h-[40vh] text-center p-6">
+                <h2 className="text-xl font-semibold mb-2">{t('couldNotLoadRobots')}</h2>
+                <p className="text-muted-foreground">{t('tryAgainLater')}</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className={`grid ${view === "grid" ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"} gap-4`}>
+              {filteredRobots.map((robot) => (
+                <StatusCard 
+                  key={robot.id} 
+                  robot={robot} 
+                  onClick={() => handleRobotClick(robot.id)}
+                  className={`cursor-pointer hover:shadow-md transition-all duration-300 ${view === "list" ? "md:max-w-full" : ""}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {/* AI Insights section */}
+        <div className="md:col-span-4">
+          <div className="mb-4">
+            <h2 className="text-xl font-medium">{t('availableInsights')}</h2>
+          </div>
+          
+          <AiInsights 
+            insights={insights} 
+            isLoading={isLoading} 
+          />
+        </div>
+      </div>
     </Layout>
   );
 };

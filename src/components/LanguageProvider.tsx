@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type Language = "en" | "zh";
@@ -126,6 +125,66 @@ const translations: Translations = {
   analytics: {
     en: "AI Analytics",
     zh: "AI 分析",
+  },
+  robotStatusOverview: {
+    en: "Robot Status Overview",
+    zh: "机器人状态��览",
+  },
+  monitorAllRobots: {
+    en: "Monitor and manage all automation robots from a single dashboard",
+    zh: "从单个仪表板监控和管理所有自动化机器人",
+  },
+  searchRobots: {
+    en: "Search robots...",
+    zh: "搜索机器人...",
+  },
+  filterByStatus: {
+    en: "Filter by status",
+    zh: "按状态筛选",
+  },
+  allRobots: {
+    en: "All Robots",
+    zh: "所有机器人",
+  },
+  running: {
+    en: "Running",
+    zh: "运行中",
+  },
+  stopped: {
+    en: "Stopped",
+    zh: "已停止",
+  },
+  error: {
+    en: "Error",
+    zh: "错误",
+  },
+  aiInsights: {
+    en: "AI Insights",
+    zh: "AI 洞察",
+  },
+  noInsightsAvailable: {
+    en: "No insights available at this time",
+    zh: "目前没有可用的洞察",
+  },
+  robot: {
+    en: "Robot",
+    zh: "机器人",
+  },
+  couldNotLoadRobots: {
+    en: "Could not load robots",
+    zh: "无法加载机器人",
+  },
+  tryAgainLater: {
+    en: "Please try again later",
+    zh: "请稍后再试",
+  },
+  robotsOverview: {
+    en: "Robots Overview",
+    zh: "机器人概览",
+  },
+  availableInsights: {
+    en: "Available Insights",
+    zh: "可用洞察",
   },
 };
 
