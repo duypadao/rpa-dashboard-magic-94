@@ -128,7 +128,7 @@ const translations: Translations = {
   },
   robotStatusOverview: {
     en: "Robot Status Overview",
-    zh: "机器人状态��览",
+    zh: "机器人状态概览",
   },
   monitorAllRobots: {
     en: "Monitor and manage all automation robots from a single dashboard",

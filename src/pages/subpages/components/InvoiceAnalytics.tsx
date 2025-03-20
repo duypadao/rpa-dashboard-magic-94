@@ -158,23 +158,13 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
           return currWarningRate > maxWarningRate ? curr : max;
         }, processedData.supplierSuccessRates[0]).supplier} has the highest warning rate`,
         icon: <AlertTriangle className="h-5 w-5 text-warning" />
-      },
-      {
-        id: "efficiency-trend",
-        title: `Invoice processing efficiency has improved by ${Math.floor(Math.random() * 10) + 5}% compared to last month`,
-        icon: <LineChart className="h-5 w-5 text-success" />
-      },
-      {
-        id: "cost-savings",
-        title: `Automated invoice processing has saved approximately ${Math.floor(Math.random() * 50) + 20} work hours this month`,
-        icon: <DollarSign className="h-5 w-5 text-success" />
       }
     ];
 
     // Randomly select 5 insights
     return allInsights
       .sort(() => Math.random() - 0.5)
-      .slice(0, 5);
+      .slice(0, 10);
   }, [processedData]);
 
   return (
