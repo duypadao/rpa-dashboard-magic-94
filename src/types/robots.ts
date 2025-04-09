@@ -8,6 +8,7 @@ export interface Robot {
   duration: string;
   description?: string;
   defaultProcessFlow?: string[];
+  processNodes?: ProcessNode[];
 }
 
 export interface ProcessNode {
@@ -18,6 +19,7 @@ export interface ProcessNode {
   endTime?: string;
   duration?: string;
   error?: string;
+  manualProcessingTime?: number 
 }
 
 export interface RunHistoryItem {
