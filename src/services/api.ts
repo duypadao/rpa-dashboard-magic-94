@@ -1,12 +1,9 @@
-import { ProcessNode, Robot, RunHistoryItem } from "@/types/robots";
+import { ProcessNode, Robot } from "@/types/robots";
 import { Insight } from "@/components/AiInsights";
-import { InvoiceHistoryItem } from "@/pages/subpages/components/InvoiceHistory";
-import { InvoiceOverViewItem } from "@/pages/subpages/components/InvoiceOverView";
-import dayjs from "dayjs";
 
-// API Endpoints
-//const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
-const API_BASE_URL = "http://ros:8112/rpa/dashboard";
+
+export const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
+//const API_BASE_URL = "http://ros:8112/rpa/dashboard";
 
 // API response types
 export interface RobotResponse {
@@ -26,16 +23,16 @@ export interface ProcessStepResponse {
   startTime?: string;
   endTime?: string;
   duration?: string;
-  status: "success" | "failure" | "in-progress" | "pending";
+  status: "success" | "warning" | "failure" | "in-progress" | "pending";
   error?: string | null;
 }
-
 // Map API response to our app's data structure
 export const mapProcessStepsToNodes = (steps: ProcessStepResponse[]): ProcessNode[] => {
   return steps.map((step) => {
     // Map API status to our component's status type
-    const statusMap: Record<string, "success" | "failure" | "in-progress" | "pending"> = {
+    const statusMap: Record<string, "success" | "warning" | "failure" | "in-progress" | "pending"> = {
       success: "success",
+      warning: "warning",
       failure: "failure",
       "in-progress": "in-progress",
       pending: "pending"
@@ -109,7 +106,7 @@ const mockRobots: Robot[] = [
   }
 ];
 
-const mockProcessNodes: ProcessNode[] = [
+export const mockProcessNodes: ProcessNode[] = [
   { id: "node1", name: "Start Process", status: "success" },
   { id: "node2", name: "Extract Data", status: "success" },
   { id: "node3", name: "Validate Information", status: "in-progress" },
@@ -166,72 +163,7 @@ export const apiService = {
     return mapDefaultProcessFlowToNodes(robot.defaultProcessFlow);
   },
   
-  // Fetch process flow for an invoice
-  async getProcessNodes(invoice: InvoiceHistoryItem): Promise<ProcessNode[]> {
-    try {
-      const date = dayjs(invoice.date, "YYYY-MM-DD HH:mm:ss").format("YYYYMMDD")
-      const response = await fetch(`${API_BASE_URL}/robots/invoice/flow/${date}/${invoice.supplierId}/${invoice.invoiceNo}`);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      const data: ProcessStepResponse[] = await response.json();
-      return mapProcessStepsToNodes(data);
-    } catch (error) {
-      console.error(`Error fetching process flow for invoice ${invoice.invoiceNo}:`, error);
-      
-      // Return mock data as fallback
-      return mockProcessNodes;
-    }
-  },
-  //Fetch invocie robot
-  async getInvoiceRobot(): Promise<Robot | undefined> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/robots/invoice`);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      const data: RobotResponse = await response.json();
-      return data as Robot;
-    } catch (error) {
-      console.error(`Error fetching invoice robot `, error);
-    }
-  },
   
-  // Fetch invoice overview data
-  async getInvoiceOverView(): Promise<InvoiceOverViewItem[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/robots/invoice/overview`);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error(`Error fetching invoice overview `, error);
-      return [];
-    }
-  },
-  
-  // Fetch invoice history data for a specific robot
-  async getInvoiceHistory(): Promise<InvoiceHistoryItem[]> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/robots/invoice/history`);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error(`Error fetching invoice history for :`, error);
-      return [];
-    }
-  },
   
   // Other API methods
   async getSuccessRateData() {

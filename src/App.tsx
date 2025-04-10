@@ -8,7 +8,8 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./components/LanguageProvider";
 import Index from "./pages/Index";
 import RobotDetail from "./pages/RobotDetail";
-import InvoiceDetail from "./pages/subpages/InvoiceDetail";
+import InvoiceDetail from "./pages/subpages/invoice/InvoiceDetail";
+import MspoDetail from "./pages/subpages/mspo/MspoDetail";
 import Analytics from "./pages/Analytics";
 import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/robot/:id" element={<RobotDetail />} />
               <Route path="/invoice" element={<InvoiceDetail />} />
+              <Route path="/mspo" element={<MspoDetail />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/insights" element={<Insights />} />
               <Route path="*" element={<NotFound />} />

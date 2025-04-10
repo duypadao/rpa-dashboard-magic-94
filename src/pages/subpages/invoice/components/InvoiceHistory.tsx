@@ -26,6 +26,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export interface InvoiceHistoryItem {
+  id: number;
   supplierId: string;
   supplierName: string;
   invoiceNo: string;

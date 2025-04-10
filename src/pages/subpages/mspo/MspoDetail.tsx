@@ -5,14 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock } from "lucide-react";
-import { apiService } from "@/services/api";
+import { mspoApiService } from "@/services/mspoApi";
 import RobotCommonInfo from "@/components/RobotCommonInfo";
-import InvoiceHistory from "./components/InvoiceHistory";
-import InvoiceAnalytics from "./components/InvoiceAnalytics";
-import InvoiceOverView from "./components/InvoiceOverView";
+import MspoAnalytics from "./components/MspoAnalytics";
+import MspoOverView from "./components/MspoOverView";
 import { useLanguage } from "@/components/LanguageProvider";
 
-const InvoiceDetail = () => {
+const MspoDetail = () => {
   const { t } = useLanguage();
   // Hard-coded ID for Invoice Processing Robot
   
@@ -22,16 +21,7 @@ const InvoiceDetail = () => {
     isLoading: robotLoading,
   } = useQuery({
     queryKey: ['invoiceRobot'],
-    queryFn: () => apiService.getInvoiceRobot(),
-  });
-
-  // Fetch invoice history data
-  const { 
-    data: invoiceHistory = [], 
-    isLoading: historyLoading 
-  } = useQuery({
-    queryKey: ['invoiceHistory'],
-    queryFn: () => apiService.getInvoiceHistory(),
+    queryFn: () => mspoApiService.getMspoRobot(),
   });
 
   // Fetch invoice overview data
@@ -40,7 +30,7 @@ const InvoiceDetail = () => {
     isLoading: overViewLoading 
   } = useQuery({
     queryKey: ['invoiceOverView'],
-    queryFn: () => apiService.getInvoiceOverView(),
+    queryFn: () => mspoApiService.getMspoOverView(),
   });
 
   if (robotLoading) {
@@ -86,25 +76,20 @@ const InvoiceDetail = () => {
 
       <Tabs defaultValue="overview" className="mb-6">
         <TabsList className="mb-4">
-          <TabsTrigger value="overview">Over View</TabsTrigger>
-          <TabsTrigger value="history">{t('history')}</TabsTrigger>
+          <TabsTrigger value="overview">{t('overview')}</TabsTrigger>
           <TabsTrigger value="analytics">{t('analytics')}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview" className="animate-fade-in">
-          <InvoiceOverView invoiceData={invoiceOverView} isLoading={overViewLoading} />
+          
         </TabsContent>
         
         <TabsContent value="history" className="animate-fade-in">
-          <InvoiceHistory invoiceData={invoiceHistory} isLoading={historyLoading} />
-        </TabsContent>
-        
-        <TabsContent value="analytics" className="animate-fade-in">
-          <InvoiceAnalytics invoiceData={invoiceHistory} isLoading={historyLoading} />
+          
         </TabsContent>
       </Tabs>
     </Layout>
   );
 };
 
-export default InvoiceDetail;
+export default MspoDetail;
