@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Eye, FileText, Calendar } from "lucide-react";
-import { format } from "date-fns";
+import { Eye, FileText, Calendar, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { format, addMonths, subMonths } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -24,10 +24,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { mspoApiService } from "@/services/mspoApi";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export interface MspoOverViewItem {
   date: string;
@@ -60,9 +65,20 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
   const [detailCurrentPage, setDetailCurrentPage] = useState(1);
   const itemsPerPage = 10;
   
-  // Date filter
+  // Month-Year filter
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  
+  // Generate years (current year + 10 years back)
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 11 }, (_, i) => currentYear - i);
+  
+  // Generate months
+  const months = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   const handleViewDetail = (item: MspoOverViewItem) => {
     setSelectedItem(item);
@@ -144,17 +160,46 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
     return items;
   };
   
-  // Handle date selection
-  const handleDateSelect = (selectedDate: Date | undefined) => {
-    setDate(selectedDate);
-    setIsCalendarOpen(false);
+  // Handle month navigation
+  const handlePreviousMonth = () => {
+    setCurrentMonth(prevMonth => subMonths(prevMonth, 1));
   };
   
-  const handleDateFilter = () => {
-    // This would be handled by the parent component via a refetch with the new date
-    if (date) {
-      console.log(`Filtering by date: ${date.toISOString()}`);
+  const handleNextMonth = () => {
+    setCurrentMonth(prevMonth => addMonths(prevMonth, 1));
+  };
+  
+  // Handle month selection
+  const handleMonthSelect = (month: string) => {
+    const monthIndex = months.findIndex(m => m === month);
+    if (monthIndex !== -1) {
+      const newDate = new Date(currentMonth);
+      newDate.setMonth(monthIndex);
+      setCurrentMonth(newDate);
     }
+  };
+  
+  // Handle year selection
+  const handleYearSelect = (year: string) => {
+    const newDate = new Date(currentMonth);
+    newDate.setFullYear(parseInt(year));
+    setCurrentMonth(newDate);
+  };
+  
+  // Apply date filter
+  const handleDateFilter = () => {
+    setDate(currentMonth);
+    setIsCalendarOpen(false);
+    // This would be handled by the parent component via a refetch with the new date
+    console.log(`Filtering by date: ${currentMonth.toISOString()}`);
+  };
+  
+  // Clear date filter
+  const handleClearFilter = () => {
+    setDate(undefined);
+    setCurrentMonth(new Date());
+    setIsCalendarOpen(false);
+    // This would trigger a refetch without date filter
   };
 
   return (
@@ -171,28 +216,86 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
                   {date ? format(date, "MMMM yyyy") : "Filter by Month"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="end">
-                <CalendarComponent
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateSelect}
-                  className="p-3 pointer-events-auto"
-                  initialFocus
-                />
-                <div className="flex items-center justify-between p-3 border-t">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setDate(undefined);
-                      setIsCalendarOpen(false);
-                    }}
-                  >
-                    Clear
-                  </Button>
-                  <Button size="sm" onClick={handleDateFilter}>
-                    Apply Filter
-                  </Button>
+              <PopoverContent className="w-auto p-3 bg-background" align="end">
+                <div className="flex flex-col space-y-4">
+                  {/* Month-Year Selector Header */}
+                  <div className="flex items-center justify-between">
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="h-7 w-7"
+                      onClick={handlePreviousMonth}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <div className="text-center font-medium">
+                      {format(currentMonth, "MMMM yyyy")}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="h-7 w-7"
+                      onClick={handleNextMonth}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  {/* Month Selector */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-sm font-medium">Month:</label>
+                      <Select 
+                        value={format(currentMonth, "MMMM")}
+                        onValueChange={handleMonthSelect}
+                      >
+                        <SelectTrigger className="w-full mt-1">
+                          <SelectValue placeholder="Select month" />
+                        </SelectTrigger>
+                        <SelectContent position="popper" className="bg-background">
+                          {months.map((month) => (
+                            <SelectItem key={month} value={month}>
+                              {month}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Year Selector */}
+                    <div>
+                      <label className="text-sm font-medium">Year:</label>
+                      <Select 
+                        value={currentMonth.getFullYear().toString()}
+                        onValueChange={handleYearSelect}
+                      >
+                        <SelectTrigger className="w-full mt-1">
+                          <SelectValue placeholder="Select year" />
+                        </SelectTrigger>
+                        <SelectContent position="popper" className="bg-background">
+                          {years.map((year) => (
+                            <SelectItem key={year} value={year.toString()}>
+                              {year}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-between pt-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleClearFilter}
+                    >
+                      Clear
+                    </Button>
+                    <Button size="sm" onClick={handleDateFilter}>
+                      Apply Filter
+                    </Button>
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>
