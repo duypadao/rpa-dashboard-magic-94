@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { mspoApiService } from "@/services/mspoApi";
 
 export interface MspoOverViewItem {
   date: string;
@@ -35,15 +36,26 @@ interface MspoOverViewProps {
 const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
   const [selectedItem, setSelectedItem] = useState<MspoOverViewItem | null>(null);
   const [pdfDialogOpen, setPdfDialogOpen] = useState(false);
-  const [selectedPdfPath, setSelectedPdfPath] = useState<string | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [loadingPdf, setLoadingPdf] = useState(false);
 
   const handleViewDetail = (item: MspoOverViewItem) => {
     setSelectedItem(item);
   };
 
-  const handleViewPdf = (pdfPath: string) => {
-    setSelectedPdfPath(pdfPath);
-    setPdfDialogOpen(true);
+  const handleViewPdf = async (pdfPath: string) => {
+    setLoadingPdf(true);
+    setPdfUrl(null);
+    try {
+      const url = await mspoApiService.getMspoPdf(pdfPath);
+      setPdfUrl(url);
+      setPdfDialogOpen(true);
+    } catch (error) {
+      console.error("Error fetching PDF:", error);
+      alert("Failed to load PDF: " + error.message);
+    } finally {
+      setLoadingPdf(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -83,8 +95,8 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
                 <TableHeader>
                   <TableRow className="bg-secondary/20 hover:bg-secondary/30">
                     <TableHead>Date</TableHead>
-                    <TableHead>Order Count</TableHead>
-                    <TableHead>Order Change Count</TableHead>
+                    <TableHead>Order /<br/>Order Change</TableHead>
+                    {/* <TableHead>Order Change Count</TableHead> */}
                     <TableHead>Last Run Time</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
@@ -98,8 +110,8 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <TableCell>{formatDate(item.date)}</TableCell>
-                        <TableCell>{item.orderCount}</TableCell>
-                        <TableCell>{item.orderChangeCount}</TableCell>
+                        <TableCell>{item.orderCount} / {item.orderChangeCount}</TableCell>
+                        {/* <TableCell>{item.orderChangeCount}</TableCell> */}
                         <TableCell>{formatDateTime(item.lastRunTime)}</TableCell>
                         <TableCell>
                           <Button 
@@ -164,9 +176,10 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
                             size="sm" 
                             onClick={() => handleViewPdf(detail.pdfFilePath)}
                             className="flex items-center gap-2"
+                            disabled={loadingPdf}
                           >
                             <FileText className="h-4 w-4" />
-                            View PDF
+                            {loadingPdf ? "Loading..." : "View PDF"}
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -185,22 +198,22 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
 
       {/* PDF Dialog */}
       <Dialog open={pdfDialogOpen} onOpenChange={setPdfDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
+        <DialogContent className="w-full h-full max-w-[100vw] max-h-[100vh] p-0">
           <DialogHeader>
             <DialogTitle>PDF Viewer</DialogTitle>
           </DialogHeader>
-          <div className="mt-4">
-            {selectedPdfPath && (
-              <div className="space-y-4">
-                <div className="p-4 bg-muted/50 rounded-md break-all">
-                  <p className="font-mono text-sm">{selectedPdfPath}</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-muted-foreground text-sm">
-                    This would typically display the PDF from the given file path.
-                    For local file paths, you would need a server-side solution to serve these files.
-                  </p>
-                </div>
+          <div className="overflow-auto w-full h-[calc(100vh-4rem)]">
+            {pdfUrl ? (
+              <iframe
+                src={pdfUrl}
+                width="100%"
+                height="100%"
+                title="PDF Viewer"
+                className="border-0"
+              />
+            ) : (
+              <div className="text-center py-4 text-muted-foreground">
+                Loading PDF...
               </div>
             )}
           </div>

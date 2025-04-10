@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import ProcessFlow from "@/components/ProcessFlow";
 import { useQuery } from "@tanstack/react-query";
-import { apiService } from "@/services/api";
+import { invoiceApiService } from "@/services/invoiceApi";
 import {
   Pagination,
   PaginationContent,
@@ -97,7 +97,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
     isLoading: processFlowLoading 
   } = useQuery({
     queryKey: ['invoiceFlow', invoiceSelected],
-    queryFn: () => apiService.getProcessNodes(invoiceSelected),
+    queryFn: () => invoiceApiService.getProcessNodes(invoiceSelected),
     enabled: !! invoiceSelected,
   });
   

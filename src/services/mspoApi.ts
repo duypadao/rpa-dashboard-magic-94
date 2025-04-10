@@ -32,4 +32,24 @@ async getMspoOverView(): Promise<any[]> {
       return [];
     }
   },
+
+ async getMspoPdf(pdfPath: string): Promise<string | null> {
+    try {
+        const response = await fetch(`${API_BASE_URL}/robots/mspo/get-pdf`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pdfPath }),
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data.url;
+    } catch (error) {
+        console.error(`Error fetching invoice PDF `, error);
+        return null;
+    }
+ } 
 }
