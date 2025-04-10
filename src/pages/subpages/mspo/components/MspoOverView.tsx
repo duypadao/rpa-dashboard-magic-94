@@ -1,38 +1,11 @@
 
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Eye, FileText, Calendar, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
-import { format, addMonths, subMonths } from "date-fns";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { 
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious
-} from "@/components/ui/pagination";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { mspoApiService } from "@/services/mspoApi";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import MonthYearFilter from "./date-filter/MonthYearFilter";
+import MspoSummaryTable from "./summary/MspoSummaryTable";
+import MspoDetailTable from "./detail/MspoDetailTable";
+import PdfViewerDialog from "./pdf-viewer/PdfViewerDialog";
 
 export interface MspoOverViewItem {
   date: string;
@@ -60,29 +33,11 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loadingPdf, setLoadingPdf] = useState(false);
   
-  // Pagination states
-  const [summaryCurrentPage, setSummaryCurrentPage] = useState(1);
-  const [detailCurrentPage, setDetailCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  
   // Month-Year filter
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-  
-  // Generate years (current year + 10 years back)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 11 }, (_, i) => currentYear - i);
-  
-  // Generate months
-  const months = [
-    "January", "February", "March", "April", "May", "June", 
-    "July", "August", "September", "October", "November", "December"
-  ];
 
   const handleViewDetail = (item: MspoOverViewItem) => {
     setSelectedItem(item);
-    setDetailCurrentPage(1); // Reset detail pagination when selecting a new item
   };
 
   const handleViewPdf = async (pdfPath: string) => {
@@ -99,107 +54,11 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
       setLoadingPdf(false);
     }
   };
-
-  const formatDate = (dateString: string) => {
-    try {
-      return format(new Date(dateString), "yyyy-MM-dd");
-    } catch (error) {
-      return dateString;
-    }
-  };
-
-  const formatDateTime = (dateString: string) => {
-    try {
-      return format(new Date(dateString), "yyyy-MM-dd HH:mm:ss");
-    } catch (error) {
-      return dateString;
-    }
-  };
   
-  // Calculate pagination for summary data
-  const summaryPaginatedData = mspoData ? mspoData.slice(
-    (summaryCurrentPage - 1) * itemsPerPage,
-    summaryCurrentPage * itemsPerPage
-  ) : [];
-  
-  const summaryTotalPages = mspoData ? Math.ceil(mspoData.length / itemsPerPage) : 0;
-  
-  // Calculate pagination for detail data
-  const detailPaginatedData = selectedItem?.details ? selectedItem.details.slice(
-    (detailCurrentPage - 1) * itemsPerPage,
-    detailCurrentPage * itemsPerPage
-  ) : [];
-  
-  const detailTotalPages = selectedItem?.details ? Math.ceil(selectedItem.details.length / itemsPerPage) : 0;
-  
-  // Generate pagination numbers
-  const generatePaginationItems = (currentPage: number, totalPages: number, setPage: (page: number) => void) => {
-    const items = [];
-    const maxPagesToShow = 5;
-    
-    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-    
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
-    
-    for (let i = startPage; i <= endPage; i++) {
-      items.push(
-        <PaginationItem key={i}>
-          <PaginationLink
-            isActive={i === currentPage}
-            onClick={() => setPage(i)}
-          >
-            {i}
-          </PaginationLink>
-        </PaginationItem>
-      );
-    }
-    
-    return items;
-  };
-  
-  // Handle month navigation
-  const handlePreviousMonth = () => {
-    setCurrentMonth(prevMonth => subMonths(prevMonth, 1));
-  };
-  
-  const handleNextMonth = () => {
-    setCurrentMonth(prevMonth => addMonths(prevMonth, 1));
-  };
-  
-  // Handle month selection
-  const handleMonthSelect = (month: string) => {
-    const monthIndex = months.findIndex(m => m === month);
-    if (monthIndex !== -1) {
-      const newDate = new Date(currentMonth);
-      newDate.setMonth(monthIndex);
-      setCurrentMonth(newDate);
-    }
-  };
-  
-  // Handle year selection
-  const handleYearSelect = (year: string) => {
-    const newDate = new Date(currentMonth);
-    newDate.setFullYear(parseInt(year));
-    setCurrentMonth(newDate);
-  };
-  
-  // Apply date filter
+  // Apply date filter - This would typically trigger a refetch from the parent component
   const handleDateFilter = () => {
-    setDate(currentMonth);
-    setIsCalendarOpen(false);
+    console.log(`Filtering by date: ${date?.toISOString()}`);
     // This would be handled by the parent component via a refetch with the new date
-    console.log(`Filtering by date: ${currentMonth.toISOString()}`);
-  };
-  
-  // Clear date filter
-  const handleClearFilter = () => {
-    setDate(undefined);
-    setCurrentMonth(new Date());
-    setIsCalendarOpen(false);
-    // This would trigger a refetch without date filter
   };
 
   return (
@@ -209,284 +68,45 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle>MSPO Summary</CardTitle>
           <div className="flex items-center gap-2">
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 gap-1">
-                  <Calendar className="h-4 w-4" />
-                  {date ? format(date, "MMMM yyyy") : "Filter by Month"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-3 bg-background" align="end">
-                <div className="flex flex-col space-y-4">
-                  {/* Month-Year Selector Header */}
-                  <div className="flex items-center justify-between">
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="h-7 w-7"
-                      onClick={handlePreviousMonth}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <div className="text-center font-medium">
-                      {format(currentMonth, "MMMM yyyy")}
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="h-7 w-7"
-                      onClick={handleNextMonth}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  
-                  {/* Month Selector */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-sm font-medium">Month:</label>
-                      <Select 
-                        value={format(currentMonth, "MMMM")}
-                        onValueChange={handleMonthSelect}
-                      >
-                        <SelectTrigger className="w-full mt-1">
-                          <SelectValue placeholder="Select month" />
-                        </SelectTrigger>
-                        <SelectContent position="popper" className="bg-background">
-                          {months.map((month) => (
-                            <SelectItem key={month} value={month}>
-                              {month}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    {/* Year Selector */}
-                    <div>
-                      <label className="text-sm font-medium">Year:</label>
-                      <Select 
-                        value={currentMonth.getFullYear().toString()}
-                        onValueChange={handleYearSelect}
-                      >
-                        <SelectTrigger className="w-full mt-1">
-                          <SelectValue placeholder="Select year" />
-                        </SelectTrigger>
-                        <SelectContent position="popper" className="bg-background">
-                          {years.map((year) => (
-                            <SelectItem key={year} value={year.toString()}>
-                              {year}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-between pt-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleClearFilter}
-                    >
-                      Clear
-                    </Button>
-                    <Button size="sm" onClick={handleDateFilter}>
-                      Apply Filter
-                    </Button>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <MonthYearFilter 
+              date={date} 
+              setDate={setDate} 
+              onFilter={handleDateFilter} 
+            />
           </div>
         </CardHeader>
         <CardContent>
-          {isLoading ? (
-            <div className="space-y-4 animate-pulse">
-              <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4"></div>
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-              ))}
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-secondary/20 hover:bg-secondary/30">
-                    <TableHead>Date</TableHead>
-                    <TableHead>Order /<br/>Order Change</TableHead>
-                    <TableHead>Last Run Time</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {summaryPaginatedData && summaryPaginatedData.length > 0 ? (
-                    summaryPaginatedData.map((item, index) => (
-                      <TableRow 
-                        key={index} 
-                        className={`transition-colors hover:bg-muted/40 animate-fade-in ${selectedItem === item ? 'bg-muted/60' : ''}`}
-                        style={{ animationDelay: `${index * 50}ms` }}
-                      >
-                        <TableCell>{formatDate(item.date)}</TableCell>
-                        <TableCell>{item.orderCount} / {item.orderChangeCount}</TableCell>
-                        <TableCell>{formatDateTime(item.lastRunTime)}</TableCell>
-                        <TableCell>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => handleViewDetail(item)}
-                            className="flex items-center gap-2"
-                          >
-                            <Eye className="h-4 w-4" />
-                            View Detail
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center">No MSPO data available</TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-              
-              {/* Summary Pagination */}
-              {summaryTotalPages > 1 && (
-                <Pagination className="mt-4">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        onClick={() => setSummaryCurrentPage(prev => Math.max(prev - 1, 1))}
-                        aria-disabled={summaryCurrentPage === 1}
-                        className={summaryCurrentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                      />
-                    </PaginationItem>
-                    
-                    {generatePaginationItems(summaryCurrentPage, summaryTotalPages, setSummaryCurrentPage)}
-                    
-                    <PaginationItem>
-                      <PaginationNext 
-                        onClick={() => setSummaryCurrentPage(prev => Math.min(prev + 1, summaryTotalPages))}
-                        aria-disabled={summaryCurrentPage === summaryTotalPages}
-                        className={summaryCurrentPage === summaryTotalPages ? "pointer-events-none opacity-50" : ""}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              )}
-            </div>
-          )}
+          <MspoSummaryTable 
+            data={mspoData} 
+            selectedItem={selectedItem}
+            onViewDetail={handleViewDetail}
+            isLoading={isLoading}
+          />
         </CardContent>
       </Card>
 
       {/* Right part - Detail Grid */}
       <Card>
         <CardHeader>
-          <CardTitle>MSPO Details {selectedItem && `(${formatDate(selectedItem.date)})`}</CardTitle>
+          <CardTitle>
+            MSPO Details {selectedItem && `(${new Date(selectedItem.date).toISOString().split('T')[0]})`}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          {!selectedItem ? (
-            <div className="text-center py-12 text-muted-foreground">
-              Select an item from the summary to view details
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-secondary/20 hover:bg-secondary/30">
-                    <TableHead>PO Number</TableHead>
-                    <TableHead>Main Line Description</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {detailPaginatedData && detailPaginatedData.length > 0 ? (
-                    detailPaginatedData.map((detail, index) => (
-                      <TableRow 
-                        key={index} 
-                        className="transition-colors hover:bg-muted/40 animate-fade-in"
-                        style={{ animationDelay: `${index * 50}ms` }}
-                      >
-                        <TableCell>{detail.poNumber}</TableCell>
-                        <TableCell>{detail.mainLineDescription}</TableCell>
-                        <TableCell>{detail.type}</TableCell>
-                        <TableCell>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => handleViewPdf(detail.pdfFilePath)}
-                            className="flex items-center gap-2"
-                            disabled={loadingPdf}
-                          >
-                            <FileText className="h-4 w-4" />
-                            {loadingPdf ? "Loading..." : "View PDF"}
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={4} className="text-center">No details available</TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-              
-              {/* Detail Pagination */}
-              {detailTotalPages > 1 && (
-                <Pagination className="mt-4">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious 
-                        onClick={() => setDetailCurrentPage(prev => Math.max(prev - 1, 1))}
-                        aria-disabled={detailCurrentPage === 1}
-                        className={detailCurrentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                      />
-                    </PaginationItem>
-                    
-                    {generatePaginationItems(detailCurrentPage, detailTotalPages, setDetailCurrentPage)}
-                    
-                    <PaginationItem>
-                      <PaginationNext 
-                        onClick={() => setDetailCurrentPage(prev => Math.min(prev + 1, detailTotalPages))}
-                        aria-disabled={detailCurrentPage === detailTotalPages}
-                        className={detailCurrentPage === detailTotalPages ? "pointer-events-none opacity-50" : ""}
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              )}
-            </div>
-          )}
+          <MspoDetailTable 
+            selectedItem={selectedItem}
+            onViewPdf={handleViewPdf}
+            loadingPdf={loadingPdf}
+          />
         </CardContent>
       </Card>
 
       {/* PDF Dialog */}
-      <Dialog open={pdfDialogOpen} onOpenChange={setPdfDialogOpen}>
-        <DialogContent className="w-full h-full max-w-[100vw] max-h-[100vh] p-0">
-          <DialogHeader>
-            <DialogTitle>PDF Viewer</DialogTitle>
-          </DialogHeader>
-          <ScrollArea className="w-full h-[calc(100vh-4rem)]">
-            {pdfUrl ? (
-              <iframe
-                src={pdfUrl}
-                width="100%"
-                height="100%"
-                title="PDF Viewer"
-                className="border-0"
-              />
-            ) : (
-              <div className="text-center py-4 text-muted-foreground">
-                Loading PDF...
-              </div>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+      <PdfViewerDialog 
+        open={pdfDialogOpen} 
+        onOpenChange={setPdfDialogOpen} 
+        pdfUrl={pdfUrl} 
+      />
     </div>
   );
 };
