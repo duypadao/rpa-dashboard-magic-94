@@ -1,5 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
@@ -13,6 +14,7 @@ import { useLanguage } from "@/components/LanguageProvider";
 
 const MspoDetail = () => {
   const { t } = useLanguage();
+  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
   
   //Fetch robot data with React Query
   const { 
@@ -23,14 +25,21 @@ const MspoDetail = () => {
     queryFn: () => mspoApiService.getMspoRobot(),
   });
 
-  // Fetch mspo overview data
+  // Fetch mspo overview data with date filter
   const { 
     data: mspoOverView = [], 
-    isLoading: overViewLoading 
+    isLoading: overViewLoading,
+    refetch: refetchOverview
   } = useQuery({
-    queryKey: ['mspoOverView'],
-    queryFn: () => mspoApiService.getMspoOverView(),
+    queryKey: ['mspoOverView', filterDate],
+    queryFn: () => mspoApiService.getMspoOverView(filterDate),
   });
+
+  // Handle date filter change
+  const handleDateFilterChange = (date: Date | undefined) => {
+    setFilterDate(date);
+    refetchOverview();
+  };
 
   if (robotLoading) {
     return <div>Loading...</div>;
@@ -80,7 +89,10 @@ const MspoDetail = () => {
         </TabsList>
         
         <TabsContent value="overview" className="animate-fade-in">
-          <MspoOverView mspoData={mspoOverView} isLoading={overViewLoading} />
+          <MspoOverView 
+            mspoData={mspoOverView} 
+            isLoading={overViewLoading} 
+          />
         </TabsContent>
         
         <TabsContent value="analytics" className="animate-fade-in">

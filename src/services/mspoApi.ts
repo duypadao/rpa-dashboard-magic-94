@@ -1,5 +1,6 @@
+
 import { Robot } from "@/types/robots";
-import { API_BASE_URL,RobotResponse } from "./api";
+import { API_BASE_URL, RobotResponse } from "./api";
 
 export const mspoApiService = {
 
@@ -18,9 +19,17 @@ async getMspoRobot(): Promise<Robot | undefined> {
     }
 },
 
-async getMspoOverView(): Promise<any[]> {
+async getMspoOverView(date?: Date): Promise<any[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/robots/mspo/overview`);
+      let url = `${API_BASE_URL}/robots/mspo/overview`;
+      
+      // If date is provided, add it as a query parameter
+      if (date) {
+        const formattedDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        url += `?date=${formattedDate}`;
+      }
+      
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

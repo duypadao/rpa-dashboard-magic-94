@@ -1,351 +1,390 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Search, List, ChevronDown, ChevronUp, SlidersHorizontal } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import ProcessFlow from "@/components/ProcessFlow";
-import { useQuery } from "@tanstack/react-query";
-import { invoiceApiService } from "@/services/invoiceApi";
+import { Eye, FileText, Calendar } from "lucide-react";
+import { format } from "date-fns";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { 
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
-  PaginationEllipsis,
+  PaginationPrevious
 } from "@/components/ui/pagination";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { mspoApiService } from "@/services/mspoApi";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export interface InvoiceHistoryItem {
-  id: number;
-  supplierId: string;
-  supplierName: string;
-  invoiceNo: string;
-  resultType: "success" | "warning" | "failure";
-  result: string,
+export interface MspoOverViewItem {
   date: string;
-  duration: string;
+  orderCount: number;
+  orderChangeCount: number;
+  lastRunTime: string;
+  details: MspoDetailItem[];
 }
 
-interface InvoiceHistoryProps {
-  invoiceData: InvoiceHistoryItem[];
+interface MspoDetailItem {
+  type: string;
+  pdfFilePath: string;
+  poNumber: string;
+  mainLineDescription: string;
+}
+
+interface MspoOverViewProps {
+  mspoData: MspoOverViewItem[];
   isLoading: boolean;
 }
 
-type SortField = 'supplierName' | 'invoiceNo' | 'result' | 'date' | 'duration';
-type SortOrder = 'asc' | 'desc';
-
-const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [processDialogOpen, setProcessDialogOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState<SortField>('date');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-  const [resultFilter, setResultFilter] = useState<'all' | 'success' | 'warning' | 'failure'>('all');
-  const [invoiceSelected, setInvoiceSelected] = useState<InvoiceHistoryItem>(null);
-
+const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
+  const [selectedItem, setSelectedItem] = useState<MspoOverViewItem | null>(null);
+  const [pdfDialogOpen, setPdfDialogOpen] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+  
+  // Pagination states
+  const [summaryCurrentPage, setSummaryCurrentPage] = useState(1);
+  const [detailCurrentPage, setDetailCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  
+  // Date filter
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  const processedData = useMemo(() => {
-    return [...invoiceData]
-      .filter(invoice => {
-        const matchesSearch =
-          invoice.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          invoice.invoiceNo.toLowerCase().includes(searchTerm.toLowerCase());
-  
-        const matchesResult = resultFilter === 'all' || invoice.resultType === resultFilter;
-  
-        return matchesSearch && matchesResult;
-      })
-      .sort((a, b) => {
-        let aValue = a[sortField];
-        let bValue = b[sortField];
-  
-        return sortOrder === 'asc'
-          ? String(aValue).localeCompare(String(bValue))
-          : String(bValue).localeCompare(String(aValue));
-      });
-  }, [invoiceData, searchTerm, resultFilter, sortField, sortOrder]);
-  
-  const totalPages = Math.ceil(processedData.length / itemsPerPage);
-  
-  const currentInvoices = processedData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
+  const handleViewDetail = (item: MspoOverViewItem) => {
+    setSelectedItem(item);
+    setDetailCurrentPage(1); // Reset detail pagination when selecting a new item
+  };
+
+  const handleViewPdf = async (pdfPath: string) => {
+    setLoadingPdf(true);
+    setPdfUrl(null);
+    try {
+      const url = await mspoApiService.getMspoPdf(pdfPath);
+      setPdfUrl(url);
+      setPdfDialogOpen(true);
+    } catch (error) {
+      console.error("Error fetching PDF:", error);
+      alert("Failed to load PDF: " + (error as Error).message);
+    } finally {
+      setLoadingPdf(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    try {
+      return format(new Date(dateString), "yyyy-MM-dd");
+    } catch (error) {
+      return dateString;
+    }
+  };
+
+  const formatDateTime = (dateString: string) => {
+    try {
+      return format(new Date(dateString), "yyyy-MM-dd HH:mm:ss");
+    } catch (error) {
+      return dateString;
     }
   };
   
-  const { 
-    data: processFlowData = [], 
-    isLoading: processFlowLoading 
-  } = useQuery({
-    queryKey: ['invoiceFlow', invoiceSelected],
-    queryFn: () => invoiceApiService.getProcessNodes(invoiceSelected),
-    enabled: !! invoiceSelected,
-  });
+  // Calculate pagination for summary data
+  const summaryPaginatedData = mspoData ? mspoData.slice(
+    (summaryCurrentPage - 1) * itemsPerPage,
+    summaryCurrentPage * itemsPerPage
+  ) : [];
   
-  const handleCheckProcess = (invoice: InvoiceHistoryItem) => {
-    setInvoiceSelected(invoice);
-    setProcessDialogOpen(true);
-  };
+  const summaryTotalPages = mspoData ? Math.ceil(mspoData.length / itemsPerPage) : 0;
   
-  const renderPaginationItems = () => {
-    const pagesToShow = new Set<number>();
+  // Calculate pagination for detail data
+  const detailPaginatedData = selectedItem?.details ? selectedItem.details.slice(
+    (detailCurrentPage - 1) * itemsPerPage,
+    detailCurrentPage * itemsPerPage
+  ) : [];
+  
+  const detailTotalPages = selectedItem?.details ? Math.ceil(selectedItem.details.length / itemsPerPage) : 0;
+  
+  // Generate pagination numbers
+  const generatePaginationItems = (currentPage: number, totalPages: number, setPage: (page: number) => void) => {
+    const items = [];
+    const maxPagesToShow = 5;
     
-    pagesToShow.add(1);
-    pagesToShow.add(totalPages);
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
     
-    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-      pagesToShow.add(i);
+    if (endPage - startPage + 1 < maxPagesToShow) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
     
-    const pagesArray = Array.from(pagesToShow).sort((a, b) => a - b);
-    
-    return pagesArray.map((page, index) => {
-      if (index > 0 && page - pagesArray[index - 1] > 1) {
-        return (
-          <React.Fragment key={`ellipsis-${index}`}>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink 
-                isActive={currentPage === page}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          </React.Fragment>
-        );
-      }
-      
-      return (
-        <PaginationItem key={page}>
-          <PaginationLink 
-            isActive={currentPage === page}
-            onClick={() => setCurrentPage(page)}
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            isActive={i === currentPage}
+            onClick={() => setPage(i)}
           >
-            {page}
+            {i}
           </PaginationLink>
         </PaginationItem>
       );
-    });
+    }
+    
+    return items;
   };
   
+  // Handle date selection
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    setIsCalendarOpen(false);
+  };
+  
+  const handleDateFilter = () => {
+    // This would be handled by the parent component via a refetch with the new date
+    if (date) {
+      console.log(`Filtering by date: ${date.toISOString()}`);
+    }
+  };
+
   return (
-    <Card className="animate-scale-in">
-      <CardHeader>
-        <CardTitle>Invoice Processing History This Month</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <div className="space-y-4 animate-pulse">
-            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4"></div>
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-              <div className="relative w-full sm:w-64">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search invoice or supplier..."
-                  className="pl-8"
-                  value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-scale-in">
+      {/* Left part - Summary Grid */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle>MSPO Summary</CardTitle>
+          <div className="flex items-center gap-2">
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="h-8 gap-1">
+                  <Calendar className="h-4 w-4" />
+                  {date ? format(date, "MMMM yyyy") : "Filter by Month"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <CalendarComponent
+                  mode="single"
+                  selected={date}
+                  onSelect={handleDateSelect}
+                  className="p-3 pointer-events-auto"
+                  initialFocus
                 />
-              </div>
-              
-              <div className="flex gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <SlidersHorizontal className="h-4 w-4 mr-1" />
-                      Result: {resultFilter === 'all' ? 'All' : resultFilter}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setResultFilter('all')}>
-                      All Results
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setResultFilter('success')}>
-                      Success
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setResultFilter('warning')}>
-                      Warning
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setResultFilter('failure')}>
-                      Failure
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                <div className="flex items-center justify-between p-3 border-t">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setDate(undefined);
+                      setIsCalendarOpen(false);
+                    }}
+                  >
+                    Clear
+                  </Button>
+                  <Button size="sm" onClick={handleDateFilter}>
+                    Apply Filter
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="space-y-4 animate-pulse">
+              <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-full mb-4"></div>
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+              ))}
             </div>
-            
+          ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-secondary/20 hover:bg-secondary/30">
-                    <TableHead onClick={() => handleSort('supplierName')} className="cursor-pointer">
-                      <div className="flex items-center">
-                        Supplier Name
-                        {sortField === 'supplierName' && (
-                          sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
-                        )}
-                      </div>
-                    </TableHead>
-                    <TableHead onClick={() => handleSort('invoiceNo')} className="cursor-pointer">
-                      <div className="flex items-center">
-                        Invoice No
-                        {sortField === 'invoiceNo' && (
-                          sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
-                        )}
-                      </div>
-                    </TableHead>
-                    <TableHead onClick={() => handleSort('result')} className="cursor-pointer">
-                      <div className="flex items-center">
-                        Result
-                        {sortField === 'result' && (
-                          sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
-                        )}
-                      </div>
-                    </TableHead>
-                    <TableHead onClick={() => handleSort('date')} className="cursor-pointer">
-                      <div className="flex items-center">
-                        Date
-                        {sortField === 'date' && (
-                          sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
-                        )}
-                      </div>
-                    </TableHead>
-                    <TableHead onClick={() => handleSort('duration')} className="cursor-pointer">
-                      <div className="flex items-center">
-                        Duration
-                        {sortField === 'duration' && (
-                          sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
-                        )}
-                      </div>
-                    </TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Order /<br/>Order Change</TableHead>
+                    <TableHead>Last Run Time</TableHead>
+                    <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentInvoices.length > 0 ? (
-                    currentInvoices.map((invoice, index) => (
+                  {summaryPaginatedData && summaryPaginatedData.length > 0 ? (
+                    summaryPaginatedData.map((item, index) => (
                       <TableRow 
                         key={index} 
-                        className="transition-colors hover:bg-muted/40 animate-fade-in"
+                        className={`transition-colors hover:bg-muted/40 animate-fade-in ${selectedItem === item ? 'bg-muted/60' : ''}`}
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
-                        <TableCell className="font-medium">{invoice.supplierName}</TableCell>
-                        <TableCell>{invoice.invoiceNo}</TableCell>
-                        <TableCell>
-                          <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                            invoice.resultType === "success"
-                              ? "bg-success/10 text-success"
-                              : invoice.resultType === "warning"
-                              ? "bg-warning/10 text-warning"
-                              : "bg-error/10 text-error"
-                          }`}>
-                            {invoice.result.charAt(0).toUpperCase() + invoice.result.slice(1)}
-                          </span>
-                        </TableCell>
-                        <TableCell>{invoice.date}</TableCell>
-                        <TableCell>{invoice.duration}</TableCell>
+                        <TableCell>{formatDate(item.date)}</TableCell>
+                        <TableCell>{item.orderCount} / {item.orderChangeCount}</TableCell>
+                        <TableCell>{formatDateTime(item.lastRunTime)}</TableCell>
                         <TableCell>
                           <Button 
                             variant="outline" 
-                            size="sm"
-                            className="hover:bg-primary/10 transition-colors"
-                            onClick={() => handleCheckProcess(invoice)}
+                            size="sm" 
+                            onClick={() => handleViewDetail(item)}
+                            className="flex items-center gap-2"
                           >
-                            <List className="h-4 w-4 mr-1" />
-                            Check Process
+                            <Eye className="h-4 w-4" />
+                            View Detail
                           </Button>
                         </TableCell>
                       </TableRow>
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center">No invoice history available</TableCell>
+                      <TableCell colSpan={5} className="text-center">No MSPO data available</TableCell>
                     </TableRow>
                   )}
                 </TableBody>
               </Table>
               
-              {totalPages > 1 && (
+              {/* Summary Pagination */}
+              {summaryTotalPages > 1 && (
                 <Pagination className="mt-4">
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious 
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                        onClick={() => setSummaryCurrentPage(prev => Math.max(prev - 1, 1))}
+                        aria-disabled={summaryCurrentPage === 1}
+                        className={summaryCurrentPage === 1 ? "pointer-events-none opacity-50" : ""}
                       />
                     </PaginationItem>
                     
-                    {renderPaginationItems()}
+                    {generatePaginationItems(summaryCurrentPage, summaryTotalPages, setSummaryCurrentPage)}
                     
                     <PaginationItem>
                       <PaginationNext 
-                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                        onClick={() => setSummaryCurrentPage(prev => Math.min(prev + 1, summaryTotalPages))}
+                        aria-disabled={summaryCurrentPage === summaryTotalPages}
+                        className={summaryCurrentPage === summaryTotalPages ? "pointer-events-none opacity-50" : ""}
                       />
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>
               )}
             </div>
-          </div>
-        )}
-      </CardContent>
-      
-      <Dialog open={processDialogOpen} onOpenChange={setProcessDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[80vh]">
-          <DialogHeader>
-            <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
-            <DialogDescription>
-              Detailed visualization of the invoice processing steps and their statuses.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <ScrollArea className="h-[60vh]">
-            <div className="py-4 px-2">
-              {processFlowLoading ? (
-                <div className="space-y-4 animate-pulse">
-                  <div className="h-20 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                </div>
-              ) : (
-                <ProcessFlow nodes={processFlowData} />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Right part - Detail Grid */}
+      <Card>
+        <CardHeader>
+          <CardTitle>MSPO Details {selectedItem && `(${formatDate(selectedItem.date)})`}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!selectedItem ? (
+            <div className="text-center py-12 text-muted-foreground">
+              Select an item from the summary to view details
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-secondary/20 hover:bg-secondary/30">
+                    <TableHead>PO Number</TableHead>
+                    <TableHead>Main Line Description</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {detailPaginatedData && detailPaginatedData.length > 0 ? (
+                    detailPaginatedData.map((detail, index) => (
+                      <TableRow 
+                        key={index} 
+                        className="transition-colors hover:bg-muted/40 animate-fade-in"
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <TableCell>{detail.poNumber}</TableCell>
+                        <TableCell>{detail.mainLineDescription}</TableCell>
+                        <TableCell>{detail.type}</TableCell>
+                        <TableCell>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handleViewPdf(detail.pdfFilePath)}
+                            className="flex items-center gap-2"
+                            disabled={loadingPdf}
+                          >
+                            <FileText className="h-4 w-4" />
+                            {loadingPdf ? "Loading..." : "View PDF"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center">No details available</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+              
+              {/* Detail Pagination */}
+              {detailTotalPages > 1 && (
+                <Pagination className="mt-4">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setDetailCurrentPage(prev => Math.max(prev - 1, 1))}
+                        aria-disabled={detailCurrentPage === 1}
+                        className={detailCurrentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    
+                    {generatePaginationItems(detailCurrentPage, detailTotalPages, setDetailCurrentPage)}
+                    
+                    <PaginationItem>
+                      <PaginationNext 
+                        onClick={() => setDetailCurrentPage(prev => Math.min(prev + 1, detailTotalPages))}
+                        aria-disabled={detailCurrentPage === detailTotalPages}
+                        className={detailCurrentPage === detailTotalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               )}
             </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* PDF Dialog */}
+      <Dialog open={pdfDialogOpen} onOpenChange={setPdfDialogOpen}>
+        <DialogContent className="w-full h-full max-w-[100vw] max-h-[100vh] p-0">
+          <DialogHeader>
+            <DialogTitle>PDF Viewer</DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="w-full h-[calc(100vh-4rem)]">
+            {pdfUrl ? (
+              <iframe
+                src={pdfUrl}
+                width="100%"
+                height="100%"
+                title="PDF Viewer"
+                className="border-0"
+              />
+            ) : (
+              <div className="text-center py-4 text-muted-foreground">
+                Loading PDF...
+              </div>
+            )}
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   );
 };
 
-export default InvoiceHistory;
+export default MspoOverView;
