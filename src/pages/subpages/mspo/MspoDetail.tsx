@@ -13,23 +13,22 @@ import { useLanguage } from "@/components/LanguageProvider";
 
 const MspoDetail = () => {
   const { t } = useLanguage();
-  // Hard-coded ID for Invoice Processing Robot
   
   //Fetch robot data with React Query
   const { 
     data: robot, 
     isLoading: robotLoading,
   } = useQuery({
-    queryKey: ['invoiceRobot'],
+    queryKey: ['mspoRobot'],
     queryFn: () => mspoApiService.getMspoRobot(),
   });
 
-  // Fetch invoice overview data
+  // Fetch mspo overview data
   const { 
-    data: invoiceOverView = [], 
+    data: mspoOverView = [], 
     isLoading: overViewLoading 
   } = useQuery({
-    queryKey: ['invoiceOverView'],
+    queryKey: ['mspoOverView'],
     queryFn: () => mspoApiService.getMspoOverView(),
   });
 
@@ -81,11 +80,11 @@ const MspoDetail = () => {
         </TabsList>
         
         <TabsContent value="overview" className="animate-fade-in">
-          
+          <MspoOverView mspoData={mspoOverView} isLoading={overViewLoading} />
         </TabsContent>
         
-        <TabsContent value="history" className="animate-fade-in">
-          
+        <TabsContent value="analytics" className="animate-fade-in">
+          <MspoAnalytics mspoData={mspoOverView} isLoading={overViewLoading} />
         </TabsContent>
       </Tabs>
     </Layout>
