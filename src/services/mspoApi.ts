@@ -23,12 +23,9 @@ async getMspoRobot(): Promise<Robot | undefined> {
 async getMspoOverView(date?: Date): Promise<any[]> {
     try {
       let url = `${API_BASE_URL}/robots/mspo/overview`;
-      
-      // If date is provided, add it as a query parameter
-      if (date) {
-        const formattedDate = formatDate(date) // Format date as YYYY-MM-DD
+
+      const formattedDate = formatDate(date ?? new Date()) // Format date as YYYY-MM-DD
         url += `?date=${formattedDate}`;
-      }
       
       const response = await fetch(url);
       
