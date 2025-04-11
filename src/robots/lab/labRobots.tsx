@@ -6,10 +6,10 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Robot } from "@/types/robots";
 import { useLanguage } from "@/components/LanguageProvider";
 import dayjs from "dayjs";
-import { formatSecond} from "@/common";
+import { formatSecond } from "@/common";
 import { RobotContext } from "../robotContext";
 import { LABStatusToRobotStatus, LAB_SERVER, LABAutomationTaskState, LABRobotReport } from "./common";
-import { sleep, randomIntFromInterval } from "@/common";
+import { sleep, randomIntFromInterval, round } from "@/common";
 import { ILABRobot } from "./common";
 const signalR = await import("@microsoft/signalr");
 
@@ -109,7 +109,7 @@ const RobotCard = ({ robot, view }: { robot: ILABRobot, view: string }) => {
       status: newStatus,
       processingTask: event.data.processingTask
     })
-    
+
     update({
       name: rb.name,
       options: {
@@ -119,7 +119,7 @@ const RobotCard = ({ robot, view }: { robot: ILABRobot, view: string }) => {
 
   }
   const automationTaskChangeEventHandler = (automationtask) => {
-    if(automationtask.workerIdentity !== rb.name){
+    if (automationtask.workerIdentity !== rb.name) {
       return;
     }
     console.log(`RobotCard ${robot.name} automationTaskChangeEventHandler`);
@@ -135,9 +135,9 @@ const RobotCard = ({ robot, view }: { robot: ILABRobot, view: string }) => {
       errorCount += 1;
       lastResult = "failure";
     }
-    const taskRunDuration = automationtask.operations
+    const taskRunDuration = round(automationtask.operations
       .map(z => (new Date(z.endTime).getTime() - new Date(z.startTime).getTime()) / 1000)
-      .reduce((a, b) => a + b, 0);
+      .reduce((a, b) => a + b, 0), 0);
     totalRunningDuration += taskRunDuration;
     const options = {
       taskCount,

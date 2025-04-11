@@ -1,5 +1,6 @@
 
 import { cn } from "@/lib/utils";
+import { useLanguage } from "./LanguageProvider";
 
 type StatusType = "running" | "idle" | "error" | "paused" | "offline";
 
@@ -10,39 +11,40 @@ interface StatusBadgeProps {
 
 const statusConfig = {
   running: {
-    label: "Running",
+    label: "running",
     className: "badge-running",
     dot: "bg-success",
   },
   idle: {
-    label: "Idle",
+    label: "idle",
     className: "badge-idle",
     dot: "bg-secondary-foreground",
   },
   error: {
-    label: "Error",
+    label: "error",
     className: "badge-error",
     dot: "bg-error",
   },
   paused: {
-    label: "Paused",
+    label: "paused",
     className: "badge-paused", 
     dot: "bg-warning",
   },
   offline: {
-    label: "Offline",
+    label: "offline",
     className: "badge-offline",
     dot: "bg-secondary-foreground"
   }
 };
 
 const StatusBadge = ({ status, className }: StatusBadgeProps) => {
+  const {t} = useLanguage();
   const config = statusConfig[status];
   
   return (
     <span className={cn("badge", config.className, className)}>
       <span className={cn("mr-1.5 h-1.5 w-1.5 rounded-full", config.dot)} />
-      {config.label}
+      {t(config.label)}
     </span>
   );
 };
