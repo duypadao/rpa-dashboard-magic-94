@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { MspoOverViewItem } from "../MspoOverView";
 import PaginationControls from "../pagination/PaginationControls";
+import { formatDate, formatDateTime } from "@/ultis/datetime";
 
 interface MspoSummaryTableProps {
   data: MspoOverViewItem[];
@@ -29,22 +30,6 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
   ) : [];
   
   const totalPages = data ? Math.ceil(data.length / itemsPerPage) : 0;
-
-  const formatDate = (dateString: string) => {
-    try {
-      return format(new Date(dateString), "yyyy-MM-dd");
-    } catch (error) {
-      return dateString;
-    }
-  };
-
-  const formatDateTime = (dateString: string) => {
-    try {
-      return format(new Date(dateString), "yyyy-MM-dd HH:mm:ss");
-    } catch (error) {
-      return dateString;
-    }
-  };
 
   return (
     <>

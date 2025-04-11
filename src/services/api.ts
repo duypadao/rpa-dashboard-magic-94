@@ -2,8 +2,8 @@ import { ProcessNode, Robot } from "@/types/robots";
 import { Insight } from "@/components/AiInsights";
 
 
-export const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
-//const API_BASE_URL = "http://ros:8112/rpa/dashboard";
+//export const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
+export const API_BASE_URL = "http://ros:8112/rpa/dashboard";
 
 // API response types
 export interface RobotResponse {

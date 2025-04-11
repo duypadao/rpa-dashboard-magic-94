@@ -6,6 +6,7 @@ import MonthYearFilter from "./date-filter/MonthYearFilter";
 import MspoSummaryTable from "./summary/MspoSummaryTable";
 import MspoDetailTable from "./detail/MspoDetailTable";
 import PdfViewerDialog from "./pdf-viewer/PdfViewerDialog";
+import { formatDate } from "@/ultis/datetime";
 
 export interface MspoOverViewItem {
   date: string;
@@ -57,7 +58,8 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
   
   // Apply date filter - This would typically trigger a refetch from the parent component
   const handleDateFilter = () => {
-    console.log(`Filtering by date: ${date?.toISOString()}`);
+    if (!date) return;
+    console.log(`Filtering by date: ${formatDate(date.toDateString())}`);
     // This would be handled by the parent component via a refetch with the new date
   };
 
@@ -67,13 +69,13 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle>MSPO Summary</CardTitle>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <MonthYearFilter 
               date={date} 
               setDate={setDate} 
               onFilter={handleDateFilter} 
             />
-          </div>
+          </div> */}
         </CardHeader>
         <CardContent>
           <MspoSummaryTable 

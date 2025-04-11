@@ -28,14 +28,6 @@ const MspoDetailTable: React.FC<MspoDetailTableProps> = ({
   
   const totalPages = selectedItem?.details ? Math.ceil(selectedItem.details.length / itemsPerPage) : 0;
 
-  const formatDate = (dateString: string) => {
-    try {
-      return format(new Date(dateString), "yyyy-MM-dd");
-    } catch (error) {
-      return dateString;
-    }
-  };
-
   if (!selectedItem) {
     return (
       <div className="text-center py-12 text-muted-foreground">
