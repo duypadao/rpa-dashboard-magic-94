@@ -13,6 +13,7 @@ export interface MspoOverViewItem {
   orderCount: number;
   orderChangeCount: number;
   lastRunTime: string;
+  duration: string;
   details: MspoDetailItem[];
 }
 
@@ -69,13 +70,13 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle>MSPO Summary</CardTitle>
-          {/* <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <MonthYearFilter 
               date={date} 
               setDate={setDate} 
               onFilter={handleDateFilter} 
             />
-          </div> */}
+          </div>
         </CardHeader>
         <CardContent>
           <MspoSummaryTable 
@@ -91,7 +92,7 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({ mspoData, isLoading }) => {
       <Card>
         <CardHeader>
           <CardTitle>
-            MSPO Details {selectedItem && `(${new Date(selectedItem.date).toISOString().split('T')[0]})`}
+            MSPO Details {selectedItem && `(${formatDate(selectedItem.date)})`}
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -1,12 +1,11 @@
 
 import React from "react";
-import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { MspoOverViewItem } from "../MspoOverView";
 import PaginationControls from "../pagination/PaginationControls";
-import { formatDate, formatDateTime } from "@/ultis/datetime";
+import { formatDate, formatDateTime, formatDuration } from "@/ultis/datetime";
 
 interface MspoSummaryTableProps {
   data: MspoOverViewItem[];
@@ -47,7 +46,7 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
               <TableRow className="bg-secondary/20 hover:bg-secondary/30">
                 <TableHead>Date</TableHead>
                 <TableHead>Order /<br/>Order Change</TableHead>
-                <TableHead>Last Run Time</TableHead>
+                <TableHead>Last Run Time <br/>(Duration)</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
@@ -61,7 +60,11 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
                   >
                     <TableCell>{formatDate(item.date)}</TableCell>
                     <TableCell>{item.orderCount} / {item.orderChangeCount}</TableCell>
-                    <TableCell>{formatDateTime(item.lastRunTime)}</TableCell>
+                    <TableCell>
+                      {formatDateTime(item.lastRunTime)}
+                      <br />
+                      ({formatDuration(item.duration)})
+                    </TableCell>
                     <TableCell>
                       <Button 
                         variant="outline" 
@@ -70,7 +73,7 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
                         className="flex items-center gap-2"
                       >
                         <Eye className="h-4 w-4" />
-                        View Detail
+                        Detail
                       </Button>
                     </TableCell>
                   </TableRow>
