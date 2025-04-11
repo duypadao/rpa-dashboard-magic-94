@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { MspoOverViewItem } from "../MspoOverView";
 import PaginationControls from "../pagination/PaginationControls";
-import { formatDate, formatDateTime, formatDuration } from "@/ultis/datetime";
+import { formatDateStr, formatDateTime, formatDuration } from "@/ultis/datetime";
 
 interface MspoSummaryTableProps {
   data: MspoOverViewItem[];
@@ -58,7 +58,7 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
                     className={`transition-colors hover:bg-muted/40 animate-fade-in ${selectedItem === item ? 'bg-muted/60' : ''}`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <TableCell>{formatDate(item.date)}</TableCell>
+                    <TableCell>{formatDateStr(item.date)}</TableCell>
                     <TableCell>{item.orderCount} / {item.orderChangeCount}</TableCell>
                     <TableCell>
                       {formatDateTime(item.lastRunTime)}

@@ -1,12 +1,20 @@
 import dayjs from "dayjs";
 
-export const formatDate = (dateString: string) => {
+export const formatDateStr = (dateString: string) => {
     try {
         return dayjs(dateString).format("YYYY-MM-DD");
     } catch (error) {
         return dateString;
     }
 };
+
+export const formatDate = (date : Date) => {
+    try {
+        return dayjs(date).format("YYYY-MM-DD");
+    } catch (error) {
+        return date.toString();
+    }
+}
 
 export const formatDateTime = (dateString: string) => {
     try {
