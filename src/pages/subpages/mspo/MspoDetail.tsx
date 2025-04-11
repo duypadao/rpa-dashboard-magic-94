@@ -29,17 +29,12 @@ const MspoDetail = () => {
   const { 
     data: mspoOverView = [], 
     isLoading: overViewLoading,
-    refetch: refetchOverview
+    isError: overViewError,
+    error: overViewErrorDetail,
   } = useQuery({
     queryKey: ['mspoOverView', filterDate],
     queryFn: () => mspoApiService.getMspoOverView(filterDate),
   });
-
-  // Handle date filter change
-  const handleDateFilterChange = (date: Date | undefined) => {
-    setFilterDate(date);
-    refetchOverview();
-  };
 
   if (robotLoading) {
     return <div>Loading...</div>;
@@ -82,6 +77,12 @@ const MspoDetail = () => {
         </Card>
       </div>
 
+      {overViewError && (
+        <div className="text-red-500 mb-4">
+          Error fetching overview: {overViewErrorDetail?.message}
+        </div>
+      )}
+
       <Tabs defaultValue="overview" className="mb-6">
         <TabsList className="mb-4">
           <TabsTrigger value="overview">{t('overview')}</TabsTrigger>
@@ -91,7 +92,9 @@ const MspoDetail = () => {
         <TabsContent value="overview" className="animate-fade-in">
           <MspoOverView 
             mspoData={mspoOverView} 
-            isLoading={overViewLoading} 
+            isLoading={overViewLoading}
+            filterDate={filterDate}
+            setFilterDate={setFilterDate}
           />
         </TabsContent>
         

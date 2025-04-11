@@ -1,6 +1,7 @@
 
 import { Robot } from "@/types/robots";
 import { API_BASE_URL, RobotResponse } from "./api";
+import { formatDate } from "@/ultis/datetime";
 
 export const mspoApiService = {
 
@@ -25,7 +26,7 @@ async getMspoOverView(date?: Date): Promise<any[]> {
       
       // If date is provided, add it as a query parameter
       if (date) {
-        const formattedDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        const formattedDate = formatDate(date) // Format date as YYYY-MM-DD
         url += `?date=${formattedDate}`;
       }
       

@@ -19,22 +19,17 @@ import {
 interface MonthYearFilterProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
-  onFilter: () => void;
 }
 
 const MonthYearFilter: React.FC<MonthYearFilterProps> = ({ 
   date,
   setDate,
-  onFilter
 }) => {
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   const [currentMonth, setCurrentMonth] = React.useState<Date>(date || new Date());
   
-  // Generate years (current year + 10 years back)
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 11 }, (_, i) => currentYear - i);
-  
-  // Generate months
+  const years = Array.from({ length: 1 }, (_, i) => currentYear - i);
   const months = [
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
@@ -70,7 +65,6 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
   const handleDateFilter = () => {
     setDate(currentMonth);
     setIsCalendarOpen(false);
-    onFilter();
   };
   
   // Clear date filter
@@ -78,7 +72,6 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
     setDate(undefined);
     setCurrentMonth(new Date());
     setIsCalendarOpen(false);
-    onFilter();
   };
 
   return (
@@ -166,7 +159,7 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
               Clear
             </Button>
             <Button size="sm" onClick={handleDateFilter}>
-              Apply Filter
+              Apply
             </Button>
           </div>
         </div>
