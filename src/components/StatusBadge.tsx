@@ -1,7 +1,7 @@
 
 import { cn } from "@/lib/utils";
 
-type StatusType = "running" | "idle" | "error" | "paused";
+type StatusType = "running" | "idle" | "error" | "paused" | "offline";
 
 interface StatusBadgeProps {
   status: StatusType;
@@ -29,6 +29,11 @@ const statusConfig = {
     className: "badge-paused", 
     dot: "bg-warning",
   },
+  offline: {
+    label: "Offline",
+    className: "badge-offline",
+    dot: "bg-secondary-foreground"
+  }
 };
 
 const StatusBadge = ({ status, className }: StatusBadgeProps) => {

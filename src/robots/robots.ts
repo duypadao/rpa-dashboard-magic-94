@@ -1,4 +1,3 @@
-import { NumericKeys } from "node_modules/react-hook-form/dist/types/path/common";
 
 export interface Robot {
   id: string;
@@ -10,12 +9,12 @@ export interface Robot {
   description?: string;
   defaultProcessFlow?: string[];
   processNodes?: ProcessNode[];
-  reportCount?: number;
+  taskCount?: number;
   successCount?: number;
   pendingCount?:number;
   errorCount?: number;
-  totalRunningDuration?: number;
-  estimateSavingDuration?: number;
+  totalRunningDuration?: number;  // in second
+  estimateSavingDuration?: number; // in second
 }
 
 export interface ProcessNode {
