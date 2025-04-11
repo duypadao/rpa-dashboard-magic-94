@@ -1,13 +1,13 @@
 
 import { Bell, Globe, Moon, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -27,7 +27,7 @@ const Navbar = () => {
     setIsDark(newTheme === "dark");
   };
 
-  const changeLanguage = (lang: "en" | "zh") => {
+  const changeLanguage = (lang: "en" | "zh" | "vi") => {
     setLanguage(lang);
     console.log(`Language changed to: ${lang}`);
   };
@@ -41,7 +41,7 @@ const Navbar = () => {
             <div className="font-semibold text-xl text-primary">{t('dashboard')}</div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -52,31 +52,37 @@ const Navbar = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
-                className={language === "en" ? "bg-muted" : ""}
-                onClick={() => changeLanguage("en")}
+              <DropdownMenuItem
+                className={language === "vi" ? "bg-muted" : ""}
+                onClick={() => changeLanguage("vi")}
               >
-                English
+                Tiếng Việt (Vietnamese)
               </DropdownMenuItem>
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 className={language === "zh" ? "bg-muted" : ""}
                 onClick={() => changeLanguage("zh")}
               >
                 中文 (Chinese)
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className={language === "en" ? "bg-muted" : ""}
+                onClick={() => changeLanguage("en")}
+              >
+                English
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
           <div className="flex items-center gap-2">
             <Sun className="h-4 w-4 dark:text-muted-foreground" />
-            <Switch 
-              checked={isDark} 
+            <Switch
+              checked={isDark}
               onCheckedChange={toggleTheme}
               className="data-[state=checked]:bg-cyan-500"
             />
             <Moon className="h-4 w-4 text-muted-foreground dark:text-white" />
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
@@ -100,11 +106,11 @@ const Navbar = () => {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          
+
           <Button variant="ghost" size="icon">
             <Settings className="h-5 w-5 text-primary" />
           </Button>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">

@@ -144,7 +144,7 @@ export const apiService = {
       }
       
       const data: RobotResponse[] = await response.json();
-      return data as Robot[]; // The structure is the same so we can cast directly
+      return data as Robot[]; // The structure is the same so we can cast directly // .sort(()=> Math.random() - 0.5).slice(0,3)
     } catch (error) {
       console.error("Error fetching robots:", error);
       
