@@ -5,14 +5,16 @@ import { Clock, XCircle, ArrowRight } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import { Robot } from "@/types/robots";
 import { cn } from "@/lib/utils";
-import { CSSProperties } from "react";
+import { CSSProperties, ReactElement, useEffect, useState } from "react";
 import { useLanguage } from "./LanguageProvider";
+import { humanizeDateTime } from "@/common";
 
 interface StatusCardProps {
   robot: Robot;
   className?: string;
   style?: CSSProperties;
   onClick?: () => void;
+  footer?: ReactElement
 }
 
 // Robot color mapping for consistent UI
@@ -27,9 +29,27 @@ const robotColorMap: Record<string, string> = {
   "default": "from-gray-500/10 to-gray-600/5 border-gray-500/20 hover:border-gray-500/30"
 };
 
-const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
+
+const LastRun = ({ lastRun, t = null }: { lastRun: string | Date, t: (key: string, unicorn?: object) => void }) => {
+  const [seed, setSeed] = useState(1);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeed(seed + 1);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [seed]);
+
+  if (typeof lastRun === typeof "") {
+    return lastRun
+  }
+  else {
+    return humanizeDateTime(lastRun as Date, t);
+  }
+}
+
+const StatusCard = ({ robot, className, style, onClick, footer = null }: StatusCardProps) => {
   const { t } = useLanguage();
-  
+
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
@@ -42,7 +62,7 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
         return null;
     }
   };
-  
+
   const getResultText = (result: string) => {
     switch (result) {
       case "success":
@@ -58,15 +78,15 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
 
   // Get color class based on robot name or default if not found
   const colorClass = robotColorMap[robot.name] || robotColorMap.default;
-  
+
   // Special highlight for Invoice Processing Robot
   const isInvoiceRobot = robot.name.includes("Invoice");
   const highlightClass = isInvoiceRobot ? "ring-2 ring-primary/30 dark:ring-primary/20" : "";
 
   return (
-    <Card 
+    <Card
       className={cn(
-        "overflow-hidden transition-all duration-300 hover:shadow-md bg-gradient-to-br", 
+        "overflow-hidden transition-all duration-300 hover:shadow-md bg-gradient-to-br",
         colorClass,
         highlightClass,
         className
@@ -84,7 +104,7 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
         <div className="space-y-4">
           <div className="flex items-center text-sm text-muted-foreground">
             <Clock className="mr-2 h-4 w-4" />
-            <span>{t('lastRun')}: {robot.lastRunTime}</span>
+            <span>{t('lastRun')}: <LastRun lastRun={robot.lastRunTime} t={t} /></span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center text-sm">
@@ -104,17 +124,20 @@ const StatusCard = ({ robot, className, style, onClick }: StatusCardProps) => {
           </div>
           {robot.description && (
             <div className="text-sm text-muted-foreground line-clamp-2">
-              {robot.description}
+              {t(robot.description)}
             </div>
           )}
         </div>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <Button variant="outline" size="sm" className="w-full gap-2">
-          {t('details')}
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </CardFooter>
+      {footer ? footer : (
+        <CardFooter className="p-4 pt-0">
+          <Button variant="outline" size="sm" className="w-full gap-2">
+            {t('details')}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </CardFooter>
+      )}
+
     </Card>
   );
 };

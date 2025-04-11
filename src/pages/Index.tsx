@@ -18,60 +18,61 @@ import {
 import { Robot } from "@/types/robots";
 import { useLanguage } from "@/components/LanguageProvider";
 import AiInsights from "@/components/AiInsights";
-
-
-interface RobotContextOverviewProps {
-  getRobots: () => Array<Robot>,
-  registerRobot: (arr: Array<Robot>) => void,
-  getLastUpdatedTime: () => number
-};
-const RobotOverviewContext = createContext<RobotContextOverviewProps>(null);
-
+import { RobotContext, RobotContainer } from "@/robots/robotContext";
+import { LABRobots } from "@/robots/lab/labRobots";
+import { DataCard } from "@/components/DataCard";
+import { round, formatSecond } from "@/common";
 
 const Summary = () => {
-  const { getRobots, getLastUpdatedTime } = useContext(RobotOverviewContext);
+  const { getRobots, getLastUpdatedTime } = useContext(RobotContext);
   const { t } = useLanguage();
   const [lastUpdatedTime, setLastUpdatedTime] = useState(-1);
   useEffect(() => {
     const interval = setInterval(() => {
-      // console.log("RobotInsights useEffect");
-      // console.log(`getLastUpdatedTime : ${getLastUpdatedTime()}`)
-      // console.log(`lastUpdatedTime : ${lastUpdatedTime}`)
-      if(getLastUpdatedTime() > lastUpdatedTime){
+      if (getLastUpdatedTime() > lastUpdatedTime) {
         setLastUpdatedTime(getLastUpdatedTime());
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [lastUpdatedTime])
-  console.log("Summary rendered");
+  }, [lastUpdatedTime]);
+  const robots = getRobots();
+  const running = robots.filter(z => z.status === "running").length;
+  const robotCount = robots.length;
+  const runningRate = round(running / robotCount * 100, 1);
+  const activeRobot = robots.filter(z => z.status !== "offline").length;
+  const activeRate = round(activeRobot / robots.length * 100, 2);
+
+  const successTasks = robots.map(z => z.successCount).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
+  const errorTasks = robots.map(z => z.errorCount).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
+  const totalTasks = successTasks + errorTasks;
+  const successRate = round(successTasks / totalTasks * 100, 2);
+  const errorRate = round(errorTasks / totalTasks * 100, 2);
+
+  const estimateSavingDuration = robots.map(z => z.estimateSavingDuration).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
+  const estimateSavingDurationInHours = round(estimateSavingDuration / 60 / 60, 1);
+
+  const totalRunningDuration = robots.map(z => z.totalRunningDuration).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
+  const totalRunningDurationInHours = round(totalRunningDuration / 60 / 60, 1);
+  const workSpeed = round(estimateSavingDuration / totalRunningDuration * 100, 2);
   return (
-    <>{lastUpdatedTime}</>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <DataCard value={running} title={t("runningRobot")} rate={runningRate} description={`${t("totalRobot")} ${robotCount}`} description2={`${t("activeRobots")} ${activeRate}%`}></DataCard>
+        <DataCard value={successTasks} title={t("successTasks")} rate={successRate} description={`${t("totalTasks")} ${totalTasks}`} description2={`${t("errorRate")}: ${errorTasks} (${errorRate}%)`}></DataCard>
+        <DataCard value={`${estimateSavingDurationInHours}h`} title={t("savingTime")} rate={null} description={``} description2={""}></DataCard>
+        <DataCard value={`${totalRunningDurationInHours}h`} title={t("robotRunningTime")} rate={workSpeed} description={`${t("robotWork {{rate}} % thanManualWork", { rate: workSpeed })}`} description2={""}></DataCard>
+      </div>
+
+    </>
+
+
   )
 }
 
-const RobotOverviewContainer = ({ children }) => {
-  const robots = useRef({});
-  const lastUpdatedTime = useRef(new Date().getTime());
-  const registerRobot = (rbs: Array<Robot>) => {
-    rbs.forEach((r) => {
-      robots.current[r.name] = r
-    })
-    lastUpdatedTime.current = new Date().getTime();
-  }
-  const getRobots = (): Array<Robot> => { return Object.values(robots.current) }; // () : Array<Robot>
-  const getLastUpdatedTime = () => { return lastUpdatedTime.current };
 
-  return <RobotOverviewContext.Provider value={{
-    getRobots, registerRobot, getLastUpdatedTime
-  }
-  }>
-    <Summary />
-    {children}
-  </RobotOverviewContext.Provider>
-}
 
 const RobotInsights = () => {
-  const { getRobots, getLastUpdatedTime } = useContext(RobotOverviewContext);
+  const { getRobots, getLastUpdatedTime } = useContext(RobotContext);
   const { t } = useLanguage();
   const [lastUpdatedTime, setLastUpdatedTime] = useState(-1);
   // Generate insights from robots data
@@ -141,7 +142,7 @@ const RobotInsights = () => {
       // console.log("RobotInsights useEffect");
       // console.log(`getLastUpdatedTime : ${getLastUpdatedTime()}`)
       // console.log(`lastUpdatedTime : ${lastUpdatedTime}`)
-      if(getLastUpdatedTime() > lastUpdatedTime){
+      if (getLastUpdatedTime() > lastUpdatedTime) {
         setLastUpdatedTime(getLastUpdatedTime());
       }
     }, 1000);
@@ -155,30 +156,29 @@ const RobotInsights = () => {
   return (
     <>
       {/* AI Insights section */}
-     
-        <div className="mb-4">
-          <h2 className="text-xl font-medium">{t('availableInsights')}</h2>
-        </div>
 
-        <AiInsights
-          insights={insights}
-          isLoading={false}
-        />
-      
+      <div className="mb-4">
+        <h2 className="text-xl font-medium">{t('availableInsights')}</h2>
+      </div>
+
+      <AiInsights
+        insights={insights}
+        isLoading={false}
+      />
+
     </>
   )
 }
 
 
 const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
-  const { registerRobot } = useContext(RobotOverviewContext);
+  const { registerRobot } = useContext(RobotContext);
   const navigate = useNavigate();
   const { t } = useLanguage();
   // Fetch robots with React Query
   const { data: robots = [], isLoading, isError, isFetched, } = useQuery({
     queryKey: ["robots"],
     queryFn: apiService.getRobots,
-    refetchInterval:  1000 * 60 * 5
   });
   if (isFetched) {
     registerRobot(robots);
@@ -210,7 +210,7 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
     }
   };
   console.log("RPA8112Robots rendered");
-  
+
   return (
     <>
       <div className="mb-4">
@@ -316,18 +316,22 @@ const Index = () => {
 
         <Separator />
       </div>
-      <RobotOverviewContainer>
+      <RobotContainer>
+        <Summary></Summary>
+        <div className="mb-8"></div>
         {/* Main content area with robots and insights side by side */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Robots section */}
           <div className="md:col-span-8">
+            <LABRobots searchTerm={searchTerm} statusFilter={statusFilter} view={view}></LABRobots>
+            <div className="mb-8"></div>
             <RPA8112Robots searchTerm={searchTerm} statusFilter={statusFilter} view={view}></RPA8112Robots>
           </div>
           <div className="md:col-span-4">
-          <RobotInsights />
+            <RobotInsights />
           </div>
         </div>
-      </RobotOverviewContainer>
+      </RobotContainer>
     </Layout>
   );
 };
