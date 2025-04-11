@@ -180,8 +180,8 @@ const RobotCard = ({ robot, view }: { robot: ILABRobot, view: string }) => {
   return (
     <StatusCard
       style={{ height: "238px" }}
-      key={robot.name}
-      robot={robot}
+      key={rb.name}
+      robot={rb}
       footer={footer}
       // onClick={() => handleRobotClick(robot)}
       className={`cursor-pointer hover:shadow-md transition-all duration-300 ${view === "list" ? "md:max-w-full" : ""}`}

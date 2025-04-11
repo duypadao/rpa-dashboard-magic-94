@@ -50,7 +50,6 @@ const Summary = () => {
 
   const estimateSavingDuration = robots.map(z => z.estimateSavingDuration).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   const estimateSavingDurationInHours = round(estimateSavingDuration / 60 / 60, 1);
-  console.log(robots);
 
   const totalRunningDuration = robots.map(z => z.totalRunningDuration).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   const totalRunningDurationInHours = round(totalRunningDuration / 60 / 60, 1);
@@ -180,7 +179,6 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
   const { data: robots = [], isLoading, isError, isFetched, } = useQuery({
     queryKey: ["robots"],
     queryFn: apiService.getRobots,
-    refetchInterval: 1000 * 60 * 5
   });
   if (isFetched) {
     registerRobot(robots);
