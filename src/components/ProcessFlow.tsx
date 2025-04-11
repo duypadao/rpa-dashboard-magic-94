@@ -1,11 +1,11 @@
 
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { BatteryWarning, CheckCircle2, CircleAlert, FileWarningIcon, Loader2, MessageCircleWarningIcon, XCircle } from "lucide-react";
 
 export interface ProcessNode {
   id: string;
   name: string;
-  status: "success" | "failure" | "in-progress" | "pending";
+  status: "success" | "warning" | "failure" | "in-progress" | "pending";
   startTime?: string;
   endTime?: string;
   duration?: string;
@@ -22,6 +22,8 @@ const ProcessFlow = ({ nodes, className }: ProcessFlowProps) => {
     switch (status) {
       case "success":
         return <CheckCircle2 className="h-5 w-5 text-success" />;
+      case "warning":
+        return <MessageCircleWarningIcon className="h-5 w-5 text-warning" />;
       case "failure":
         return <XCircle className="h-5 w-5 text-error" />;
       case "in-progress":
@@ -40,6 +42,7 @@ const ProcessFlow = ({ nodes, className }: ProcessFlowProps) => {
               className={cn(
                 "absolute left-2.5 top-6 w-0.5 h-full -ml-px",
                 node.status === "success" ? "bg-success/30" : 
+                node.status === "warning" ? "bg-warning/30" :
                 node.status === "failure" ? "bg-error/30" : 
                 node.status === "in-progress" ? "bg-info/30" : "bg-muted"
               )}

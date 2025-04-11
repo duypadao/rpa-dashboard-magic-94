@@ -195,11 +195,18 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
   // Navigate to robot detail page
   const handleRobotClick = (robot: Robot) => {
     // Check if this is the Invoice Robot
-    if (robot.id === "1") {
-      navigate("/invoice");
-    } else {
-      // For all other robots, navigate to the robot/:id page with robot data
-      navigate(`/robot/${robot.id}`, { state: { robot } });
+    switch (robot.id.toString()) {
+      case "1":
+        // Navigate to Invoice page
+        navigate("/invoice");
+        break;
+      case "2":
+        // Navigate to Analytics page
+        navigate("/mspo");
+        break;
+      default:
+        navigate(`/robot/${robot.id}`, { state: { robot } });
+        break;
     }
   };
   console.log("RPA8112Robots rendered");

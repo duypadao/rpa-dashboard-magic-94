@@ -25,11 +25,11 @@ const RobotDetail = () => {
   const { t } = useLanguage();
   
   // Check if this is the Invoice Robot and redirect if needed
-  reactUseEffect(() => {
-    if (id === "1") {
-      navigate("/invoice", { replace: true });
-    }
-  }, [id, navigate]);
+  // reactUseEffect(() => {
+  //   if (id === "1") {
+  //     navigate("/invoice", { replace: true });
+  //   }
+  // }, [id, navigate]);
   
   // Get robot data from router state
   const robot = location.state?.robot as Robot | undefined;

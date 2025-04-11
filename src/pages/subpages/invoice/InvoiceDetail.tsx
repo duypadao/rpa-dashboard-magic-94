@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatusBadge from "@/components/StatusBadge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock } from "lucide-react";
-import { apiService } from "@/services/api";
+import { invoiceApiService } from "@/services/invoiceApi";
 import RobotCommonInfo from "@/components/RobotCommonInfo";
 import InvoiceHistory from "./components/InvoiceHistory";
 import InvoiceAnalytics from "./components/InvoiceAnalytics";
@@ -22,7 +22,7 @@ const InvoiceDetail = () => {
     isLoading: robotLoading,
   } = useQuery({
     queryKey: ['invoiceRobot'],
-    queryFn: () => apiService.getInvoiceRobot(),
+    queryFn: () => invoiceApiService.getInvoiceRobot(),
   });
 
   // Fetch invoice history data
@@ -31,7 +31,7 @@ const InvoiceDetail = () => {
     isLoading: historyLoading 
   } = useQuery({
     queryKey: ['invoiceHistory'],
-    queryFn: () => apiService.getInvoiceHistory(),
+    queryFn: () => invoiceApiService.getInvoiceHistory(),
   });
 
   // Fetch invoice overview data
@@ -40,7 +40,7 @@ const InvoiceDetail = () => {
     isLoading: overViewLoading 
   } = useQuery({
     queryKey: ['invoiceOverView'],
-    queryFn: () => apiService.getInvoiceOverView(),
+    queryFn: () => invoiceApiService.getInvoiceOverView(),
   });
 
   if (robotLoading) {

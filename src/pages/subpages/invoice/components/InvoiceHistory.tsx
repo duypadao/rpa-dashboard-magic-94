@@ -7,8 +7,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import ProcessFlow from "@/components/ProcessFlow";
 import { useQuery } from "@tanstack/react-query";
-import { apiService } from "@/services/api";
+import { invoiceApiService } from "@/services/invoiceApi";
 import {
+
+
+
+
+
+
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -23,9 +29,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export interface InvoiceHistoryItem {
+  id: number;
   supplierId: string;
   supplierName: string;
   invoiceNo: string;
@@ -33,6 +42,16 @@ export interface InvoiceHistoryItem {
   result: string,
   date: string;
   duration: string;
+
+
+
+
+
+
+
+
+
+
 }
 
 interface InvoiceHistoryProps {
@@ -42,6 +61,18 @@ interface InvoiceHistoryProps {
 
 type SortField = 'supplierName' | 'invoiceNo' | 'result' | 'date' | 'duration';
 type SortOrder = 'asc' | 'desc';
+
+
+
+
+
+
+
+
+
+
+
+
 
 const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,6 +84,19 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   const [invoiceSelected, setInvoiceSelected] = useState<InvoiceHistoryItem>(null);
 
   const itemsPerPage = 10;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const processedData = useMemo(() => {
     return [...invoiceData]
@@ -90,31 +134,41 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
       setSortOrder('asc');
     }
   };
-  
+
   const { 
     data: processFlowData = [], 
     isLoading: processFlowLoading 
   } = useQuery({
     queryKey: ['invoiceFlow', invoiceSelected],
-    queryFn: () => apiService.getProcessNodes(invoiceSelected),
+    queryFn: () => invoiceApiService.getProcessNodes(invoiceSelected),
     enabled: !! invoiceSelected,
   });
-  
+
   const handleCheckProcess = (invoice: InvoiceHistoryItem) => {
     setInvoiceSelected(invoice);
     setProcessDialogOpen(true);
   };
-  
+
   const renderPaginationItems = () => {
     const pagesToShow = new Set<number>();
-    
+
+
+
+
+
+
+
+
+
+
+
     pagesToShow.add(1);
     pagesToShow.add(totalPages);
-    
+
     for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
       pagesToShow.add(i);
     }
-    
+
     const pagesArray = Array.from(pagesToShow).sort((a, b) => a - b);
     
     return pagesArray.map((page, index) => {
@@ -147,8 +201,23 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
         </PaginationItem>
       );
     });
+
+
   };
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <Card className="animate-scale-in">
       <CardHeader>
@@ -261,6 +330,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                       >
                         <TableCell className="font-medium">{invoice.supplierName}</TableCell>
                         <TableCell>{invoice.invoiceNo}</TableCell>
+
                         <TableCell>
                           <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
                             invoice.resultType === "success"
@@ -274,12 +344,82 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                         </TableCell>
                         <TableCell>{invoice.date}</TableCell>
                         <TableCell>{invoice.duration}</TableCell>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <TableCell>
                           <Button 
                             variant="outline" 
                             size="sm"
                             className="hover:bg-primary/10 transition-colors"
                             onClick={() => handleCheckProcess(invoice)}
+
                           >
                             <List className="h-4 w-4 mr-1" />
                             Check Process
@@ -294,23 +434,26 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                   )}
                 </TableBody>
               </Table>
-              
+
               {totalPages > 1 && (
+
                 <Pagination className="mt-4">
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious 
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+
                       />
                     </PaginationItem>
-                    
+
                     {renderPaginationItems()}
-                    
+
                     <PaginationItem>
                       <PaginationNext 
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+
                       />
                     </PaginationItem>
                   </PaginationContent>
@@ -323,6 +466,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
       
       <Dialog open={processDialogOpen} onOpenChange={setProcessDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh]">
+
           <DialogHeader>
             <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
             <DialogDescription>
@@ -340,6 +484,9 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                 <ProcessFlow nodes={processFlowData} />
               )}
             </div>
+
+
+
           </ScrollArea>
         </DialogContent>
       </Dialog>
