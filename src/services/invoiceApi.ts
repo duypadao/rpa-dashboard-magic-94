@@ -2,6 +2,7 @@ import { API_BASE_URL, ProcessStepResponse, RobotResponse, mapProcessStepsToNode
 import { Robot, ProcessNode} from "@/types/robots";
 import { InvoiceHistoryItem } from "@/pages/subpages/invoice/components/InvoiceHistory";
 import { InvoiceOverViewItem } from "@/pages/subpages/invoice/components/InvoiceOverView";
+import { formatDate } from "@/ultis/datetime";
 
 export const invoiceApiService = {
 // Fetch process flow for an invoice
@@ -56,9 +57,12 @@ export const invoiceApiService = {
   },
   
   // Fetch invoice history data for a specific robot
-  async getInvoiceHistory(): Promise<InvoiceHistoryItem[]> {
+  async getInvoiceHistory(date?: Date): Promise<InvoiceHistoryItem[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/robots/invoice/history`);
+      let url = `${API_BASE_URL}/robots/invoice/history`;
+      const formattedDate = formatDate(date ?? new Date()) // Format date as YYYY-MM-DD
+              url += `?date=${formattedDate}`;
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import StatusBadge from "@/components/StatusBadge";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export interface InvoiceOverViewItem {
   id: number;
@@ -42,6 +43,7 @@ type SortField = 'id' | 'supplierName' | 'inLineDate' | 'accumulatedInvoice' | '
 type SortOrder = 'asc' | 'desc';
 
 const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
+  const { t } = useLanguage();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('id');
@@ -168,7 +170,7 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
   return (
     <Card className="animate-scale-in">
       <CardHeader>
-        <CardTitle>Invoice Over View</CardTitle>
+        <CardTitle>{t('invoiceOverView')}</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (

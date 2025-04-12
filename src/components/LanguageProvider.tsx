@@ -146,6 +146,11 @@ const translations: Translations = {
     zh: "的通知已发送给团队",
     vi: "đã gửi cho nhóm"
   },
+  overview: {
+    en: "Overview",
+    zh: "概览",
+    vi: "Tổng quan"
+  },
   history: {
     en: "Run History",
     zh: "运行历史",
@@ -330,6 +335,21 @@ const translations: Translations = {
     en: "{{diffMins}} minute ago",
     zh: "{{diffMins}} minute ago",
     vi: "{{diffMins}} phút trước"
+  },
+  invoiceOverView: {
+    en: "Invoice Overview",
+    zh: "发票概览",
+    vi: "Tổng quan hoá đơn"
+  },
+  invoiceProcessingHistory: {
+    en: "Invoice Processing History",
+    zh: "发票处理历史",
+    vi: "Lịch sử xử lý hoá đơn"
+  },
+  invoiceProcessingAnalytics: {
+    en: "Invoice Processing Analytics",
+    zh: "发票处理分析",
+    vi: "Phân tích xử lý hoá đơn"
   },
 };
 

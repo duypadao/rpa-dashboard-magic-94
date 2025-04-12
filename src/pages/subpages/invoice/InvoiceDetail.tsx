@@ -11,12 +11,13 @@ import InvoiceHistory from "./components/InvoiceHistory";
 import InvoiceAnalytics from "./components/InvoiceAnalytics";
 import InvoiceOverView from "./components/InvoiceOverView";
 import { useLanguage } from "@/components/LanguageProvider";
+import { formatDateTime } from "@/ultis/datetime";
+import { useState } from "react";
 
 const InvoiceDetail = () => {
   const { t } = useLanguage();
-  // Hard-coded ID for Invoice Processing Robot
-  
-  //Fetch robot data with React Query
+  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
+
   const { 
     data: robot, 
     isLoading: robotLoading,
@@ -28,10 +29,12 @@ const InvoiceDetail = () => {
   // Fetch invoice history data
   const { 
     data: invoiceHistory = [], 
-    isLoading: historyLoading 
+    isLoading: historyLoading,
+    isError: historyError,
+    error: historyErrorDetail,
   } = useQuery({
-    queryKey: ['invoiceHistory'],
-    queryFn: () => invoiceApiService.getInvoiceHistory(),
+    queryKey: ['invoiceHistory', filterDate],
+    queryFn: () => invoiceApiService.getInvoiceHistory(filterDate),
   });
 
   // Fetch invoice overview data
@@ -71,7 +74,7 @@ const InvoiceDetail = () => {
           </CardHeader>
           <CardContent className="flex items-center">
             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-            <span>{robot.lastRunTime}</span>
+            <span>{formatDateTime(robot.lastRunTime)}</span>
           </CardContent>
         </Card>
         <Card>
@@ -86,7 +89,7 @@ const InvoiceDetail = () => {
 
       <Tabs defaultValue="overview" className="mb-6">
         <TabsList className="mb-4">
-          <TabsTrigger value="overview">Over View</TabsTrigger>
+          <TabsTrigger value="overview">{t('overview')}</TabsTrigger>
           <TabsTrigger value="history">{t('history')}</TabsTrigger>
           <TabsTrigger value="analytics">{t('analytics')}</TabsTrigger>
         </TabsList>
@@ -96,7 +99,12 @@ const InvoiceDetail = () => {
         </TabsContent>
         
         <TabsContent value="history" className="animate-fade-in">
-          <InvoiceHistory invoiceData={invoiceHistory} isLoading={historyLoading} />
+          <InvoiceHistory 
+            invoiceData={invoiceHistory} 
+            isLoading={historyLoading}
+            filterDate={filterDate}
+            setFilterDate={setFilterDate}
+            />
         </TabsContent>
         
         <TabsContent value="analytics" className="animate-fade-in">

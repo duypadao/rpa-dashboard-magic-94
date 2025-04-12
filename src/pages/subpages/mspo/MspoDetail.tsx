@@ -11,6 +11,7 @@ import RobotCommonInfo from "@/components/RobotCommonInfo";
 import MspoAnalytics from "./components/MspoAnalytics";
 import MspoOverView from "./components/MspoOverView";
 import { useLanguage } from "@/components/LanguageProvider";
+import { formatDateTime } from "@/ultis/datetime";
 
 const MspoDetail = () => {
   const { t } = useLanguage();
@@ -64,7 +65,7 @@ const MspoDetail = () => {
           </CardHeader>
           <CardContent className="flex items-center">
             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-            <span>{robot.lastRunTime}</span>
+            <span>{formatDateTime(robot.lastRunTime)}</span>
           </CardContent>
         </Card>
         <Card>

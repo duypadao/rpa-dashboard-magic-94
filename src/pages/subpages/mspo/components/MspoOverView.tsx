@@ -41,9 +41,9 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({
   const [pdfDialogOpen, setPdfDialogOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [loadingPdf, setLoadingPdf] = useState(false);
-  
-  // Month-Year filter
-  const [date, setDate] = useState<Date | undefined>(undefined);
+          <div className="flex items-center gap-2">
+            <MonthYearFilter date={filterDate} setDate={setFilterDate} />
+          </div>
 
   const handleViewDetail = (item: MspoOverViewItem) => {
     setSelectedItem(item);
