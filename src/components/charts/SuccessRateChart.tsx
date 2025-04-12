@@ -1,7 +1,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-interface SuccessRateChartProps {
+export interface SuccessRateChartProps {
   data: {
     name: string;
     value: number;
@@ -10,6 +10,7 @@ interface SuccessRateChartProps {
 }
 
 const SuccessRateChart = ({ data }: SuccessRateChartProps) => {
+  console.log(data);
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>

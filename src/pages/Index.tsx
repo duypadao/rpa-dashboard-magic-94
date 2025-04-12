@@ -15,13 +15,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Robot } from "@/types/robots";
+import { Robot } from "@/robots/robots";
 import { useLanguage } from "@/components/LanguageProvider";
 import AiInsights from "@/components/AiInsights";
 import { RobotContext, RobotContainer } from "@/robots/robotContext";
 import { LABRobots } from "@/robots/lab/labRobots";
 import { DataCard } from "@/components/DataCard";
-import { round, formatSecond } from "@/common";
+import { round,formatSecond } from "@/common";
 
 const Summary = () => {
   const { getRobots, getLastUpdatedTime } = useContext(RobotContext);
@@ -45,22 +45,22 @@ const Summary = () => {
   const successTasks = robots.map(z => z.successCount).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   const errorTasks = robots.map(z => z.errorCount).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   const totalTasks = successTasks + errorTasks;
-  const successRate = round(successTasks / totalTasks * 100, 2);
-  const errorRate = round(errorTasks / totalTasks * 100, 2);
+  const successRate = totalTasks < 1 ? 0 : round(successTasks / totalTasks * 100, 2);
+  const errorRate = totalTasks < 1 ? 0 :  round(errorTasks / totalTasks * 100, 2);
 
   const estimateSavingDuration = robots.map(z => z.estimateSavingDuration).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   const estimateSavingDurationInHours = round(estimateSavingDuration / 60 / 60, 1);
 
   const totalRunningDuration = robots.map(z => z.totalRunningDuration).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   const totalRunningDurationInHours = round(totalRunningDuration / 60 / 60, 1);
-  const workSpeed = round(estimateSavingDuration / totalRunningDuration * 100, 2);
+  const workSpeed = totalRunningDuration < 1 ? 0 : round(estimateSavingDuration / totalRunningDuration * 100, 2);
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <DataCard value={running} title={t("runningRobot")} rate={runningRate} description={`${t("totalRobot")} ${robotCount}`} description2={`${t("activeRobots")} ${activeRate}%`}></DataCard>
         <DataCard value={successTasks} title={t("successTasks")} rate={successRate} description={`${t("totalTasks")} ${totalTasks}`} description2={`${t("errorRate")}: ${errorTasks} (${errorRate}%)`}></DataCard>
-        <DataCard value={`${estimateSavingDurationInHours}h`} title={t("savingTime")} rate={null} description={``} description2={""}></DataCard>
-        <DataCard value={`${totalRunningDurationInHours}h`} title={t("robotRunningTime")} rate={workSpeed} description={`${t("robotWork {{rate}} % thanManualWork", { rate: workSpeed })}`} description2={""}></DataCard>
+        <DataCard value={`${formatSecond(estimateSavingDuration)}`} title={t("savingTime")} rate={null} description={``} description2={""}></DataCard>
+        <DataCard value={`${formatSecond(totalRunningDuration)}`} title={t("robotRunningTime")} rate={workSpeed} description={`${t("robotWork {{rate}} % thanManualWork", { rate: workSpeed })}`} description2={""}></DataCard>
       </div>
 
     </>

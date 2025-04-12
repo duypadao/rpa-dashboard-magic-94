@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import StatusCard from "@/components/StatusCard";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Robot } from "@/types/robots";
+import { Robot } from "../robots";
 import { useLanguage } from "@/components/LanguageProvider";
 import dayjs from "dayjs";
 import { formatSecond } from "@/common";
 import { RobotContext } from "../robotContext";
-import { LABStatusToRobotStatus, LAB_SERVER, LABAutomationTaskState, LABRobotReport } from "./common";
+import { LABStatusToRobotStatus, LAB_SERVER, LABAutomationTaskState, ILABRobotReport,AVG_MANUAL_TASK_DURATION } from "./common";
 import { sleep, randomIntFromInterval, round } from "@/common";
 import { ILABRobot } from "./common";
 const signalR = await import("@microsoft/signalr");
@@ -149,7 +149,7 @@ const RobotCard = ({ robot, view }: { robot: ILABRobot, view: string }) => {
       lastRunTime: new Date(), //humanizeDateTime()
       estimateSavingDuration: 0
     }
-    options.estimateSavingDuration = options.successCount * 90;
+    options.estimateSavingDuration = options.successCount * AVG_MANUAL_TASK_DURATION;
     setRobot({
       ...rb,
       ...options,
@@ -214,7 +214,7 @@ export const LABRobots = ({ searchTerm, statusFilter, view }) => {
           totalRunningDuration: 0,
           estimateSavingDuration: 0
         } as ILABRobot));
-        const reportData = (await (await fetch(`${LAB_SERVER}/automation/report?startDate=${today}&endDate=${today}`)).json()) as Array<LABRobotReport>;
+        const reportData = (await (await fetch(`${LAB_SERVER}/automation/report?startDate=${today}&endDate=${today}`)).json()) as Array<ILABRobotReport>;
         reportData.forEach(x => {
           const robot = robots.find(z => z.name === x.workerIdentity);
           if (robot) {
@@ -223,7 +223,7 @@ export const LABRobots = ({ searchTerm, statusFilter, view }) => {
             robot.errorCount += x.automationTaskState == LABAutomationTaskState.ERROR ? x.reportCount : 0;
             robot.pendingCount += x.automationTaskState == LABAutomationTaskState.PENDING ? x.reportCount : 0;
             robot.totalRunningDuration += x.robotRunningDuration;
-            robot.estimateSavingDuration = robot.successCount * 90;
+            robot.estimateSavingDuration = robot.successCount * AVG_MANUAL_TASK_DURATION;
           }
         });
 

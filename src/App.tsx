@@ -13,6 +13,7 @@ import MspoDetail from "./pages/subpages/mspo/MspoDetail";
 import Analytics from "./pages/Analytics";
 import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
+import LABReport from "./robots/lab/report";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/lab/report" element={<LABReport />} />
               <Route path="/robot/:id" element={<RobotDetail />} />
               <Route path="/invoice" element={<InvoiceDetail />} />
               <Route path="/mspo" element={<MspoDetail />} />

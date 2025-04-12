@@ -71,17 +71,17 @@ export function humanizeDateTime(date: Date, t: (key: string, unicorn?: object) 
                 return t('just now');
             }
             if (diffSecs < 60) {
-                return t(`{{diffSecs}} seconds ago`,{diffSecs});
+                return t(`{{diffSecs}} seconds ago`, { diffSecs });
             }
 
             // Minutes ago (within the last hour)
             if (diffMins < 60) {
-                return t(`{{diffMins}} ${diffMins === 1 ? 'minute' : 'minutes'} ago`,{diffMins});
+                return t(`{{diffMins}} ${diffMins === 1 ? 'minute' : 'minutes'} ago`, { diffMins });
             }
 
             // Hours ago (within the last day)
             if (diffHours < 24) {
-                return t(`{{diffHours}} ${diffHours === 1 ? 'hour' : 'hours'} ago`,{diffHours});
+                return t(`{{diffHours}} ${diffHours === 1 ? 'hour' : 'hours'} ago`, { diffHours });
             }
 
             // Yesterday
@@ -196,13 +196,44 @@ export function formatTime(date) {
 }
 
 
-export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-export const randomIntFromInterval = (min, max) => {
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+export const randomIntFromInterval = (min: number, max: number) => {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 
-export const round = (number, decimals) => {
+export const round = (number: number, decimals: number) => {
     return Math.round((number + Number.EPSILON) * Math.pow(10, decimals)) / Math.pow(10, decimals)
+}
+
+export function addDays(date: Date, days: number) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+export function getMonday(d: Date) {
+    d = new Date(d);
+    var day = d.getDay();
+    var diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
+}
+export function getMondayAndSaturdayFromDate(d: Date) {
+    const monday = getMonday(d);
+    const saturday = addDays(monday, 5)
+    return { monday, saturday };
+}
+
+export function getFirstDayAndLastDayOfMonthFromDate(d: Date) {
+    var date = d, y = date.getFullYear(), m = date.getMonth();
+    var firstDay = new Date(y, m, 1);
+    var lastDay = new Date(y, m + 1, 0);
+    return { firstDay, lastDay };
+}
+
+export function getFirstDayAndLastDayOfYearFromDate(d: Date) {
+    var date = d, y = date.getFullYear();
+    var firstDay = new Date(y, 0, 1);
+    var lastDay = new Date(y, 11, 31);
+    return { firstDay, lastDay };
 }

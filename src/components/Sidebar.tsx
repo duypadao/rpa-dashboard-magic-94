@@ -11,7 +11,7 @@ import {
   SidebarMenuButton, 
   SidebarMenuItem 
 } from "@/components/ui/sidebar";
-import { Home, Info, Zap } from "lucide-react";
+import { Home, Info, Zap,PieChartIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "./LanguageProvider";
 
@@ -29,6 +29,11 @@ const Sidebar = () => {
       title: t('aiInsightsTab'),
       path: "/insights",
       icon: Zap,
+    },
+    {
+      title: t('labRobotReport'),
+      path: "/lab/report",
+      icon: PieChartIcon,
     },
   ];
   
