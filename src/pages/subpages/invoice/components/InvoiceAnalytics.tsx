@@ -282,7 +282,7 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BrainCircuit className="h-5 w-5" />
-          {t("invoiceProcessingAnalytics")}
+          {t("invoice.invoiceProcessingAnalytics")}
         </CardTitle>
       </CardHeader>
       <CardContent>

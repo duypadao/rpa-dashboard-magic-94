@@ -2,6 +2,7 @@ import { API_BASE_URL, ProcessStepResponse, RobotResponse, mapProcessStepsToNode
 import { Robot, ProcessNode} from "@/types/robots";
 import { InvoiceHistoryItem } from "@/pages/subpages/invoice/components/InvoiceHistory";
 import { InvoiceOverViewItem } from "@/pages/subpages/invoice/components/InvoiceOverView";
+import { InvoiceSummary } from "@/pages/subpages/invoice/InvoiceDetail";
 import { formatDate } from "@/ultis/datetime";
 
 export const invoiceApiService = {
@@ -37,6 +38,23 @@ export const invoiceApiService = {
       return data as Robot;
     } catch (error) {
       console.error(`Error fetching invoice robot `, error);
+    }
+  },
+  
+  // Fetch invoice overview data
+  async getInvoiceSummary(): Promise<InvoiceSummary | undefined> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/robots/invoice/summary`);
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data : InvoiceSummary = await response.json();
+      return data as InvoiceSummary;
+
+    } catch (error) {
+      console.error(`Error fetching invoice overview `, error);
     }
   },
   

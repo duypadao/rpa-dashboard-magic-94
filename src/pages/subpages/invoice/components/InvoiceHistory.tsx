@@ -27,7 +27,7 @@ import {
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MonthYearFilter from "../../mspo/components/date-filter/MonthYearFilter";
-import { formatDate, formatMonthYear } from "@/ultis/datetime";
+import { formatDate, formatDuration, formatMonthYear } from "@/ultis/datetime";
 import { useLanguage } from "@/components/LanguageProvider";
 
 export interface InvoiceHistoryItem {
@@ -163,7 +163,7 @@ const InvoiceHistory = ({
   return (
     <Card className="animate-scale-in">
       <CardHeader className="flex flex-row justify-between pb-3">
-        <CardTitle>{t('invoiceProcessingHistory')}({formatMonthYear(filterDate)})</CardTitle>
+        <CardTitle>{t('invoice.invoiceProcessingHistory')}({formatMonthYear(filterDate)})</CardTitle>
         <div className="flex items-center gap-2">
             <MonthYearFilter date={filterDate} setDate={setFilterDate} />
           </div>
@@ -182,7 +182,7 @@ const InvoiceHistory = ({
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search invoice or supplier..."
+                  placeholder={t('invoice.searchInvoiceOrSupplier')}
                   className="pl-8"
                   value={searchTerm}
                   onChange={(e) => {
@@ -197,21 +197,21 @@ const InvoiceHistory = ({
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                       <SlidersHorizontal className="h-4 w-4 mr-1" />
-                      Result: {resultFilter === 'all' ? 'All' : resultFilter}
+                      {t("result")}: {resultFilter === 'all' ? t('all') : t(resultFilter)}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setResultFilter('all')}>
-                      All Results
+                      {t('all')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setResultFilter('success')}>
-                      Success
+                    {t('success')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setResultFilter('warning')}>
-                      Warning
+                    {t('warning')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setResultFilter('failure')}>
-                      Failure
+                    {t('failure')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -224,7 +224,7 @@ const InvoiceHistory = ({
                   <TableRow className="bg-secondary/20 hover:bg-secondary/30">
                     <TableHead onClick={() => handleSort('supplierName')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Supplier Name
+                        {t("invoice.supplierName")}
                         {sortField === 'supplierName' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -232,7 +232,7 @@ const InvoiceHistory = ({
                     </TableHead>
                     <TableHead onClick={() => handleSort('invoiceNo')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Invoice No
+                        {t("invoice.invoiceNo")}
                         {sortField === 'invoiceNo' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -240,7 +240,7 @@ const InvoiceHistory = ({
                     </TableHead>
                     <TableHead onClick={() => handleSort('result')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Result
+                        {t("result")}
                         {sortField === 'result' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -248,7 +248,7 @@ const InvoiceHistory = ({
                     </TableHead>
                     <TableHead onClick={() => handleSort('date')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Date
+                        {t("invoice.invoiceRunDate")}
                         {sortField === 'date' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -256,13 +256,13 @@ const InvoiceHistory = ({
                     </TableHead>
                     <TableHead onClick={() => handleSort('duration')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Duration
+                        {t("duration")}
                         {sortField === 'duration' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
                       </div>
                     </TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>{t("actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -287,17 +287,16 @@ const InvoiceHistory = ({
                           </span>
                         </TableCell>
                         <TableCell>{invoice.date}</TableCell>
-                        <TableCell>{invoice.duration}</TableCell>
+                        <TableCell>{formatDuration(invoice.duration)}</TableCell>
                         <TableCell>
                           <Button
                             variant="outline"
                             size="sm"
                             className="hover:bg-primary/10 transition-colors"
                             onClick={() => handleCheckProcess(invoice)}
-
                           >
                             <List className="h-4 w-4 mr-1" />
-                            Check Process
+                            {t("invoice.invoiceCheckProcess")}
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -343,10 +342,8 @@ const InvoiceHistory = ({
         <DialogContent className="max-w-3xl max-h-[80vh]">
 
           <DialogHeader>
-            <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
-            <DialogDescription>
-              Detailed visualization of the invoice processing steps and their statuses.
-            </DialogDescription>
+            <DialogTitle>{t("invoice.processFlowForInvoice")} {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
+            <DialogDescription>{t("invoice.invoiceProcessDescription")}</DialogDescription>
           </DialogHeader>
 
           <ScrollArea className="h-[60vh]">

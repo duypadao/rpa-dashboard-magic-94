@@ -2,6 +2,7 @@
 import { Robot } from "@/types/robots";
 import { API_BASE_URL, RobotResponse } from "./api";
 import { formatDate } from "@/ultis/datetime";
+import { MspoSummary } from "@/pages/subpages/mspo/MspoDetail";
 
 export const mspoApiService = {
 
@@ -15,6 +16,21 @@ async getMspoRobot(): Promise<Robot | undefined> {
         
         const data: RobotResponse = await response.json();
         return data as Robot;
+    } catch (error) {
+        console.error(`Error fetching invoice robot `, error);
+    }
+},
+
+async getMspoSummary(): Promise<MspoSummary | undefined> {
+    try {
+        const response = await fetch(`${API_BASE_URL}/robots/mspo/summary`);
+        
+        if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+        }
+        
+        const data: MspoSummary = await response.json();
+        return data as MspoSummary;
     } catch (error) {
         console.error(`Error fetching invoice robot `, error);
     }

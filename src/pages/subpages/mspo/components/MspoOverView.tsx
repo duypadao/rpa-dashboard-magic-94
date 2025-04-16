@@ -6,7 +6,8 @@ import MonthYearFilter from "./date-filter/MonthYearFilter";
 import MspoSummaryTable from "./summary/MspoSummaryTable";
 import MspoDetailTable from "./detail/MspoDetailTable";
 import PdfViewerDialog from "./pdf-viewer/PdfViewerDialog";
-import { formatDateStr } from "@/ultis/datetime";
+import { formatDateStr, formatMonthYear } from "@/ultis/datetime";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export interface MspoOverViewItem {
   date: string;
@@ -37,6 +38,7 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({
   filterDate,
   setFilterDate,
 }) => {
+  const { t } = useLanguage();
   const [selectedItem, setSelectedItem] = useState<MspoOverViewItem | null>(null);
   const [pdfDialogOpen, setPdfDialogOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -69,7 +71,7 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({
       {/* Left part - Summary Grid */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle>MSPO Summary</CardTitle>
+          <CardTitle>{t('mspo.mspoSummary')} ({formatMonthYear(filterDate)})</CardTitle>
           <div className="flex items-center gap-2">
             <MonthYearFilter date={filterDate} setDate={setFilterDate} />
           </div>
@@ -88,7 +90,7 @@ const MspoOverView: React.FC<MspoOverViewProps> = ({
       <Card>
         <CardHeader>
           <CardTitle>
-            MSPO Details {selectedItem && `(${formatDateStr(selectedItem.date)})`}
+          {t('mspo.mspoDetails')} {selectedItem && `(${formatDateStr(selectedItem.date)})`}
           </CardTitle>
         </CardHeader>
         <CardContent>

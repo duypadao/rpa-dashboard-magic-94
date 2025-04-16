@@ -1,6 +1,7 @@
 
 import { cn } from "@/lib/utils";
 import { BatteryWarning, CheckCircle2, CircleAlert, FileWarningIcon, Loader2, MessageCircleWarningIcon, XCircle } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export interface ProcessNode {
   id: string;
@@ -18,6 +19,7 @@ interface ProcessFlowProps {
 }
 
 const ProcessFlow = ({ nodes, className }: ProcessFlowProps) => {
+  const { t, tp } = useLanguage();
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "success":
@@ -52,18 +54,18 @@ const ProcessFlow = ({ nodes, className }: ProcessFlowProps) => {
             <div className="mr-3 flex-shrink-0">{getStatusIcon(node.status)}</div>
             <div className="flex-1 glass p-3 rounded-lg animate-slide-in-right" style={{ animationDelay: `${index * 100}ms` }}>
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                <div className="font-medium">{node.name}</div>
+                <div className="font-medium">{tp(node.name)}</div>
                 {node.duration && (
                   <div className="text-xs text-muted-foreground whitespace-nowrap">
-                    Duration: {node.duration}
+                    {t('duration')}: {node.duration}
                   </div>
                 )}
               </div>
               
               {(node.startTime || node.endTime) && (
                 <div className="mt-1 flex text-xs text-muted-foreground gap-x-2">
-                  {node.startTime && <div>Start: {node.startTime}</div>}
-                  {node.endTime && <div>End: {node.endTime}</div>}
+                  {node.startTime && <div>{t('start')}: {node.startTime}</div>}
+                  {node.endTime && <div>{t('end')}: {node.endTime}</div>}
                 </div>
               )}
               

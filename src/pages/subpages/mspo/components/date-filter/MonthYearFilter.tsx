@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLanguage } from "@/components/LanguageProvider";
 
 interface MonthYearFilterProps {
   date: Date | undefined;
@@ -25,6 +26,7 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
   date,
   setDate,
 }) => {
+  const { t } = useLanguage();
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   const [currentMonth, setCurrentMonth] = React.useState<Date>(date || new Date());
   
@@ -79,7 +81,7 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="h-8 gap-1">
           <Calendar className="h-4 w-4" />
-          {date ? format(date, "MMMM yyyy") : "Filter by Month"}
+          {date ? format(date, "MMMM yyyy") : t("filterByMonth")}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-3 bg-background" align="end">
@@ -110,7 +112,7 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
           {/* Month Selector */}
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-sm font-medium">Month:</label>
+              <label className="text-sm font-medium">{t('month')}:</label>
               <Select 
                 value={format(currentMonth, "MMMM")}
                 onValueChange={handleMonthSelect}
@@ -130,7 +132,7 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
             
             {/* Year Selector */}
             <div>
-              <label className="text-sm font-medium">Year:</label>
+              <label className="text-sm font-medium">{t('year')}:</label>
               <Select 
                 value={currentMonth.getFullYear().toString()}
                 onValueChange={handleYearSelect}
@@ -156,10 +158,10 @@ const MonthYearFilter: React.FC<MonthYearFilterProps> = ({
               size="sm"
               onClick={handleClearFilter}
             >
-              Clear
+              {t('clear')}:
             </Button>
             <Button size="sm" onClick={handleDateFilter}>
-              Apply
+              {t('apply')}:
             </Button>
           </div>
         </div>
