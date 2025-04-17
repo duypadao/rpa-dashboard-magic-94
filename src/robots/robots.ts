@@ -20,7 +20,7 @@ export interface Robot {
 export interface ProcessNode {
   id: string;
   name: string;
-  status: "success" | "failure" | "in-progress" | "pending";
+  status: "success" | "warning" | "failure" | "in-progress" | "pending";
   startTime?: string;
   endTime?: string;
   duration?: string;
