@@ -145,7 +145,7 @@ const RobotCard = ({ robot, view }: { robot: ILABRobot, view: string }) => {
       errorCount,
       totalRunningDuration,
       lastResult,
-      duration: formatSecond(taskRunDuration),
+      duration: formatSecond(taskRunDuration,t),
       lastRunTime: new Date(), //humanizeDateTime()
       estimateSavingDuration: 0
     }

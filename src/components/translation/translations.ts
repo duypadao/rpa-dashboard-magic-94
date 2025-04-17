@@ -422,6 +422,131 @@ export const translations: Translations = {
             en: "Type",
             zh: "类型",
             vi: "Loại"
+        },
+        "{{diffHours}} hours ago": {
+            en: "{{diffHours}} hours ago",
+            zh: "{{diffHours}} hours ago",
+            vi: "{{diffHours}} giờ trước"
+        },
+        "{{diffHours}} hour ago": {
+            en: "{{diffHours}} hour ago",
+            zh: "{{diffHours}} hour ago",
+            vi: "{{diffHours}} giờ trước"
+        },
+        "{{hours}}h{{minutes}}m": {
+            en: "{{hours}}h {{minutes}}m",
+            zh: "{{hours}}h{{minutes}}m",
+            vi: "{{hours}} giờ {{minutes}} giây"
+        },
+        "{{hours}}h{{minutes}}m{{seconds}}s": {
+            en: "{{hours}}h {{minutes}}m {{seconds}}s",
+            zh: "{{hours}}h{{minutes}}m",
+            vi: "{{hours}} giờ {{minutes}} phút {{seconds}} giây"
+        },
+        "{{minutes}}m": {
+            en: "{{minutes}}m",
+            zh: "{{minutes}}m",
+            vi: "{{minutes}} phút"
+        },
+        robotPerformance: {
+            en: "Robot Performance",
+            zh: "robotPerformance",
+            vi: "Hiệu suất làm việc của robot"
+        },
+        LIMS_BRAReportPrintAndUpload: {
+            en: "Bra Washing Report",
+            zh: "LIMS_BRAReportPrintAndUpload",
+            vi: "Báo cáo giặt áo"
+        },
+        LIMS_UploadOldReportAndReturnSample: {
+            en: "Upload report then return sample",
+            zh: "LIMS_UploadOldReportAndReturnSample",
+            vi: "Tải báo cáo và trả mẫu"
+        },
+        labRobotReport: {
+            en: "LAB Report",
+            zh: "labRobotReport",
+            vi: "Báo cáo LAB"
+        },
+        LABRobotReport: {
+            en: "Labratory Robot Report",
+            zh: "LABRobotReport",
+            vi: "Báo cáo robot phòng thí nghiệm"
+        },
+        summaryLABRobotPerformance: {
+            en: "Summrize labratory robot performance",
+            zh: "summaryLABRobotPerformance",
+            vi: "Tổng hợp kết quả robot phòng thí nghiệm"
+        },
+        today: {
+            en: "Today",
+            zh: "today",
+            vi: "Hôm nay"
+        },
+        thisWeek: {
+            en: "This week",
+            zh: "thisWeek",
+            vi: "Tuần này"
+        },
+        thisMonth: {
+            en: "This month",
+            zh: "thisMonth",
+            vi: "Tháng này"
+        },
+        thisYear: {
+            en: "This year",
+            zh: "thisYear",
+            vi: "Năm nay"
+        },
+        customRange: {
+            en: "Custom range",
+            zh: "customRange",
+            vi: "Tùy chọn"
+        },
+        startDate: {
+            en: "Start Date",
+            zh: "startDate",
+            vi: "Từ ngày"
+        },
+        endDate: {
+            en: "End Date",
+            zh: "endDate",
+            vi: "Tới ngày"
+        },
+        LIMS_UploadReportWithConclusion: {
+            en: "Report with conclusion",
+            zh: "LIMS_UploadReportWithConclusion",
+            vi: "Báo cáo có lời bình"
+        },
+        LIMS_LABCLogoStamp: {
+            en: "Logo and Stamp",
+            zh: "LIMS_LABCLogoStamp",
+            vi: "Logo và tem"
+        },
+        LIMS_LABCAccessory: {
+            en: "Accessory",
+            zh: "LIMS_LABCAccessory",
+            vi: "Phụ liệu"
+        },
+        totalRobots: {
+            en: "Total Robots",
+            zh: "totalRobots",
+            vi: " Tổng số Robot"
+        },
+        successRate: {
+            en: "Success Rate",
+            zh: "successRate",
+            vi: "Tỉ lệ thành công"
+        },
+        errorTasks: {
+            en: "Error Tasks",
+            zh: "successRate",
+            vi: "Số công việc bị lỗi"
+        },
+        labRobotChartTitle: {
+            en: "Analyze Robot Tasks",
+            zh: "labRobotChartTitle",
+            vi: "Phân tích công việc của từng robot"
         }
     },
     invoice: {
