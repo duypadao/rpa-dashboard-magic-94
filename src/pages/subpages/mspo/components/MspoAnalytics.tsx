@@ -15,6 +15,7 @@ import {
   Activity,
   Calendar
 } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 interface AnalyticInsight {
   id: string;
@@ -29,6 +30,7 @@ interface MspoAnalyticsProps {
 }
 
 const MspoAnalytics = ({ mspoData, isLoading }: MspoAnalyticsProps) => {
+  const { t } = useLanguage();
   // Process mspo data for analytics
   const processedData = useMemo(() => {
     if (!mspoData || mspoData.length === 0) return null;
@@ -155,7 +157,7 @@ const MspoAnalytics = ({ mspoData, isLoading }: MspoAnalyticsProps) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BrainCircuit className="h-5 w-5" />
-          MSPO Processing Analytics
+          {t('mspo.mspoProcessingAnalytics')}
         </CardTitle>
       </CardHeader>
       <CardContent>

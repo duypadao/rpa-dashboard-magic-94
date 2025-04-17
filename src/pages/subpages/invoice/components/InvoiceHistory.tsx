@@ -9,12 +9,6 @@ import ProcessFlow from "@/components/ProcessFlow";
 import { useQuery } from "@tanstack/react-query";
 import { invoiceApiService } from "@/services/invoiceApi";
 import {
-
-
-
-
-
-
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -32,6 +26,9 @@ import {
 
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import MonthYearFilter from "../../mspo/components/date-filter/MonthYearFilter";
+import { formatDate, formatDuration, formatMonthYear } from "@/ultis/datetime";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export interface InvoiceHistoryItem {
   id: number;
@@ -42,39 +39,24 @@ export interface InvoiceHistoryItem {
   result: string,
   date: string;
   duration: string;
-
-
-
-
-
-
-
-
-
-
 }
 
 interface InvoiceHistoryProps {
   invoiceData: InvoiceHistoryItem[];
   isLoading: boolean;
+  filterDate: Date | undefined;
+  setFilterDate: (date: Date | undefined) => void;
 }
 
 type SortField = 'supplierName' | 'invoiceNo' | 'result' | 'date' | 'duration';
 type SortOrder = 'asc' | 'desc';
-
-
-
-
-
-
-
-
-
-
-
-
-
-const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
+const InvoiceHistory = ({
+  invoiceData,
+  isLoading,
+  filterDate,
+  setFilterDate,
+}: InvoiceHistoryProps) => {
+  const { t } = useLanguage();
   const [currentPage, setCurrentPage] = useState(1);
   const [processDialogOpen, setProcessDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -84,48 +66,34 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
   const [invoiceSelected, setInvoiceSelected] = useState<InvoiceHistoryItem>(null);
 
   const itemsPerPage = 10;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const processedData = useMemo(() => {
     return [...invoiceData]
       .filter(invoice => {
         const matchesSearch =
           invoice.supplierName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           invoice.invoiceNo.toLowerCase().includes(searchTerm.toLowerCase());
-  
+
         const matchesResult = resultFilter === 'all' || invoice.resultType === resultFilter;
-  
+
         return matchesSearch && matchesResult;
       })
       .sort((a, b) => {
         let aValue = a[sortField];
         let bValue = b[sortField];
-  
+
         return sortOrder === 'asc'
           ? String(aValue).localeCompare(String(bValue))
           : String(bValue).localeCompare(String(aValue));
       });
   }, [invoiceData, searchTerm, resultFilter, sortField, sortOrder]);
-  
+
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
-  
+
   const currentInvoices = processedData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  
+
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -135,13 +103,13 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
     }
   };
 
-  const { 
-    data: processFlowData = [], 
-    isLoading: processFlowLoading 
+  const {
+    data: processFlowData = [],
+    isLoading: processFlowLoading
   } = useQuery({
     queryKey: ['invoiceFlow', invoiceSelected],
     queryFn: () => invoiceApiService.getProcessNodes(invoiceSelected),
-    enabled: !! invoiceSelected,
+    enabled: !!invoiceSelected,
   });
 
   const handleCheckProcess = (invoice: InvoiceHistoryItem) => {
@@ -151,17 +119,6 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
 
   const renderPaginationItems = () => {
     const pagesToShow = new Set<number>();
-
-
-
-
-
-
-
-
-
-
-
     pagesToShow.add(1);
     pagesToShow.add(totalPages);
 
@@ -170,7 +127,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
     }
 
     const pagesArray = Array.from(pagesToShow).sort((a, b) => a - b);
-    
+
     return pagesArray.map((page, index) => {
       if (index > 0 && page - pagesArray[index - 1] > 1) {
         return (
@@ -179,7 +136,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink 
+              <PaginationLink
                 isActive={currentPage === page}
                 onClick={() => setCurrentPage(page)}
               >
@@ -189,10 +146,10 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
           </React.Fragment>
         );
       }
-      
+
       return (
         <PaginationItem key={page}>
-          <PaginationLink 
+          <PaginationLink
             isActive={currentPage === page}
             onClick={() => setCurrentPage(page)}
           >
@@ -201,27 +158,15 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
         </PaginationItem>
       );
     });
-
-
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <Card className="animate-scale-in">
-      <CardHeader>
-        <CardTitle>Invoice Processing History This Month</CardTitle>
+      <CardHeader className="flex flex-row justify-between pb-3">
+        <CardTitle>{t('invoice.invoiceProcessingHistory')}({formatMonthYear(filterDate)})</CardTitle>
+        <div className="flex items-center gap-2">
+            <MonthYearFilter date={filterDate} setDate={setFilterDate} />
+          </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -237,7 +182,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search invoice or supplier..."
+                  placeholder={t('invoice.searchInvoiceOrSupplier')}
                   className="pl-8"
                   value={searchTerm}
                   onChange={(e) => {
@@ -252,34 +197,34 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                       <SlidersHorizontal className="h-4 w-4 mr-1" />
-                      Result: {resultFilter === 'all' ? 'All' : resultFilter}
+                      {t("result")}: {resultFilter === 'all' ? t('all') : t(resultFilter)}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setResultFilter('all')}>
-                      All Results
+                      {t('all')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setResultFilter('success')}>
-                      Success
+                    {t('success')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setResultFilter('warning')}>
-                      Warning
+                    {t('warning')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setResultFilter('failure')}>
-                      Failure
+                    {t('failure')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             </div>
-            
+
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-secondary/20 hover:bg-secondary/30">
                     <TableHead onClick={() => handleSort('supplierName')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Supplier Name
+                        {t("invoice.supplierName")}
                         {sortField === 'supplierName' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -287,7 +232,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('invoiceNo')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Invoice No
+                        {t("invoice.invoiceNo")}
                         {sortField === 'invoiceNo' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -295,7 +240,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('result')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Result
+                        {t("result")}
                         {sortField === 'result' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -303,7 +248,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('date')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Date
+                        {t("invoice.invoiceRunDate")}
                         {sortField === 'date' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -311,20 +256,20 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('duration')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Duration
+                        {t("duration")}
                         {sortField === 'duration' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
                       </div>
                     </TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>{t("actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {currentInvoices.length > 0 ? (
                     currentInvoices.map((invoice, index) => (
-                      <TableRow 
-                        key={index} 
+                      <TableRow
+                        key={index}
                         className="transition-colors hover:bg-muted/40 animate-fade-in"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
@@ -332,97 +277,26 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                         <TableCell>{invoice.invoiceNo}</TableCell>
 
                         <TableCell>
-                          <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
-                            invoice.resultType === "success"
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${invoice.resultType === "success"
                               ? "bg-success/10 text-success"
                               : invoice.resultType === "warning"
-                              ? "bg-warning/10 text-warning"
-                              : "bg-error/10 text-error"
-                          }`}>
+                                ? "bg-warning/10 text-warning"
+                                : "bg-error/10 text-error"
+                            }`}>
                             {invoice.result.charAt(0).toUpperCase() + invoice.result.slice(1)}
                           </span>
                         </TableCell>
                         <TableCell>{invoice.date}</TableCell>
-                        <TableCell>{invoice.duration}</TableCell>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        <TableCell>{formatDuration(invoice.duration)}</TableCell>
                         <TableCell>
-                          <Button 
-                            variant="outline" 
+                          <Button
+                            variant="outline"
                             size="sm"
                             className="hover:bg-primary/10 transition-colors"
                             onClick={() => handleCheckProcess(invoice)}
-
                           >
                             <List className="h-4 w-4 mr-1" />
-                            Check Process
+                            {t("invoice.invoiceCheckProcess")}
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -440,7 +314,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                 <Pagination className="mt-4">
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
+                      <PaginationPrevious
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
 
@@ -450,7 +324,7 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
                     {renderPaginationItems()}
 
                     <PaginationItem>
-                      <PaginationNext 
+                      <PaginationNext
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
 
@@ -463,17 +337,15 @@ const InvoiceHistory = ({ invoiceData, isLoading }: InvoiceHistoryProps) => {
           </div>
         )}
       </CardContent>
-      
+
       <Dialog open={processDialogOpen} onOpenChange={setProcessDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[80vh]">
 
           <DialogHeader>
-            <DialogTitle>Process Flow for Invoice {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
-            <DialogDescription>
-              Detailed visualization of the invoice processing steps and their statuses.
-            </DialogDescription>
+            <DialogTitle>{t("invoice.processFlowForInvoice")} {invoiceSelected ? invoiceSelected.invoiceNo : ""}</DialogTitle>
+            <DialogDescription>{t("invoice.invoiceProcessDescription")}</DialogDescription>
           </DialogHeader>
-          
+
           <ScrollArea className="h-[60vh]">
             <div className="py-4 px-2">
               {processFlowLoading ? (

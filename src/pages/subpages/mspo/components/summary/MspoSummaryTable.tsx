@@ -6,6 +6,7 @@ import { Eye } from "lucide-react";
 import { MspoOverViewItem } from "../MspoOverView";
 import PaginationControls from "../pagination/PaginationControls";
 import { formatDateStr, formatDateTime, formatDuration } from "@/ultis/datetime";
+import { useLanguage } from "@/components/LanguageProvider";
 
 interface MspoSummaryTableProps {
   data: MspoOverViewItem[];
@@ -20,6 +21,7 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
   onViewDetail,
   isLoading
 }) => {
+  const { t } = useLanguage();
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
 
@@ -44,10 +46,10 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
           <Table>
             <TableHeader>
               <TableRow className="bg-secondary/20 hover:bg-secondary/30">
-                <TableHead>Date</TableHead>
+                <TableHead>{t('mspo.mspoRunDate')}</TableHead>
                 <TableHead>Order /<br/>Order Change</TableHead>
-                <TableHead>Last Run Time <br/>(Duration)</TableHead>
-                <TableHead>Action</TableHead>
+                <TableHead>{t('lastRunTime')} <br/>({t('duration')})</TableHead>
+                <TableHead>{t('actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -73,7 +75,7 @@ const MspoSummaryTable: React.FC<MspoSummaryTableProps> = ({
                         className="flex items-center gap-2"
                       >
                         <Eye className="h-4 w-4" />
-                        Detail
+                        {t('detail')}
                       </Button>
                     </TableCell>
                   </TableRow>

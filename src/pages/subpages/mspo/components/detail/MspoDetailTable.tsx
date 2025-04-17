@@ -6,6 +6,7 @@ import { FileText } from "lucide-react";
 import { format } from "date-fns";
 import { MspoOverViewItem } from "../MspoOverView";
 import PaginationControls from "../pagination/PaginationControls";
+import { useLanguage } from "@/components/LanguageProvider";
 
 interface MspoDetailTableProps {
   selectedItem: MspoOverViewItem | null;
@@ -18,6 +19,7 @@ const MspoDetailTable: React.FC<MspoDetailTableProps> = ({
   onViewPdf,
   loadingPdf
 }) => {
+  const { t } = useLanguage();
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
 
@@ -31,7 +33,7 @@ const MspoDetailTable: React.FC<MspoDetailTableProps> = ({
   if (!selectedItem) {
     return (
       <div className="text-center py-12 text-muted-foreground">
-        Select an item from the summary to view details
+        {t('mspo.selectFromSummary')}
       </div>
     );
   }
@@ -41,10 +43,10 @@ const MspoDetailTable: React.FC<MspoDetailTableProps> = ({
       <Table>
         <TableHeader>
           <TableRow className="bg-secondary/20 hover:bg-secondary/30">
-            <TableHead>PO Number</TableHead>
+            <TableHead>PO</TableHead>
             <TableHead>Main Line Description</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead>{t('type')}</TableHead>
+            <TableHead>{t('actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -67,14 +69,14 @@ const MspoDetailTable: React.FC<MspoDetailTableProps> = ({
                     disabled={loadingPdf}
                   >
                     <FileText className="h-4 w-4" />
-                    {loadingPdf ? "Loading..." : "View PDF"}
+                    {loadingPdf ? t("loading") : t("viewPdf")}
                   </Button>
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4} className="text-center">No details available</TableCell>
+              <TableCell colSpan={4} className="text-center">{t('noDetailsAvailable')}</TableCell>
             </TableRow>
           )}
         </TableBody>

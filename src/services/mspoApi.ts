@@ -2,6 +2,7 @@
 import { Robot } from "@/types/robots";
 import { API_BASE_URL, RobotResponse } from "./api";
 import { formatDate } from "@/ultis/datetime";
+import { MspoSummary } from "@/pages/subpages/mspo/MspoDetail";
 
 export const mspoApiService = {
 
@@ -20,15 +21,27 @@ async getMspoRobot(): Promise<Robot | undefined> {
     }
 },
 
+async getMspoSummary(): Promise<MspoSummary | undefined> {
+    try {
+        const response = await fetch(`${API_BASE_URL}/robots/mspo/summary`);
+        
+        if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+        }
+        
+        const data: MspoSummary = await response.json();
+        return data as MspoSummary;
+    } catch (error) {
+        console.error(`Error fetching invoice robot `, error);
+    }
+},
+
 async getMspoOverView(date?: Date): Promise<any[]> {
     try {
       let url = `${API_BASE_URL}/robots/mspo/overview`;
-      
-      // If date is provided, add it as a query parameter
-      if (date) {
-        const formattedDate = formatDate(date) // Format date as YYYY-MM-DD
+
+      const formattedDate = formatDate(date ?? new Date()) // Format date as YYYY-MM-DD
         url += `?date=${formattedDate}`;
-      }
       
       const response = await fetch(url);
       

@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import StatusBadge from "@/components/StatusBadge";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export interface InvoiceOverViewItem {
   id: number;
@@ -42,6 +43,7 @@ type SortField = 'id' | 'supplierName' | 'inLineDate' | 'accumulatedInvoice' | '
 type SortOrder = 'asc' | 'desc';
 
 const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
+  const { t } = useLanguage();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('id');
@@ -168,7 +170,7 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
   return (
     <Card className="animate-scale-in">
       <CardHeader>
-        <CardTitle>Invoice Over View</CardTitle>
+        <CardTitle>{t('invoice.invoiceOverView')}</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -184,7 +186,7 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search supplier..."
+                  placeholder={t('invoice.searchSupplier')}
                   className="pl-8"
                   value={searchTerm}
                   onChange={(e) => {
@@ -199,18 +201,18 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm">
                       <SlidersHorizontal className="h-4 w-4 mr-1" />
-                      Status: {statusFilter === 'all' ? 'All' : statusFilter}
+                      {t("status")}: {statusFilter === 'all' ? t("all") : t(statusFilter)}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setStatusFilter('all')}>
-                      All
+                    {t("all")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setStatusFilter('running')}>
-                      Running
+                    {t("running")}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setStatusFilter('idle')}>
-                      Idle
+                    {t("idle")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -223,16 +225,16 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
                   <TableRow className="bg-secondary/20 hover:bg-secondary/30">
                     <TableHead onClick={() => handleSort('id')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Id
+                        {t("Id")}
                         {sortField === 'id' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
                       </div>
                     </TableHead>
-                    <TableHead>SAPID</TableHead>
+                    <TableHead>{t('invoice.supplierId')}</TableHead>
                     <TableHead onClick={() => handleSort('supplierName')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Supplier Name
+                        {t("invoice.supplierName")}
                         {sortField === 'supplierName' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -240,7 +242,7 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('inLineDate')} className="cursor-pointer">
                       <div className="flex items-center">
-                        InLine Date
+                      {t("invoice.inlineDate")}
                         {sortField === 'inLineDate' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -248,16 +250,16 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('accumulatedInvoice')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Invoice Created
+                        {t("invoice.invoiceCreated")}
                         {sortField === 'accumulatedInvoice' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
                       </div>
                     </TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>{t("status")}</TableHead>
                     <TableHead onClick={() => handleSort('invoiceInqueueQuantity')} className="cursor-pointer">
                       <div className="flex items-center">
-                        In Queue
+                      {t("invoice.invoiceInQueue")}
                         {sortField === 'invoiceInqueueQuantity' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
@@ -265,7 +267,7 @@ const InvoiceOverView = ({ invoiceData, isLoading }: InvoiceOverViewProps) => {
                     </TableHead>
                     <TableHead onClick={() => handleSort('lastRunTime')} className="cursor-pointer">
                       <div className="flex items-center">
-                        Last Run Time
+                        {t("lastRunTime")}
                         {sortField === 'lastRunTime' && (
                           sortOrder === 'asc' ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />
                         )}
