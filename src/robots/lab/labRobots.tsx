@@ -254,17 +254,6 @@ export const LABRobots = ({ searchTerm, statusFilter, view }) => {
       return matchesSearch && matchesStatus;
     });
   }, [robots, searchTerm, statusFilter]);
-
-  // Navigate to robot detail page
-  const handleRobotClick = (robot: Robot) => {
-    // Check if this is the Invoice Robot
-    if (robot.id === "1") {
-      navigate("/invoice");
-    } else {
-      // For all other robots, navigate to the robot/:id page with robot data
-      navigate(`/robot/${robot.id}`, { state: { robot } });
-    }
-  };
   console.log("LABRobots rendered");
 
   return (

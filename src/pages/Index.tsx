@@ -22,6 +22,7 @@ import { RobotContext, RobotContainer } from "@/robots/robotContext";
 import { LABRobots } from "@/robots/lab/labRobots";
 import { DataCard } from "@/components/DataCard";
 import { round,formatSecond } from "@/common";
+import UtilityRobots from "@/robots/rpa/utilityRobots";
 
 const Summary = () => {
   const { getRobots, getLastUpdatedTime } = useContext(RobotContext);
@@ -247,6 +248,8 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
 }
 
 
+
+
 const Index = () => {
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
@@ -326,6 +329,8 @@ const Index = () => {
             <LABRobots searchTerm={searchTerm} statusFilter={statusFilter} view={view}></LABRobots>
             <div className="mb-8"></div>
             <RPA8112Robots searchTerm={searchTerm} statusFilter={statusFilter} view={view}></RPA8112Robots>
+            <div className="mb-8"></div>
+            <UtilityRobots searchTerm={searchTerm} statusFilter={statusFilter} view={view}></UtilityRobots>
           </div>
           <div className="md:col-span-4">
             <RobotInsights />

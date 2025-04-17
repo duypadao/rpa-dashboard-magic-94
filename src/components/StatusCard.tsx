@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, XCircle, ArrowRight } from "lucide-react";
+import { Clock, XCircle, ArrowRight,CheckCheck } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import { Robot } from "@/types/robots";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,8 @@ interface StatusCardProps {
   className?: string;
   style?: CSSProperties;
   onClick?: () => void;
-  footer?: ReactElement
+  footer?: ReactElement;
+  showLastRunTime?: boolean;
 }
 
 // Robot color mapping for consistent UI
@@ -47,17 +48,17 @@ const LastRun = ({ lastRun, t = null }: { lastRun: string | Date, t: (key: strin
   }
 }
 
-const StatusCard = ({ robot, className, style, onClick, footer = null }: StatusCardProps) => {
+const StatusCard = ({ robot, className, style, onClick, footer = null, showLastRunTime = true }: StatusCardProps) => {
   const { t } = useLanguage();
 
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
-        return null;
+        return <CheckCheck className="inline h-4 w-4 text-success" />;;
       case "warning":
         return <span className="text-warning">⚠️</span>;
       case "failure":
-        return <XCircle className="h-4 w-4 text-error" />;
+        return <XCircle className="inline h-4 w-4 text-error" />;
       default:
         return null;
     }
@@ -102,26 +103,31 @@ const StatusCard = ({ robot, className, style, onClick, footer = null }: StatusC
       </CardHeader>
       <CardContent className="p-4">
         <div className="space-y-4">
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Clock className="mr-2 h-4 w-4" />
-            <span>{t('lastRun')}: <LastRun lastRun={robot.lastRunTime} t={t} /></span>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm">
-              <span className="mr-1">{t('result')}:</span>
-              <span className={cn(
-                robot.lastResult === "success" && "text-success",
-                robot.lastResult === "warning" && "text-warning",
-                robot.lastResult === "failure" && "text-error"
-              )}>
-                {getResultText(robot.lastResult)}
-                {getResultIcon()}
-              </span>
+
+          {showLastRunTime && (<>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Clock className="mr-2 h-4 w-4" />
+              <span>{t('lastRun')}: <LastRun lastRun={robot.lastRunTime} t={t} /></span>
             </div>
-            <div className="text-sm">
-              {t('duration')}: {robot.duration}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-sm">
+                <span className="mr-1">{t('result')}:</span>
+                <span className={cn(
+                  robot.lastResult === "success" && "text-success",
+                  robot.lastResult === "warning" && "text-warning",
+                  robot.lastResult === "failure" && "text-error"
+                )}>
+                  {getResultIcon()} {getResultText(robot.lastResult)}
+                </span>
+              </div>
+              <div className="text-sm">
+                {t('duration')}: {robot.duration}
+              </div>
             </div>
-          </div>
+          </>
+
+          )}
+
           {robot.description && (
             <div className="text-sm text-muted-foreground line-clamp-2">
               {t(robot.description)}
