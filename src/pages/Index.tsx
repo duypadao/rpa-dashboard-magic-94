@@ -60,8 +60,8 @@ const Summary = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <DataCard value={running} title={t("runningRobot")} rate={runningRate} description={`${t("totalRobot")} ${robotCount}`} description2={`${t("activeRobots")} ${activeRate}%`}></DataCard>
         <DataCard value={successTasks} title={t("successTasks")} rate={successRate} description={`${t("totalTasks")} ${totalTasks}`} description2={`${t("errorRate")}: ${errorTasks} (${errorRate}%)`}></DataCard>
-        <DataCard value={`${formatSecond(estimateSavingDuration)}`} title={t("savingTime")} rate={null} description={``} description2={""}></DataCard>
-        <DataCard value={`${formatSecond(totalRunningDuration)}`} title={t("robotRunningTime")} rate={workSpeed} description={`${t("robotWork {{rate}} % thanManualWork", { rate: workSpeed })}`} description2={""}></DataCard>
+        <DataCard value={`${formatSecond(estimateSavingDuration,t)}`} title={t("savingTime")} rate={null} description={``} description2={""}></DataCard>
+        <DataCard value={`${formatSecond(totalRunningDuration,t)}`} title={t("robotRunningTime")} rate={workSpeed} description={`${t("robotWork {{rate}} % thanManualWork", { rate: workSpeed })}`} description2={""}></DataCard>
       </div>
 
     </>
