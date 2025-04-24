@@ -16,7 +16,7 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="flex flex-1">
           <Sidebar />
           <main className="flex-1 overflow-auto animate-fade-in">
-            <div className="container p-6">
+            <div className="p-8">
               {children}
             </div>
           </main>

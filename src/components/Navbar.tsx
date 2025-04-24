@@ -44,7 +44,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <SidebarTrigger />
           <div className="flex items-center gap-2">
-            <div className="font-semibold text-xl text-primary">{t('dashboard')}</div>
+            <div className="font-semibold text-xl text-primary">{t('rpa')}</div>
           </div>
         </div>
 
