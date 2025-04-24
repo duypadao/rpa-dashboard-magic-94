@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Clock, XCircle, ArrowRight,CheckCheck } from "lucide-react";
+import { Clock, XCircle, ArrowRight, CheckCheck } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import { Robot } from "@/types/robots";
 import { cn } from "@/lib/utils";
@@ -54,11 +54,11 @@ const StatusCard = ({ robot, className, style, onClick, footer = null, showLastR
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
-        return <CheckCheck className="inline h-4 w-4 text-success" />;;
+        return "✔️"; //
       case "warning":
         return <span className="text-warning">⚠️</span>;
       case "failure":
-        return <XCircle className="inline h-4 w-4 text-error" />;
+        return "❌️"; //<XCircle className="inline h-4 w-4 text-error" />;
       default:
         return null;
     }

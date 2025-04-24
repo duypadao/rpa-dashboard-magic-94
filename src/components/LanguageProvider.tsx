@@ -3,7 +3,7 @@ import { formatUnicorn } from "@/common";
 import { translations  } from "./translation/translations";
 import { processTranslations } from "./translation/processTranslation"
 
-export type Language = "en" | "zh" | "vi";
+export type Language = "en" | "cn" | "vi";
 
 export type Translations = {
   [group: string]: {

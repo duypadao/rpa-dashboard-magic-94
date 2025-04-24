@@ -15,19 +15,25 @@ import { Switch } from "@/components/ui/switch";
 import { useTheme } from "./ThemeProvider";
 import { useLanguage } from "./LanguageProvider";
 import { useState } from "react";
+import { useAuth } from "@/auths/AuthProvider";
 
+
+const shortName = (name: string)=>{
+  return name.split(' ').map(z=> z[0].toUpperCase()).join('')
+}
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const [isDark, setIsDark] = useState(theme === "dark");
-
+  const auth = useAuth();
+  console.log(auth);
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     setIsDark(newTheme === "dark");
   };
 
-  const changeLanguage = (lang: "en" | "zh" | "vi") => {
+  const changeLanguage = (lang: "en" | "cn" | "vi") => {
     setLanguage(lang);
     console.log(`Language changed to: ${lang}`);
   };
@@ -59,8 +65,8 @@ const Navbar = () => {
                 Tiếng Việt (Vietnamese)
               </DropdownMenuItem>
               <DropdownMenuItem
-                className={language === "zh" ? "bg-muted" : ""}
-                onClick={() => changeLanguage("zh")}
+                className={language === "cn" ? "bg-muted" : ""}
+                onClick={() => changeLanguage("cn")}
               >
                 中文 (Chinese)
               </DropdownMenuItem>
@@ -83,7 +89,7 @@ const Navbar = () => {
             <Moon className="h-4 w-4 text-muted-foreground dark:text-white" />
           </div>
 
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-5 w-5 text-primary" />
@@ -105,7 +111,7 @@ const Navbar = () => {
                 ))}
               </div>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
 
           <Button variant="ghost" size="icon">
             <Settings className="h-5 w-5 text-primary" />
@@ -116,7 +122,7 @@ const Navbar = () => {
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="" alt="User" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>{shortName(auth.user.userName)}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -126,7 +132,9 @@ const Navbar = () => {
               <DropdownMenuItem>{t('profile')}</DropdownMenuItem>
               <DropdownMenuItem>{t('settings')}</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>{t('logout')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={()=>{
+                auth.signOut()
+              }}>{t('logout')}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
