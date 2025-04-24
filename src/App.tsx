@@ -17,6 +17,8 @@ import Analytics from "./pages/Analytics";
 import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
 import LABReport from "./robots/lab/report";
+import RPATemplate from "./rpaTemplates/rpaTemplate";
+import Layout from "./components/Layout";
 
 
 const queryClient = new QueryClient();
@@ -31,16 +33,19 @@ const App = () => (
           <AxiosProvider>
             <AuthProvider mustLogin={true}>
               <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/lab/report" element={<LABReport />} />
-                  <Route path="/robot/:id" element={<RobotDetail />} />
-                  <Route path="/invoice" element={<InvoiceDetail />} />
-                  <Route path="/mspo" element={<MspoDetail />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/insights" element={<Insights />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/rpaTemplate" element={<RPATemplate />} />
+                    <Route path="/lab/report" element={<LABReport />} />
+                    <Route path="/robot/:id" element={<RobotDetail />} />
+                    <Route path="/invoice" element={<InvoiceDetail />} />
+                    <Route path="/mspo" element={<MspoDetail />} />
+                    <Route path="/analytics" element={<Analytics />} />
+                    <Route path="/insights" element={<Insights />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Layout>
               </BrowserRouter>
             </AuthProvider>
           </AxiosProvider>

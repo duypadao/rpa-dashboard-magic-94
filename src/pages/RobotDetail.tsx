@@ -76,7 +76,7 @@ const RobotDetail = () => {
   // Show loading state
   if (!robot) {
     return (
-      <Layout>
+      <>
         <Button variant="ghost" asChild className="mb-4 -ml-3">
           <Link to="/" className="flex items-center">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -93,12 +93,12 @@ const RobotDetail = () => {
           </div>
           <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
         </div>
-      </Layout>
+      </>
     );
   }
 
   return (
-    <Layout>
+    <>
       <RobotCommonInfo robot={robot} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -152,7 +152,7 @@ const RobotDetail = () => {
           </TabsContent>
         )}
       </Tabs>
-    </Layout>
+    </>
   );
 };
 

@@ -76,7 +76,7 @@ const InvoiceDetail = () => {
 
 
   return (
-    <Layout>
+    <>
       {/* Common robot information section */}
       <RobotCommonInfo robot={robot} />
 
@@ -212,7 +212,7 @@ const InvoiceDetail = () => {
           <InvoiceAnalytics invoiceData={invoiceHistory} isLoading={historyLoading} />
         </TabsContent>
       </Tabs>
-    </Layout>
+    </>
   );
 };
 

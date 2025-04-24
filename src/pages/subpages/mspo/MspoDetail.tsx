@@ -67,7 +67,7 @@ const MspoDetail = () => {
   }
 
   return (
-    <Layout>
+    <>
       {/* Common robot information section */}
       <RobotCommonInfo robot={robot} />
 
@@ -180,7 +180,7 @@ const MspoDetail = () => {
           <MspoAnalytics mspoData={mspoOverView} isLoading={overViewLoading} />
         </TabsContent>
       </Tabs>
-    </Layout>
+    </>
   );
 };
 

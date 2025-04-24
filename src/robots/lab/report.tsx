@@ -237,7 +237,7 @@ const LABReport = () => {
   const { robots, workSpeed, successRate, errorRate, totalRobots, totalTasks, successTasks, errorTasks, savingDuration, totalRunningDuration } = analyzeData(reportData);
 
   return (
-    <Layout>
+    <>
       {/* Header section with title and search controls */}
       <div className="mb-8 space-y-1">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -318,7 +318,7 @@ const LABReport = () => {
 
         )}
       </div>
-    </Layout>
+    </>
   );
 };
 

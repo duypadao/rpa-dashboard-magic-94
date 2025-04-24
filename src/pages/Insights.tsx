@@ -43,7 +43,7 @@ const Insights = () => {
   };
 
   return (
-    <Layout>
+    <>
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">AI Insights</h1>
         <p className="text-muted-foreground">
@@ -171,7 +171,7 @@ const Insights = () => {
           <AiInsights insights={insights} />
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

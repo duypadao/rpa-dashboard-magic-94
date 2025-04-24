@@ -257,7 +257,7 @@ const Index = () => {
   const [view, setView] = useState<"grid" | "list">("grid");
 
   return (
-    <Layout>
+    <>
       {/* Header section with title and search controls */}
       <div className="mb-8 space-y-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -337,7 +337,7 @@ const Index = () => {
           </div>
         </div>
       </RobotContainer>
-    </Layout>
+    </>
   );
 };
 

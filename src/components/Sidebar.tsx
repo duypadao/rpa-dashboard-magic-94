@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { Home, Info, Zap, PieChartIcon } from "lucide-react";
+import { Home, Info, Zap, PieChartIcon, LayoutList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "./LanguageProvider";
 
@@ -34,9 +34,9 @@ const Sidebar = () => {
     title: t("rpaTemplate"),
     items: [
       {
-        title: t('overviewTab'),
-        path: "/",
-        icon: Home,
+        title: t('rpaTemplateHome'),
+        path: "/rpaTemplate",
+        icon: LayoutList,
       },
     ]
   }
