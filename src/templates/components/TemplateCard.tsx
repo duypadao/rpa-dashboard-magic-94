@@ -88,7 +88,7 @@ export const TemplateCard: FC<TemplateCardProps> = ({
           </Card>
         </TooltipTrigger>
         <TooltipContent>
-          <p className="max-w-xs">{description}</p>
+          <p className="max-w-xs">{t(description)}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

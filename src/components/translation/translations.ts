@@ -9,169 +9,169 @@ export const translations: Translations = {
         },
         home: {
             en: "Home",
-            cn: "",
-            vi: ""
+            cn: "首页",
+            vi: "Trang chủ"
         },
         templateMenus: {
             en: "Template",
-            cn: "",
-            vi: ""
+            cn: "模板",
+            vi: "Mẫu"
         }, templateLibrary: {
             en: "Template Library",
-            cn: "",
-            vi: ""
+            cn: "模板库",
+            vi: "Thư viện mẫu"
         }, myTemplate: {
             en: "My Template",
-            cn: "",
-            vi: ""
+            cn: "我的模板",
+            vi: "Mẫu của tôi"
         }, reports: {
             en: "Reports",
-            cn: "",
-            vi: ""
+            cn: "报告",
+            vi: "Báo cáo"
         }, templateLibraryDescription: {
             en: "Use pre-set templates to quickly create automation",
-            cn: "",
-            vi: ""
+            cn: "使用预设模板快速创建自动化",
+            vi: "Sử dụng các mẫu có sẵn để nhanh chóng tạo tự động hóa"
         }, ready: {
             en: "Ready",
-            cn: "",
-            vi: ""
+            cn: "就绪",
+            vi: "Sẵn sàng"
         }, general: {
             en: "General",
-            cn: "",
-            vi: ""
+            cn: "通用",
+            vi: "Chung"
         }, "pp-daily-report": {
             en: "Post Process Daily Report",
-            cn: "",
-            vi: ""
+            cn: "后处理日报",
+            vi: "Báo cáo hàng ngày sau xử lý"
         }, "pp-daily-report-desc": {
             en: "Analyze post process production data in real-time",
-            cn: "",
-            vi: ""
+            cn: "实时分析后处理生产数据",
+            vi: "Phân tích dữ liệu sản xuất bộ phận công đoạn sau theo thời gian thực"
         }, "automatic report generation": {
             en: "Automatic Report Generation",
-            cn: "",
-            vi: ""
+            cn: "自动报告生成",
+            vi: "Tạo báo cáo tự động"
         }, "post-process": {
             en: "Post Process",
-            cn: "",
-            vi: ""
+            cn: "后处理",
+            vi: "Bộ phận công đoạn sau"
         }, developing: {
             en: "Developing",
-            cn: "",
-            vi: ""
+            cn: "开发中",
+            vi: "Đang phát triển"
         }, "pp-weekly-report": {
             en: "Post Process Weekly Report",
-            cn: "",
-            vi: ""
+            cn: "按周分析生产部门的生产数据",
+            vi: "Báo cáo hàng tuần bộ phận công đoạn sau"
         }, "pp-weekly-report-desc": {
             en: "Analyze post process production data by week",
-            cn: "",
-            vi: ""
+            cn: "按周分析后处理生产数据",
+            vi: "Phân tích dữ liệu sản xuất của bộ phận công đoạn theo tuần"
         }, "pp-monthly-report": {
             en: "Post Process Monthly Report",
-            cn: "",
-            vi: ""
+            cn: "后处理月报",
+            vi: "Báo cáo hàng tháng bộ phận công đoạn sau"
         }, "pp-monthly-report-desc": {
             en: "Analyze post process production data by month",
-            cn: "",
-            vi: ""
+            cn: "按月份分析生产部门的生产数据",
+            vi: "Phân tích dữ liệu sản xuất của bộ phận công đoạn theo tháng"
         }, "hr-daily-attendance": {
             en: "Daily Attendance Report",
-            cn: "",
-            vi: ""
+            cn: "每日考勤报告",
+            vi: "Báo cáo đi làm hàng ngày"
         }, "hr-daily-attendance-description": {
             en: "Generate report for attendance to have an overview of daily workforce",
-            cn: "",
-            vi: ""
+            cn: "生成考勤报告以了解每日劳动力概况",
+            vi: "Tạo báo cáo đi làm để có tổng quan về lực lượng lao động hàng ngày"
         }, "all-department": {
             en: "All Department",
-            cn: "",
-            vi: ""
+            cn: "所有部门",
+            vi: "Tất cả phòng ban"
         }, "hr-resignation": {
             en: "Employee Resignation Report",
-            cn: "",
-            vi: ""
+            cn: "员工离职报告",
+            vi: "Báo cáo nghỉ việc của nhân viên"
         }, "hr-resignation-description": {
-            en: "Resignation Report",
-            cn: "",
-            vi: ""
+            en: "Create resignation report and send to Wecom",
+            cn: "创建辞职报告并发送到企业微信",
+            vi: "Tự động tạo báo cáo nghỉ việc và gửi kết quả thông quan Wecom"
         }, custom: {
             en: "Custom",
-            cn: "",
-            vi: ""
+            cn: "自定义",
+            vi: "Tùy chỉnh"
         }, "shp-exportplan": {
             en: "SHP Export Plan",
-            cn: "",
-            vi: ""
+            cn: "SHP 出口计划",
+            vi: "Kế hoạch xuất khẩu SHP"
         }, "shp-exportplan-desc": {
             en: "Capture export plan details for various custom like Adidas, Nike, ... for warehouse department. Replace manual upload data into system for warehouse department",
-            cn: "",
-            vi: ""
+            cn: "为仓库部门捕获各种定制的出口计划详情，如阿迪达斯、耐克等。取代仓库部门手动上传数据到系统",
+            vi: "Nắm bắt chi tiết kế hoạch xuất hàng cho các khách hàng như Adidas, Nike, ... cho bộ phận kho. Thay thế việc tải dữ liệu thủ công vào hệ thống."
         }, "data integration automation": {
             en: "Data Integration Automation",
-            cn: "",
-            vi: ""
+            cn: "数据集成自动化",
+            vi: "Tự động hóa tích hợp dữ liệu"
         }, warehouse: {
             en: "Warehouse",
-            cn: "",
-            vi: ""
+            cn: "仓库",
+            vi: "Kho"
         }, "cutting-plan": {
             en: "Cutting Plan",
-            cn: "",
-            vi: ""
+            cn: "裁剪计划",
+            vi: "Kế hoạch cắt"
         }, "cutting-plan-desc": {
             en: "Read cutting plan data from PCC email and save to system. Help to reduce manual data update for VNE and VNC",
-            cn: "",
-            vi: ""
+            cn: "从PCC电子邮件中读取裁剪计划数据并保存到系统。帮助减少VNE和VNC的手动数据更新",
+            vi: "Đọc dữ liệu kế hoạch cắt từ email PCC và lưu vào hệ thống. Tích hợp dữ liệu và giúp giảm thao táccập nhật dữ liệu thủ công cho VNE và VNC"
         }, "pre-process": {
             en: "Pre Process",
-            cn: "",
-            vi: ""
+            cn: "预处理",
+            vi: "Bộ phận công đoạn trước"
         }, "vne-ppc-exportplan": {
             en: "VNE PPC Export Plan",
-            cn: "",
-            vi: ""
+            cn: "VNE PPC 出口计划",
+            vi: "Kế hoạch xuất khẩu VNE PPC"
         }, "vne-ppc-exportplan-desc": {
             en: "Capture export plan details of VNE factory for future analyzing production readiness",
-            cn: "",
-            vi: ""
+            cn: "捕获VNE工厂的出口计划详情，用于未来分析生产准备情况",
+            vi: "Nắm bắt chi tiết kế hoạch xuất khẩu của nhà máy VNE để phân tích tiến độ xuất hàng"
         }, packing: {
             en: "Packing",
-            cn: "",
-            vi: ""
+            cn: "包装",
+            vi: "Đóng gói"
         }, dm014: {
             en: "DM014- Worker Overtime Report",
-            cn: "",
-            vi: ""
+            cn: "DM014- 工人加班报告",
+            vi: "DM014- Báo cáo làm thêm giờ của công nhân"
         }, "dm014-desc": {
             en: "Replace manual task of secretary to input daily worker overtime record into system",
-            cn: "",
-            vi: ""
+            cn: "取代秘书将每日工人加班记录输入系统的手动任务",
+            vi: "Thay thế nhiệm vụ thủ công của thư ký để nhập bản ghi làm thêm giờ hàng ngày của công nhân vào hệ thống"
         }, "ijt-report": {
             en: "IJT Report",
-            cn: "",
-            vi: ""
+            cn: "IJT 报告",
+            vi: "Báo cáo IJT"
         }, "ijt-report-desc": {
             en: "Summarize production data for IJT workshop by morning, evening, night",
-            cn: "",
-            vi: ""
+            cn: "按早晚夜总结IJT车间的生产数据",
+            vi: "Tổng hợp dữ liệu sản xuất cho xưởng IJT theo sáng, chiều, tối"
         }, rm060: {
             en: "RM060- Warehouse Returning Alert",
-            cn: "",
-            vi: ""
+            cn: "RM060- 仓库退货提醒",
+            vi: "RM060- Cảnh báo trả hàng kho"
         }, "rm060-desc": {
             en: "Alert revelant post process department returning product to warehouse based on exported order",
-            cn: "",
-            vi: ""
+            cn: "根据出口订单提醒相关后处理部门将产品退回仓库",
+            vi: "Cảnh báo bộ phận công đoạn sau trả sản phẩm về kho dựa trên đơn hàng đã xuất"
         }, hyr002: {
             en: "HYR002- Abnormalities between white order and color order",
-            cn: "",
-            vi: ""
+            cn: "HYR002- 白色订单与彩色订单之间的异常",
+            vi: "HYR002- Bất thường giữa đơn phôi trắng và đơn phôi màu"
         }, "hyr002-desc": {
             en: "Analyze abnormalities between white order and color order",
-            cn: "",
-            vi: ""
+            cn: "分析白色订单与彩色订单之间的异常",
+            vi: "Phân tích bất thường giữa đơn phôi trắng và đơn phôi màu"
         },
         dashboard: {
             en: "RPA Dashboard",
@@ -395,12 +395,12 @@ export const translations: Translations = {
         },
         currentTask: {
             en: "Current Task",
-            cn: "currentTask",
+            cn: "当前任务",
             vi: "Công việc"
         },
         runningRobot: {
             en: "Running Robot",
-            cn: "runningRobot",
+            cn: "运行中的机器人",
             vi: "Robot đang làm việc"
         },
         limsNo: {
@@ -410,87 +410,87 @@ export const translations: Translations = {
         },
         automationType: {
             en: "Automation Type",
-            cn: "automationType",
+            cn: "自动化类型",
             vi: "Loại hình"
         },
         activeRobots: {
             en: "Active Robots",
-            cn: "activeRobots",
+            cn: "活跃机器人",
             vi: "Robot trực tuyến"
         },
         successTasks: {
             en: "Success Tasks",
-            cn: "successTasks",
+            cn: "成功任务",
             vi: "Số công việc thành công"
         },
         totalTasks: {
             en: "Total tasks",
-            cn: "totalTasks",
+            cn: "总任务",
             vi: "Tổng số công việc"
         },
         errorRate: {
             en: "Error Rate",
-            cn: "errorRate",
+            cn: "错误率",
             vi: "Tỉ lệ lỗi"
         },
         savingTime: {
             en: "Saving Time",
-            cn: "savingTime",
+            cn: "节省时间",
             vi: "Tiết kiệm thời gian"
         },
         robotRunningTime: {
             en: "Robot Running Time",
-            cn: "robotRunningTime",
+            cn: "机器人运行时间",
             vi: "Thời gian robot chạy"
         },
         "robotWork {{rate}} % thanManualWork": {
             en: "Robot work {{rate}} % faster than manual work ",
-            cn: "robotWork {{rate}} % thanManualWork",
+            cn: "机器人工作比手动工作快 {{rate}}%",
             vi: "Robot làm việc nhanh hơn {{rate}}%  "
         },
         labRobotForUploadingReport: {
             en: "Upload report automatically",
-            cn: "labRobotForUploadingReport",
+            cn: "自动上传报告",
             vi: "Tải báo cáo tự động"
         },
         LABRobots: {
             en: "Labratory Robot",
-            cn: "LABRobots",
+            cn: "实验室机器人",
             vi: "Robot Phòng Thí Nghiệm"
         },
         "{{seconds}}s": {
             en: "{{seconds}}s",
-            cn: "{{seconds}}s",
+            cn: "{{seconds}}秒",
             vi: "{{seconds}} giây"
         },
         "{{minutes}}m{{seconds}}s": {
             en: "{{minutes}}m{{seconds}}s",
-            cn: "{{minutes}}m{{seconds}}s",
+            cn: "{{minutes}}分{{seconds}}秒",
             vi: "{{minutes}}phút {{seconds}} giây"
         },
         "just now": {
             en: "just now",
-            cn: "just now",
+            cn: "刚刚",
             vi: "Vừa xong"
         },
         "totalRobot": {
             en: "Total Robot",
-            cn: "totalRobot",
+            cn: "总机器人",
             vi: "Tổng số Robot"
         },
         "{{diffSecs}} seconds ago": {
             en: "{{diffSecs}} seconds ago",
-            cn: "{{diffSecs}} seconds ago",
+            cn: "{{diffSecs}}秒前",
             vi: "{{diffSecs}} giây trước"
         },
         "{{diffMins}} minutes ago": {
             en: "{{diffMins}} minutes ago",
-            cn: "{{diffMins}} minutes ago",
+            cn: "{{diffMins}}分钟前",
             vi: "{{diffMins}} phút trước"
         },
         "{{diffMins}} minute ago": {
             en: "{{diffMins}} minute ago",
-            cn: "{{diffMins}} minute ago",
+            cn: "{{diffMins}}分钟前",
             vi: "{{diffMins}} phút trước"
         },
         lastRunTime: {
@@ -596,132 +596,132 @@ export const translations: Translations = {
         },
         "{{hours}}h{{seconds}}s": {
             en: "{{hours}}h{{seconds}}s",
-            cn: "{{hours}}h{{seconds}}s",
+            cn: "{{hours}}小时{{seconds}}秒",
             vi: "{{hours}}giờ {{seconds}}giây",
         },
         "{{diffHours}} hours ago": {
             en: "{{diffHours}} hours ago",
-            cn: "{{diffHours}} hours ago",
+            cn: "{{diffHours}}小时前",
             vi: "{{diffHours}} giờ trước"
         },
         "{{diffHours}} hour ago": {
             en: "{{diffHours}} hour ago",
-            cn: "{{diffHours}} hour ago",
+            cn: "{{diffHours}}小时前",
             vi: "{{diffHours}} giờ trước"
         },
         "{{hours}}h{{minutes}}m": {
             en: "{{hours}}h {{minutes}}m",
-            cn: "{{hours}}h{{minutes}}m",
+            cn: "{{hours}}小时{{minutes}}分钟",
             vi: "{{hours}} giờ {{minutes}} giây"
         },
         "{{hours}}h{{minutes}}m{{seconds}}s": {
             en: "{{hours}}h {{minutes}}m {{seconds}}s",
-            cn: "{{hours}}h{{minutes}}m",
+            cn: "{{hours}}小时{{minutes}}分钟{{seconds}}秒",
             vi: "{{hours}} giờ {{minutes}} phút {{seconds}} giây"
         },
         "{{minutes}}m": {
             en: "{{minutes}}m",
-            cn: "{{minutes}}m",
+            cn: "{{minutes}}分钟",
             vi: "{{minutes}} phút"
         },
         robotPerformance: {
             en: "Robot Performance",
-            cn: "robotPerformance",
+            cn: "机器人性能",
             vi: "Hiệu suất làm việc của robot"
         },
         LIMS_BRAReportPrintAndUpload: {
             en: "Bra Washing Report",
-            cn: "LIMS_BRAReportPrintAndUpload",
+            cn: "胸罩洗涤报告",
             vi: "Báo cáo giặt áo"
         },
         LIMS_UploadOldReportAndReturnSample: {
             en: "Upload report then return sample",
-            cn: "LIMS_UploadOldReportAndReturnSample",
+            cn: "上传报告然后返回样品",
             vi: "Tải báo cáo và trả mẫu"
         },
         labRobotReport: {
             en: "LAB Report",
-            cn: "labRobotReport",
+            cn: "实验室报告",
             vi: "Báo cáo LAB"
         },
         LABRobotReport: {
             en: "Labratory Robot Report",
-            cn: "LABRobotReport",
+            cn: "实验室机器人报告",
             vi: "Báo cáo robot phòng thí nghiệm"
         },
         summaryLABRobotPerformance: {
             en: "Summrize labratory robot performance",
-            cn: "summaryLABRobotPerformance",
+            cn: "总结实验室机器人性能",
             vi: "Tổng hợp kết quả robot phòng thí nghiệm"
         },
         today: {
             en: "Today",
-            cn: "today",
+            cn: "今天",
             vi: "Hôm nay"
         },
         thisWeek: {
             en: "This week",
-            cn: "thisWeek",
+            cn: "本周",
             vi: "Tuần này"
         },
         thisMonth: {
             en: "This month",
-            cn: "thisMonth",
+            cn: "本月",
             vi: "Tháng này"
         },
         thisYear: {
             en: "This year",
-            cn: "thisYear",
+            cn: "今年",
             vi: "Năm nay"
         },
         customRange: {
             en: "Custom range",
-            cn: "customRange",
+            cn: "自定义范围",
             vi: "Tùy chọn"
         },
         startDate: {
             en: "Start Date",
-            cn: "startDate",
+            cn: "开始日期",
             vi: "Từ ngày"
         },
         endDate: {
             en: "End Date",
-            cn: "endDate",
+            cn: "结束日期",
             vi: "Tới ngày"
         },
         LIMS_UploadReportWithConclusion: {
             en: "Report with conclusion",
-            cn: "LIMS_UploadReportWithConclusion",
+            cn: "带结论的报告",
             vi: "Báo cáo có lời bình"
         },
         LIMS_LABCLogoStamp: {
             en: "Logo and Stamp",
-            cn: "LIMS_LABCLogoStamp",
+            cn: "徽标和印章",
             vi: "Logo và tem"
         },
         LIMS_LABCAccessory: {
             en: "Accessory",
-            cn: "LIMS_LABCAccessory",
+            cn: "配件",
             vi: "Phụ liệu"
         },
         totalRobots: {
             en: "Total Robots",
-            cn: "totalRobots",
+            cn: "总机器人数",
             vi: " Tổng số Robot"
         },
         successRate: {
             en: "Success Rate",
-            cn: "successRate",
+            cn: "成功率",
             vi: "Tỉ lệ thành công"
         },
         errorTasks: {
             en: "Error Tasks",
-            cn: "successRate",
+            cn: "错误任务",
             vi: "Số công việc bị lỗi"
         },
         labRobotChartTitle: {
             en: "Analyze Robot Tasks",
-            cn: "labRobotChartTitle",
+            cn: "分析机器人任务",
             vi: "Phân tích công việc của từng robot"
         }
     },
