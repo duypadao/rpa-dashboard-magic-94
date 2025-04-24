@@ -423,6 +423,11 @@ export const translations: Translations = {
             cn: "类型",
             vi: "Loại"
         },
+        "{{hours}}h{{seconds}}s":{
+            en: "{{hours}}h{{seconds}}s",
+            cn: "{{hours}}h{{seconds}}s",
+            vi: "{{hours}}giờ {{seconds}}giây",
+        },
         "{{diffHours}} hours ago": {
             en: "{{diffHours}} hours ago",
             cn: "{{diffHours}} hours ago",
