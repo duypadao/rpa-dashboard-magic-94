@@ -17,9 +17,9 @@ import Analytics from "./pages/Analytics";
 import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
 import LABReport from "./robots/lab/report";
-import RPATemplate from "./rpaTemplates/rpaTemplate";
 import Layout from "./components/Layout";
-
+import RPATemplateLibrary from "./templates/templatelibrary";
+import MyTemplate from "./templates/myTemplate";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +36,8 @@ const App = () => (
                 <Layout>
                   <Routes>
                     <Route path="/" element={<Index />} />
-                    <Route path="/rpaTemplate" element={<RPATemplate />} />
+                    <Route path="/templateLibrary" element={<RPATemplateLibrary />} />
+                    <Route path="/myTemplate" element={<MyTemplate />} />
                     <Route path="/lab/report" element={<LABReport />} />
                     <Route path="/robot/:id" element={<RobotDetail />} />
                     <Route path="/invoice" element={<InvoiceDetail />} />

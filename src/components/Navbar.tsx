@@ -26,7 +26,6 @@ const Navbar = () => {
   const { language, setLanguage, t } = useLanguage();
   const [isDark, setIsDark] = useState(theme === "dark");
   const auth = useAuth();
-  console.log(auth);
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);

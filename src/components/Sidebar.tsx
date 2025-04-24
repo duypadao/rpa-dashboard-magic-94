@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { Home, Info, Zap, PieChartIcon, LayoutList } from "lucide-react";
+import { Home, Info, Zap, PieChartIcon, LayoutList,ContactRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "./LanguageProvider";
 
@@ -19,24 +19,28 @@ const Sidebar = () => {
   const location = useLocation();
   const { t } = useLanguage();
 
-
-  const dashboardMenu = {
+  const taskAutomations = {
     title: t('dashboard'),
     items: [
       {
-        title: t('overviewTab'),
+        title: t('home'),
         path: "/",
         icon: Home,
       },
     ]
   }
-  const rpaTemplatesMenus = {
-    title: t("rpaTemplate"),
+  const templateMenus = {
+    title: t("templateMenus"),
     items: [
       {
-        title: t('rpaTemplateHome'),
-        path: "/rpaTemplate",
+        title: t('templateLibrary'),
+        path: "/templateLibrary",
         icon: LayoutList,
+      },
+      {
+        title: t('myTemplate'),
+        path: "/myTemplate",
+        icon: ContactRound,
       },
     ]
   }
@@ -51,8 +55,8 @@ const Sidebar = () => {
     ]
   }
   const menuItems = [
-    dashboardMenu,
-    rpaTemplatesMenus,
+    taskAutomations,
+    templateMenus,
     reportMenus,
   ];
 
@@ -61,7 +65,7 @@ const Sidebar = () => {
       <SidebarContent className="mt-16"> {/* Added top margin to avoid navbar overlap */}
         {
           menuItems.map((group) =>
-            <SidebarGroup>
+            <SidebarGroup key={group.title}>
               <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>

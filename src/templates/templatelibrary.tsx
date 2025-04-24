@@ -8,9 +8,10 @@ import { TemplateManagement } from "./components/TemplateManagement";
 import { useToast } from "@/components/ui/use-toast";
 import { FolderPlus, Zap, LayoutDashboard } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
+import { templates } from "./data/templates";
 
 
-const RPATemplate = () => {
+const RPATemplateLibrary = () => {
   const { t } = useLanguage();
   const [currentTab, setCurrentTab] = useState("templates");
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -47,49 +48,20 @@ const RPATemplate = () => {
     <div className="">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold">{t("rpaTemplateHome")}</h1>
-          <p className="text-muted-foreground">{t("rpaTemplateHomeDescription")}</p>
+          <h1 className="text-3xl font-bold">{t("templateLibrary")}</h1>
+          <p className="text-muted-foreground">{t("templateLibraryDescription")}</p>
         </div>
 
-        <div className="flex items-center gap-4 mt-4 md:mt-0">
+        {/* <div className="flex items-center gap-4 mt-4 md:mt-0">
           <Button onClick={() => setCurrentTab("templates")}>
             <FolderPlus className="mr-2 h-4 w-4" />
             {t("createTemplateButton")}
           </Button>
-        </div>
+        </div> */}
       </div>
-
-      {selectedTemplate ? (
-        <ParameterForm
-          templateId={selectedTemplate}
-          onBack={handleBack}
-          onGenerate={handleGenerateRPA}
-          onPreview={handlePreviewRPA}
-        />
-      ) : (
-        <Tabs value={currentTab} onValueChange={setCurrentTab}>
-          <TabsList className="mb-8">
-            <TabsTrigger value="templates" className="flex items-center gap-2">
-              <Zap className="h-4 w-4" />
-              {t("templateLibrary")}
-            </TabsTrigger>
-            <TabsTrigger value="management" className="flex items-center gap-2">
-              <LayoutDashboard className="h-4 w-4" />
-              {t("myTemplates")}
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="templates">
-            <TemplateList onSelectTemplate={handleSelectTemplate} />
-          </TabsContent>
-
-          <TabsContent value="management">
-            <TemplateManagement />
-          </TabsContent>
-        </Tabs>
-      )}
+      <TemplateList onSelectTemplate={handleSelectTemplate} templates={templates} />
     </div>
   );
 };
 
-export default RPATemplate;
+export default RPATemplateLibrary;

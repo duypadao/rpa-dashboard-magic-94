@@ -2,6 +2,177 @@ import { Translations } from "../LanguageProvider";
 
 export const translations: Translations = {
     common: {
+        rpa: {
+            en: "RPA",
+            cn: "RPA",
+            vi: "RPA"
+        },
+        home: {
+            en: "Home",
+            cn: "",
+            vi: ""
+        },
+        templateMenus: {
+            en: "Template",
+            cn: "",
+            vi: ""
+        }, templateLibrary: {
+            en: "Template Library",
+            cn: "",
+            vi: ""
+        }, myTemplate: {
+            en: "My Template",
+            cn: "",
+            vi: ""
+        }, reports: {
+            en: "Reports",
+            cn: "",
+            vi: ""
+        }, templateLibraryDescription: {
+            en: "Use pre-set templates to quickly create automation",
+            cn: "",
+            vi: ""
+        }, ready: {
+            en: "Ready",
+            cn: "",
+            vi: ""
+        }, general: {
+            en: "General",
+            cn: "",
+            vi: ""
+        }, "pp-daily-report": {
+            en: "Post Process Daily Report",
+            cn: "",
+            vi: ""
+        }, "pp-daily-report-desc": {
+            en: "Analyze post process production data in real-time",
+            cn: "",
+            vi: ""
+        }, "automatic report generation": {
+            en: "Automatic Report Generation",
+            cn: "",
+            vi: ""
+        }, "post-process": {
+            en: "Post Process",
+            cn: "",
+            vi: ""
+        }, developing: {
+            en: "Developing",
+            cn: "",
+            vi: ""
+        }, "pp-weekly-report": {
+            en: "Post Process Weekly Report",
+            cn: "",
+            vi: ""
+        }, "pp-weekly-report-desc": {
+            en: "Analyze post process production data by week",
+            cn: "",
+            vi: ""
+        }, "pp-monthly-report": {
+            en: "Post Process Monthly Report",
+            cn: "",
+            vi: ""
+        }, "pp-monthly-report-desc": {
+            en: "Analyze post process production data by month",
+            cn: "",
+            vi: ""
+        }, "hr-daily-attendance": {
+            en: "Daily Attendance Report",
+            cn: "",
+            vi: ""
+        }, "hr-daily-attendance-description": {
+            en: "Generate report for attendance to have an overview of daily workforce",
+            cn: "",
+            vi: ""
+        }, "all-department": {
+            en: "All Department",
+            cn: "",
+            vi: ""
+        }, "hr-resignation": {
+            en: "Employee Resignation Report",
+            cn: "",
+            vi: ""
+        }, "hr-resignation-description": {
+            en: "Resignation Report",
+            cn: "",
+            vi: ""
+        }, custom: {
+            en: "Custom",
+            cn: "",
+            vi: ""
+        }, "shp-exportplan": {
+            en: "SHP Export Plan",
+            cn: "",
+            vi: ""
+        }, "shp-exportplan-desc": {
+            en: "Capture export plan details for various custom like Adidas, Nike, ... for warehouse department. Replace manual upload data into system for warehouse department",
+            cn: "",
+            vi: ""
+        }, "data integration automation": {
+            en: "Data Integration Automation",
+            cn: "",
+            vi: ""
+        }, warehouse: {
+            en: "Warehouse",
+            cn: "",
+            vi: ""
+        }, "cutting-plan": {
+            en: "Cutting Plan",
+            cn: "",
+            vi: ""
+        }, "cutting-plan-desc": {
+            en: "Read cutting plan data from PCC email and save to system. Help to reduce manual data update for VNE and VNC",
+            cn: "",
+            vi: ""
+        }, "pre-process": {
+            en: "Pre Process",
+            cn: "",
+            vi: ""
+        }, "vne-ppc-exportplan": {
+            en: "VNE PPC Export Plan",
+            cn: "",
+            vi: ""
+        }, "vne-ppc-exportplan-desc": {
+            en: "Capture export plan details of VNE factory for future analyzing production readiness",
+            cn: "",
+            vi: ""
+        }, packing: {
+            en: "Packing",
+            cn: "",
+            vi: ""
+        }, dm014: {
+            en: "DM014- Worker Overtime Report",
+            cn: "",
+            vi: ""
+        }, "dm014-desc": {
+            en: "Replace manual task of secretary to input daily worker overtime record into system",
+            cn: "",
+            vi: ""
+        }, "ijt-report": {
+            en: "IJT Report",
+            cn: "",
+            vi: ""
+        }, "ijt-report-desc": {
+            en: "Summarize production data for IJT workshop by morning, evening, night",
+            cn: "",
+            vi: ""
+        }, rm060: {
+            en: "RM060- Warehouse Returning Alert",
+            cn: "",
+            vi: ""
+        }, "rm060-desc": {
+            en: "Alert revelant post process department returning product to warehouse based on exported order",
+            cn: "",
+            vi: ""
+        }, hyr002: {
+            en: "HYR002- Abnormalities between white order and color order",
+            cn: "",
+            vi: ""
+        }, "hyr002-desc": {
+            en: "Analyze abnormalities between white order and color order",
+            cn: "",
+            vi: ""
+        },
         dashboard: {
             en: "RPA Dashboard",
             cn: "RPA 仪表板",
@@ -423,7 +594,7 @@ export const translations: Translations = {
             cn: "类型",
             vi: "Loại"
         },
-        "{{hours}}h{{seconds}}s":{
+        "{{hours}}h{{seconds}}s": {
             en: "{{hours}}h{{seconds}}s",
             cn: "{{hours}}h{{seconds}}s",
             vi: "{{hours}}giờ {{seconds}}giây",
