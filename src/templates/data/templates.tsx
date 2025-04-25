@@ -15,7 +15,19 @@ import {
   UserMinus,
 
 } from "lucide-react";
+
+import ppReportEN1 from "../assets/pp-daily-report/1.png";
+import ppReportEN2 from "../assets/pp-daily-report/2.png";
+import ppReportEN3 from "../assets/pp-daily-report/3.png";
+import ppReportVN1 from "../assets/pp-daily-report/1v.png";
+import ppReportVN2 from "../assets/pp-daily-report/2v.png";
+import ppReportVN3 from "../assets/pp-daily-report/3v.png";
+import ppReportCN1 from "../assets/pp-daily-report/1c.png";
+import ppReportCN2 from "../assets/pp-daily-report/2c.png";
+import ppReportCN3 from "../assets/pp-daily-report/3c.png";
+
 import { ReactNode } from "react";
+import { ScheduleOptions, transformEveryDayAt } from "./scheduleOptions";
 
 export interface TemplateParameter {
   id: string;
@@ -42,6 +54,35 @@ export interface Template {
   timeSaved: string;
   steps: string[];
   parameters: TemplateParameter[];
+  parameterValidation?: (params: object) => Promise<{ isValid: boolean, messages: Record<string, string> }>;
+  preview?: Record<string, ReactNode>;
+  recommendSettings?: ScheduleOptions[]
+}
+
+const validateWecomRobotID = async (id: string) => {
+  let robotId = "id";
+  if (id.includes("key=")) {
+    robotId = id.substring(id.indexOf("key=") + 4);
+  }
+  else {
+    robotId = id;
+  }
+  let formData = new FormData();
+  formData.append('robotId', robotId);
+  formData.append('message', 'Wecom Robot Test');
+  try {
+    const req = await fetch("http://ros:8103/utility/wecom/message", {
+      "body": formData,
+      "method": "POST",
+    });
+    if (req.status === 200) {
+      return { isValid: true }
+    }
+  }
+  catch {
+
+  }
+  return { isValid: false, message: "invalidRobotId" }
 }
 
 export const templates: Template[] = [
@@ -90,7 +131,7 @@ export const templates: Template[] = [
   {
     id: "dm014",
     title: "dm014",//"Post Process Worker Overtime",
-    description: "dm014-desc" ,//"",
+    description: "dm014-desc",//"",
     icon: <FolderGit className="h-6 w-6" />,
     category: "data integration automation",
     department: ["post-process"],
@@ -202,6 +243,54 @@ export const templates: Template[] = [
           { label: "english", value: "en" },
         ]
       },
+    ],
+    parameterValidation: async (params: any) => {
+      let isValid = true;
+      const messages = {};
+      try {
+        const worklines = await (await fetch(`http://ros:8108/pp/list/${params.level}/${params.key}`)).json();
+        if (worklines.length < 1) {
+          isValid = false;
+          messages["key"] = "organizationIsNotValid";
+        }
+        const wecomRobotValidate = await validateWecomRobotID(params.wecomRobotId);
+        if (!wecomRobotValidate.isValid) {
+          isValid = false;
+          messages["wecomRobotId"] = wecomRobotValidate.message;
+        }
+      }
+      catch {
+
+      }
+      return {
+        isValid, messages
+      }
+
+    },
+    preview: {
+      chinese: <div className="flex flex-wrap gap-1">
+        <img className="object-scale-down ..." src={ppReportCN1} />
+        <img className="object-scale-down ..." src={ppReportCN2} />
+        <img className="object-scale-down ..." src={ppReportCN3} />
+      </div>,
+      english: <div className="flex flex-wrap">
+        <img className="object-scale-down ..." src={ppReportEN1} />
+        <img className="object-scale-down ..." src={ppReportEN2} />
+        <img className="object-scale-down ..." src={ppReportEN3} />
+      </div>,
+      vietnamese: <div className="flex flex-wrap">
+        <img className="object-scale-down ..." src={ppReportVN1} />
+        <img className="object-scale-down ..." src={ppReportVN2} />
+        <img className="object-scale-down ..." src={ppReportVN3} />
+      </div>,
+
+    },
+    recommendSettings: [
+      transformEveryDayAt(10,0),
+      transformEveryDayAt(12,0),
+      transformEveryDayAt(14,0),
+      transformEveryDayAt(16,0),
+      transformEveryDayAt(18,0),
     ]
   },
   {
@@ -235,7 +324,7 @@ export const templates: Template[] = [
 
   {
     id: "hr-daily-attendance",
-    title: "hr-daily-attendance", 
+    title: "hr-daily-attendance",
     description: "hr-daily-attendance-description",
     icon: <UserCheck className="h-6 w-6" />,
     category: "automatic report generation",

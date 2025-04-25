@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { FolderPlus, Zap, LayoutDashboard } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
 import { templates } from "./data/templates";
+import CreateAutomation from "./components/CreateAutomation";
 
 
 const RPATemplateLibrary = () => {
@@ -60,11 +61,11 @@ const RPATemplateLibrary = () => {
         </div> */}
       </div>
       {selectedTemplate ? (
-        <ParameterForm
+        <CreateAutomation
           templateId={selectedTemplate}
           onBack={handleBack}
-          onGenerate={handleGenerateRPA}
-          onPreview={handlePreviewRPA}
+          // onGenerate={handleGenerateRPA}
+          // onPreview={handlePreviewRPA}
         />
       ) : (
         <TemplateList onSelectTemplate={handleSelectTemplate} templates={templates} />
