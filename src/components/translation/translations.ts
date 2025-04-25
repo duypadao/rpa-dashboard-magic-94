@@ -2,6 +2,16 @@ import { Translations } from "../LanguageProvider";
 
 export const translations: Translations = {
     common: {
+        templateListDescription1: {
+            en: "None of above templates meet your need? Please contact IT department to request a new automation",
+            cn: "",
+            vi: "",
+        },
+        templateListDescription2: {
+            en: "We have fullfiled many requirements, please see the list below",
+            cn: "",
+            vi: "",
+        },
         rpa: {
             en: "RPA",
             cn: "RPA",
@@ -105,7 +115,7 @@ export const translations: Translations = {
             cn: "SHP 出口计划",
             vi: "Kế hoạch xuất khẩu SHP"
         }, "shp-exportplan-desc": {
-            en: "Capture export plan details for various custom like Adidas, Nike, ... for warehouse department. Replace manual upload data into system for warehouse department",
+            en: "Capture export plan details for various custom like Adidas, Nike, ... for warehouse department. Replace manual upload data into system.",
             cn: "为仓库部门捕获各种定制的出口计划详情，如阿迪达斯、耐克等。取代仓库部门手动上传数据到系统",
             vi: "Nắm bắt chi tiết kế hoạch xuất hàng cho các khách hàng như Adidas, Nike, ... cho bộ phận kho. Thay thế việc tải dữ liệu thủ công vào hệ thống."
         }, "data integration automation": {

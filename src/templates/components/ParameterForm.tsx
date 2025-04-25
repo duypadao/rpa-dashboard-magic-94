@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { templates } from "../data/templates";
 import { ArrowLeft, Eye, Wand2 } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 interface ParameterFormProps {
   templateId: string;
@@ -22,11 +23,12 @@ export const ParameterForm: FC<ParameterFormProps> = ({
   onGenerate,
   onPreview,
 }) => {
+  const {t} = useLanguage();
   const template = templates.find((t) => t.id === templateId);
   const [parameters, setParameters] = useState<Record<string, string>>({});
 
   if (!template) {
-    return <div>模板不存在</div>;
+    return <div>{t("templateIsNotFound")}</div>;
   }
 
   const handleInputChange = (key: string, value: string) => {
@@ -47,10 +49,10 @@ export const ParameterForm: FC<ParameterFormProps> = ({
             onClick={onBack}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            返回模板选择
+            {t("return")}
           </Button>
-          <CardTitle className="text-2xl">{template.title}</CardTitle>
-          <CardDescription>{template.description}</CardDescription>
+          <CardTitle className="text-2xl">{t(template.title)}</CardTitle>
+          <CardDescription>{t(template.description)}</CardDescription>
         </CardHeader>
         <CardContent className="px-0">
           <div className="flex flex-col md:flex-row gap-8">
@@ -61,14 +63,14 @@ export const ParameterForm: FC<ParameterFormProps> = ({
                   {template.icon}
                 </div>
               </div>
-              <h3 className="font-medium mb-2">流程步骤</h3>
+              <h3 className="font-medium mb-2">{t("automationSteps")}</h3>
               <ol className="space-y-2">
                 {template.steps.map((step, index) => (
                   <li key={index} className="flex gap-2">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
                       {index + 1}
                     </span>
-                    <span>{step}</span>
+                    <span>{t(step)}</span>
                   </li>
                 ))}
               </ol>
@@ -76,7 +78,7 @@ export const ParameterForm: FC<ParameterFormProps> = ({
             
             {/* Right side: Parameter form */}
             <div className="w-full md:w-3/5">
-              <h3 className="font-medium mb-4">设置参数</h3>
+              <h3 className="font-medium mb-4">{t("paramaterSetup")}</h3>
               <div className="space-y-4">
                 {template.parameters.map((param) => (
                   <div key={param.id} className="space-y-2">
@@ -113,14 +115,17 @@ export const ParameterForm: FC<ParameterFormProps> = ({
                         <SelectContent>
                           {param.options?.map((option) => (
                             <SelectItem key={option.value} value={option.value}>
-                              {option.label}
+                              {t(option.label)}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     )}
                     {param.description && (
-                      <p className="text-sm text-muted-foreground">{param.description}</p>
+                      <p className="text-sm text-muted-foreground">{t(param.description)}</p>
+                    )}
+                    {param.id === "wecomRobotId" && (
+                       <p className="text-sm text-muted-foreground">{t("wecomRobotIdHelper")}</p>
                     )}
                   </div>
                 ))}
@@ -130,19 +135,11 @@ export const ParameterForm: FC<ParameterFormProps> = ({
         </CardContent>
         <CardFooter className="flex justify-end gap-4 px-0 mt-6">
           <Button
-            variant="outline"
-            onClick={() => onPreview(parameters)}
-            disabled={!isFormComplete}
-          >
-            <Eye className="mr-2 h-4 w-4" />
-            预览
-          </Button>
-          <Button
             onClick={() => onGenerate(parameters)}
             disabled={!isFormComplete}
           >
             <Wand2 className="mr-2 h-4 w-4" />
-            生成自动化
+            {t("generateAutomation")}
           </Button>
         </CardFooter>
       </Card>

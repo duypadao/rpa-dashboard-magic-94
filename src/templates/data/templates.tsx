@@ -9,6 +9,7 @@ import {
   NotebookPen,
   NotebookTabs,
   PackageSearch,
+  SquareScissors,
   TableProperties,
   UserCheck,
   UserMinus,
@@ -153,8 +154,55 @@ export const templates: Template[] = [
     robot: "Reporter",
     type: "general",
     timeSaved: "",
-    steps: [],
-    parameters: []
+    steps: [
+      "collectETSData",
+      "collectFRData",
+      "collectROSData",
+      "analyze",
+      "createReportLayout",
+      "sendResultToWecom"
+    ],
+    parameters: [
+      {
+        id: "level",
+        label: "level",
+        type: "select",
+        placeholder: "selectOrganizationLevel",
+        required: true,
+        options: [
+          { label: "factory", value: "factory" },
+          { label: "department", value: "department" },
+          { label: "workshop", value: "workshop" },
+          { label: "workline", value: "workline" },
+        ]
+      },
+      {
+        id: "key",
+        label: "name",
+        type: "text",
+        placeholder: "pleaseInputOrganization",
+        required: true
+      },
+      {
+        id: "wecomRobotId",
+        label: "wecomRobotId",
+        type: "text",
+        placeholder: "wecomRobotConfigUrl",
+        required: true
+      },
+      {
+        id: "language",
+        label: "language",
+        type: "select",
+        placeholder: "select Language",
+        required: true,
+        options: [
+          { label: "vietnamese", value: "vi" },
+          { label: "chinese", value: "cn" },
+          { label: "english", value: "en" },
+        ]
+      },
+    ]
   },
   {
     id: "pp-weekly-report",
@@ -206,6 +254,20 @@ export const templates: Template[] = [
     icon: <UserMinus className="h-6 w-6" />,
     category: "automatic report generation",
     department: ["all-department"],
+    status: "developing",
+    robot: "Reporter",
+    type: "general",
+    timeSaved: "",
+    steps: [],
+    parameters: []
+  },
+  {
+    id: "cutting-report",
+    title: "cutting-report", //"Resignation Report",
+    description: "cutting-report-description", //"Generate report for resignation",
+    icon: <SquareScissors className="h-6 w-6" />,
+    category: "automatic report generation",
+    department: ["pre-process"],
     status: "developing",
     robot: "Reporter",
     type: "general",

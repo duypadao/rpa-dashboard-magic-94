@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Antenna, Clock, Gem, Goal, LoaderPinwheel } from "lucide-react";
 import { Template } from "../data/templates";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useToast } from "@/hooks/use-toast";
 
 interface TemplateCardProps {
   template: Template
@@ -19,6 +20,7 @@ export const TemplateCard: FC<TemplateCardProps> = ({
   template,
   onClick,
 }) => {
+  const {toast} = useToast();
   const { t } = useLanguage();
   const { id,
     title,
@@ -34,7 +36,17 @@ export const TemplateCard: FC<TemplateCardProps> = ({
         <TooltipTrigger asChild>
           <Card
             className="w-full h-full cursor-pointer hover:shadow-md transition-all duration-200 border hover:border-primary/50"
-            onClick={() => onClick(id)}
+            onClick={() => {
+              if(status === "ready"){
+                onClick(id);
+              }
+              else {
+                toast({
+                  title: t("notification"),
+                  description: t("templateIsNotReadyYetPleaseTryAgainLater")
+                })
+              }
+            } }
           >
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">

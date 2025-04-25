@@ -59,7 +59,17 @@ const RPATemplateLibrary = () => {
           </Button>
         </div> */}
       </div>
-      <TemplateList onSelectTemplate={handleSelectTemplate} templates={templates} />
+      {selectedTemplate ? (
+        <ParameterForm
+          templateId={selectedTemplate}
+          onBack={handleBack}
+          onGenerate={handleGenerateRPA}
+          onPreview={handlePreviewRPA}
+        />
+      ) : (
+        <TemplateList onSelectTemplate={handleSelectTemplate} templates={templates} />
+      )}
+
     </div>
   );
 };
