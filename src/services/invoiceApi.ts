@@ -1,4 +1,4 @@
-import { API_BASE_URL, ProcessStepResponse, RobotResponse, mapProcessStepsToNodes, mockProcessNodes } from "./api";
+import { API_BASE_URL, ProcessStepResponse, RobotResponse, mapProcessStepsToNodes } from "./api";
 import { Robot, ProcessNode} from "@/types/robots";
 import { InvoiceHistoryItem } from "@/pages/subpages/invoice/components/InvoiceHistory";
 import { InvoiceOverViewItem } from "@/pages/subpages/invoice/components/InvoiceOverView";
@@ -20,9 +20,6 @@ export const invoiceApiService = {
       return mapProcessStepsToNodes(data);
     } catch (error) {
       console.error(`Error fetching process flow for invoice ${invoice.invoiceNo}:`, error);
-      
-      // Return mock data as fallback
-      return mockProcessNodes;
     }
   },
   //Fetch invocie robot

@@ -16,6 +16,8 @@ import RobotCommonInfo from "@/components/RobotCommonInfo";
 import { Robot } from "@/types/robots";
 import { useMemo } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
+import { formatDate } from "@/common";
+import { LastRun } from "@/components/StatusCard";
 
 const RobotDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,13 +25,6 @@ const RobotDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
-  
-  // Check if this is the Invoice Robot and redirect if needed
-  // reactUseEffect(() => {
-  //   if (id === "1") {
-  //     navigate("/invoice", { replace: true });
-  //   }
-  // }, [id, navigate]);
   
   // Get robot data from router state
   const robot = location.state?.robot as Robot | undefined;
@@ -116,7 +111,7 @@ const RobotDetail = () => {
           </CardHeader>
           <CardContent className="flex items-center">
             <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-            <span>{robot.lastRunTime}</span>
+            <span><LastRun lastRun={robot.lastRunTime} t={t} /></span>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-background to-muted/30 border-border/50">

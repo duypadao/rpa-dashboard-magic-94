@@ -173,7 +173,7 @@ export function formatDate(date) {
     const options = {
         month: 'long',
         day: 'numeric',
-        year: ''
+        year: 'numeric'
     };
 
     if (!isThisYear) {

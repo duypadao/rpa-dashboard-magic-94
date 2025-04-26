@@ -5,7 +5,7 @@ export interface Robot {
   status: "running" | "idle" | "error" | "paused" | "offline";
   lastRunTime: string | Date;
   lastResult: "success" | "failure" | "warning";
-  duration: string;
+  duration: string | number;
   description?: string;
   defaultProcessFlow?: string[];
   processNodes?: ProcessNode[];

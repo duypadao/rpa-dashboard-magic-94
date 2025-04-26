@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Robot } from "@/robots/robots";
+import { Robot } from "@/types/robots";
 import { useLanguage } from "@/components/LanguageProvider";
 import AiInsights from "@/components/AiInsights";
 import { RobotContext, RobotContainer } from "@/robots/robotContext";
@@ -111,9 +111,9 @@ const RobotInsights = () => {
     if (robotsData.length > 0) {
       // Find the longest running robot
       const longestRunningRobot = [...robotsData].sort((a, b) => {
-        const durationA = a.duration.includes("h") ? parseInt(a.duration) * 60 : parseInt(a.duration);
-        const durationB = b.duration.includes("h") ? parseInt(b.duration) * 60 : parseInt(b.duration);
-        return durationB - durationA;
+        // const durationA = a.duration.includes("h") ? parseInt(a.duration) * 60 : parseInt(a.duration);
+        // const durationB = b.duration.includes("h") ? parseInt(b.duration) * 60 : parseInt(b.duration);
+        return (b.duration as number) - (a.duration as number);
       })[0];
 
       insights.push({
@@ -179,7 +179,9 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
   // Fetch robots with React Query
   const { data: robots = [], isLoading, isError, isFetched, } = useQuery({
     queryKey: ["robots"],
-    queryFn: apiService.getRobots,
+    queryFn: ()=>{
+      return apiService.getRobots(t);
+    } ,
   });
   if (isFetched) {
     registerRobot(robots);
@@ -192,6 +194,7 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
       return matchesSearch && matchesStatus;
     });
   }, [robots, searchTerm, statusFilter]);
+  console.log(robots);
 
   // Navigate to robot detail page
   const handleRobotClick = (robot: Robot) => {
@@ -237,6 +240,7 @@ const RPA8112Robots = ({ searchTerm, statusFilter, view }) => {
             <StatusCard
               key={robot.id}
               robot={robot}
+              showLastRunTime={true}
               onClick={() => handleRobotClick(robot)}
               className={`cursor-pointer hover:shadow-md transition-all duration-300 ${view === "list" ? "md:max-w-full" : ""}`}
             />

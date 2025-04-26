@@ -1,5 +1,6 @@
 import { ProcessNode, Robot } from "@/types/robots";
 import { Insight } from "@/components/AiInsights";
+import { formatSecond } from "@/common";
 
 
 //export const API_BASE_URL = "https://localhost:7009/rpa/dashboard";
@@ -10,9 +11,9 @@ export interface RobotResponse {
   id: string;
   name: string;
   status: "running" | "idle" | "error" | "paused";
-  lastRunTime: string;
+  lastRunTime: string | Date;
   lastResult: "success" | "failure" | "warning";
-  duration: string;
+  duration: number | number;
   description?: string;
   defaultProcessFlow?: string[]; // Added default process flow
 }
@@ -61,80 +62,10 @@ export const mapDefaultProcessFlowToNodes = (names: string[]): ProcessNode[] => 
   });
 };
 
-
-// Mock data for fallbacks
-const mockRobots: Robot[] = [
-  {
-    id: "1",
-    name: "Invoice Processing Robot",
-    status: "running",
-    lastRunTime: "2023-06-15 14:30:22",
-    lastResult: "success",
-    duration: "45m 12s",
-    description: "Processes vendor invoices and updates the accounting system",
-    defaultProcessFlow: ["Extract Invoice Data", "Validate Invoice", "Match with PO", "Post to ERP", "Send Confirmation"]
-  },
-  {
-    id: "2",
-    name: "Order Fulfillment Bot",
-    status: "idle",
-    lastRunTime: "2023-06-15 10:15:00",
-    lastResult: "success",
-    duration: "32m 45s",
-    description: "Processes customer orders and coordinates fulfillment",
-    defaultProcessFlow: ["Receive Order", "Check Inventory", "Process Payment", "Generate Shipping Label", "Send Confirmation"]
-  },
-  {
-    id: "3",
-    name: "HR Onboarding Assistant",
-    status: "error",
-    lastRunTime: "2023-06-14 16:20:10",
-    lastResult: "failure",
-    duration: "15m 30s",
-    description: "Automates employee onboarding documentation and system access",
-    defaultProcessFlow: ["Create User Accounts", "Send Welcome Email", "Provision System Access", "Schedule Training", "Notify Manager"]
-  },
-  {
-    id: "4",
-    name: "Supplier Management Bot",
-    status: "paused",
-    lastRunTime: "2023-06-13 09:45:30",
-    lastResult: "warning",
-    duration: "1h 10m",
-    description: "Manages supplier information and performance monitoring",
-    defaultProcessFlow: ["Update Supplier Database", "Validate Contact Info", "Check Performance Metrics", "Generate Report", "Send Updates"]
-  }
-];
-
-export const mockProcessNodes: ProcessNode[] = [
-  { id: "node1", name: "Start Process", status: "success" },
-  { id: "node2", name: "Extract Data", status: "success" },
-  { id: "node3", name: "Validate Information", status: "in-progress" },
-  { id: "node4", name: "Process Documents", status: "pending" },
-  { id: "node5", name: "Complete Task", status: "pending" }
-];
-
-const mockSuccessRateData = [
-  { name: "Mon", success: 85, failure: 15 },
-  { name: "Tue", success: 78, failure: 22 },
-  { name: "Wed", success: 90, failure: 10 },
-  { name: "Thu", success: 82, failure: 18 },
-  { name: "Fri", success: 88, failure: 12 },
-  { name: "Sat", success: 95, failure: 5 },
-  { name: "Sun", success: 92, failure: 8 }
-];
-
-const mockTrendData = [
-  { name: "Week 1", invoices: 120, average: 10, issues: 5 },
-  { name: "Week 2", invoices: 140, average: 9, issues: 8 },
-  { name: "Week 3", invoices: 160, average: 11, issues: 6 },
-  { name: "Week 4", invoices: 180, average: 8, issues: 3 }
-];
-
 // API service
 export const apiService = {
   // Fetch all robots
-  async getRobots(): Promise<Robot[]> {
+  async getRobots(t : (key: string, unicorn: object ) => string ): Promise<Robot[]> {
     try {
       // For development, falling back to mock data if API call fails
       const response = await fetch(`${API_BASE_URL}/robots`);
@@ -144,12 +75,17 @@ export const apiService = {
       }
       
       const data: RobotResponse[] = await response.json();
+      //Convert lastRunTime to Date type
+      console.log(data);
+      data.forEach((robot) => {
+        robot.lastRunTime = new Date(robot.lastRunTime); // Convert to local date string
+        robot.defaultProcessFlow = robot.defaultProcessFlow || []; // Ensure default process flow is an array
+        robot.duration = formatSecond(robot.duration, t); // Convert to local date string
+      });
+      console.log(data);
       return data as Robot[]; // The structure is the same so we can cast directly // .sort(()=> Math.random() - 0.5).slice(0,3)
     } catch (error) {
       console.error("Error fetching robots:", error);
-      
-      // Return mock data as fallback
-      return mockRobots;
     }
   },
   
@@ -177,9 +113,6 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error("Error fetching success rate data:", error);
-      
-      // Return mock data as fallback
-      return mockSuccessRateData;
     }
   },
   
@@ -194,9 +127,6 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error("Error fetching trend data:", error);
-      
-      // Return mock data as fallback
-      return mockTrendData;
     }
   },
   
@@ -212,50 +142,6 @@ export const apiService = {
       return await response.json();
     } catch (error) {
       console.error("Error fetching insights:", error);
-      
-      // Generate mock insights
-      return [
-        {
-          id: "1",
-          title: "Invoice Processing Performance",
-          description: "Invoice processing has improved by 15% in the last week",
-          type: "optimization",
-          severity: "medium",
-          robot: "Invoice Processing Robot"
-        },
-        {
-          id: "2",
-          title: "Order Bot Error Pattern",
-          description: "Order Fulfillment Bot shows recurring errors on Tuesdays",
-          type: "anomaly",
-          severity: "high",
-          robot: "Order Fulfillment Bot"
-        },
-        {
-          id: "3",
-          title: "Onboarding Process Delay",
-          description: "HR Onboarding Assistant is taking 20% longer than usual",
-          type: "anomaly",
-          severity: "medium",
-          robot: "HR Onboarding Assistant"
-        },
-        {
-          id: "4",
-          title: "Supplier Database Growth",
-          description: "Supplier database growing rapidly, consider optimization",
-          type: "prediction",
-          severity: "low",
-          robot: "Supplier Management Bot"
-        },
-        {
-          id: "5",
-          title: "Invoice Volume Trend",
-          description: "Invoice volume expected to increase by 30% next month",
-          type: "prediction",
-          severity: "medium",
-          robot: "Invoice Processing Robot"
-        }
-      ];
     }
   }
 };

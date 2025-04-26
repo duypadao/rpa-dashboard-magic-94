@@ -2,6 +2,27 @@ import { Translations } from "../LanguageProvider";
 
 export const translations: Translations = {
     common: {
+        loginTitle: {
+            en: "RPA Control Room",
+            cn: "RPA控制室",
+            vi: "Phòng Điều Khiển RPA"
+        },
+        loginDescription: {
+            en: "Securely access, monitor, and manage your automation workflows.",
+            cn: "安全访问、监控和管理您的自动化工作流程。",
+            vi: "Truy cập, giám sát và quản lý quy trình tự động hóa một cách an toàn."
+        },
+        empId: {
+            en: "Employee ID",
+            cn: "员工编号",
+            vi: "Mã nhân viên"
+        },        
+        password: {
+            en: "Password",
+            cn: "密码",
+            vi: "Mật khẩu"
+        },
+        
         "": {
             en: "",
             cn: "",

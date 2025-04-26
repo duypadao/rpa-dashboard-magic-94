@@ -31,7 +31,7 @@ const robotColorMap: Record<string, string> = {
 };
 
 
-const LastRun = ({ lastRun, t = null }: { lastRun: string | Date, t: (key: string, unicorn?: object) => void }) => {
+export const LastRun = ({ lastRun, t = null }: { lastRun: string | Date, t: (key: string, unicorn?: object) => void }) => {
   const [seed, setSeed] = useState(1);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -50,7 +50,7 @@ const LastRun = ({ lastRun, t = null }: { lastRun: string | Date, t: (key: strin
 
 const StatusCard = ({ robot, className, style, onClick, footer = null, showLastRunTime = true }: StatusCardProps) => {
   const { t } = useLanguage();
-
+  
   const getResultIcon = () => {
     switch (robot.lastResult) {
       case "success":
