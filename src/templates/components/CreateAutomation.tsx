@@ -18,6 +18,8 @@ interface CreateAutomationProps {
   onBack: () => void;
 }
 
+
+
 const CreateAutomation = ({ templateId, onBack }: CreateAutomationProps) => {
   const { t } = useLanguage();
   const template = templates.find(z => z.id === templateId);
@@ -45,6 +47,7 @@ const CreateAutomation = ({ templateId, onBack }: CreateAutomationProps) => {
     const currentIndex = list.findIndex(z => z === tab);
     setTab(list[currentIndex - 1]);
   }
+  const canAccessFinalstep = schedules.length > 0 && Object.entries(params).length >0;
   return (
     <div className="w-full max-w-5xl mx-auto">
       <Button
@@ -57,14 +60,13 @@ const CreateAutomation = ({ templateId, onBack }: CreateAutomationProps) => {
       </Button>
       <Card className="border-none shadow-none">
         <CardHeader className="px-0">
-
           <CardTitle className="text-2xl">{t(template.title)}</CardTitle>
           <CardDescription>{t(template.description)}</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue={"preview"} value={tab} onValueChange={onTabChange}>
             <TabsList className="mb-6">
-              {list.map(k => <TabsTrigger value={k}>{t(k)}</TabsTrigger>)}
+              {list.map(k => <TabsTrigger value={k} disabled={!canAccessFinalstep && k === "finalStep"}>{t(k)}</TabsTrigger>)}
             </TabsList>
 
             <TabsContent value={"preview"}>
@@ -79,28 +81,10 @@ const CreateAutomation = ({ templateId, onBack }: CreateAutomationProps) => {
             </TabsContent>
 
             <TabsContent value={"finalStep"}>
-              <FinalStep template={template}></FinalStep>
+              <FinalStep template={template} schedules={schedules} params={params} onBack={onBack}></FinalStep>
             </TabsContent>
           </Tabs>
         </CardContent>
-        <CardFooter className="flex justify-end gap-4 px-0 mt-6">
-          {tab !== "preview" && (
-            <Button
-              onClick={() => prevTab()}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t("previousStep")}
-            </Button>
-          )}
-          {tab !== "finalStep" && (
-            <Button
-              onClick={() => nextTab()}
-            >
-              <ArrowRight className="mr-2 h-4 w-4" />
-              {t("nextStep")}
-            </Button>
-          )}
-        </CardFooter>
       </Card>
     </div>
   );

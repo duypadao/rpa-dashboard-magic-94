@@ -5,7 +5,7 @@ import { Plus, RefreshCw, Save, Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
-import { humanizeScheduleOptions, ScheduleOptions, transformEveryDayAt, ScheduleType } from "../data/scheduleOptions";
+import { humanizeScheduleOptions, ScheduleOptions, transformEveryDayAt, ScheduleType, HumanizeScheduleOptions } from "../data/scheduleOptions";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -79,10 +79,39 @@ const ScheduleForm = ({ onCreated }: { onCreated: (opt: ScheduleOptions) => void
   )
 }
 
+const ScheduleTable = ({ scheOpts }: { scheOpts: ScheduleOptions[] }) => {
+  const { t } = useLanguage();
+  const humanScheduleOpt = humanizeScheduleOptions(scheOpts);
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>{t("scheduleName")}</TableHead>
+          <TableHead>{t("scheduleRunValue")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {humanScheduleOpt.map((hso) => (
+          <TableRow key={hso.type}>
+            <TableCell className="font-medium">{t(hso.type)}</TableCell>
+            <TableCell>
+              <div className="flex gap-2 flex-wrap">
+                {hso.value.map(v => <Badge variant="secondary">
+                  {v}
+                </Badge>)
+                }
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
 const ScheduleSetup = ({ template, schedules, onCompleted }: ScheduleSetupProps) => {
   const { t } = useLanguage();
   const [scheOpts, setScheOptions] = useState<ScheduleOptions[]>(schedules);
-  const humanScheduleOpt = humanizeScheduleOptions(scheOpts);
   const useRecommendSchedule = () => {
     setScheOptions(template.recommendSettings);
   }
@@ -124,29 +153,7 @@ const ScheduleSetup = ({ template, schedules, onCompleted }: ScheduleSetupProps)
             <ScheduleForm onCreated={onScheduleCreated}></ScheduleForm>
           </div>
           <div className="w-full md:w-3/5">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t("scheduleName")}</TableHead>
-                  <TableHead>{t("scheduleRunValue")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {humanScheduleOpt.map((hso) => (
-                  <TableRow key={hso.type}>
-                    <TableCell className="font-medium">{t(hso.type)}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 flex-wrap">
-                        {hso.value.map(v => <Badge variant="secondary">
-                          {v}
-                        </Badge>)
-                        }
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <ScheduleTable scheOpts={scheOpts}></ScheduleTable>
             <div className="mt-4 text-center">
               <Button
                 variant="success"
@@ -164,5 +171,7 @@ const ScheduleSetup = ({ template, schedules, onCompleted }: ScheduleSetupProps)
     </Card>
   );
 };
+
+export {ScheduleTable}
 
 export default ScheduleSetup;

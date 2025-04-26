@@ -38,6 +38,22 @@ export interface TemplateParameter {
   required: boolean;
   options?: { label: string; value: string }[];
 }
+export interface Automation {
+  id: number;
+  automationName: string;
+  description: string;
+  executionType: string;
+  jSONParam: string;
+  owner: string;
+  manualOperationTimeInSeconds: number;
+  isActive: boolean;
+  lastUpdatedTime: string;
+}
+
+export interface AutomationCreationModel {
+  automation: Automation;
+  schedules: ScheduleOptions[];
+}
 
 type Department = "all-department" | "post-process" | "pre-process" | "warehouse" | "packing";
 
@@ -56,7 +72,9 @@ export interface Template {
   parameters: TemplateParameter[];
   parameterValidation?: (params: object) => Promise<{ isValid: boolean, messages: Record<string, string> }>;
   preview?: Record<string, ReactNode>;
-  recommendSettings?: ScheduleOptions[]
+  recommendSettings?: ScheduleOptions[];
+  generateDescription?: (param: Record<string, string>, t: (key: string, unicorn?: object) => string) => string;
+  createAutomation?: (schedules: ScheduleOptions[], param: Record<string, string>, description: string, t: (key: string, unicorn: object) => string) => AutomationCreationModel
 }
 
 const validateWecomRobotID = async (id: string) => {
@@ -225,13 +243,6 @@ export const templates: Template[] = [
         required: true
       },
       {
-        id: "wecomRobotId",
-        label: "wecomRobotId",
-        type: "text",
-        placeholder: "wecomRobotConfigUrl",
-        required: true
-      },
-      {
         id: "language",
         label: "language",
         type: "select",
@@ -242,6 +253,13 @@ export const templates: Template[] = [
           { label: "chinese", value: "cn" },
           { label: "english", value: "en" },
         ]
+      },
+      {
+        id: "wecomRobotId",
+        label: "wecomRobotId",
+        type: "text",
+        placeholder: "wecomRobotConfigUrl",
+        required: true
       },
     ],
     parameterValidation: async (params: any) => {
@@ -286,12 +304,31 @@ export const templates: Template[] = [
 
     },
     recommendSettings: [
-      transformEveryDayAt(10,0),
-      transformEveryDayAt(12,0),
-      transformEveryDayAt(14,0),
-      transformEveryDayAt(16,0),
-      transformEveryDayAt(18,0),
-    ]
+      transformEveryDayAt(10, 0),
+      transformEveryDayAt(12, 0),
+      transformEveryDayAt(14, 0),
+      transformEveryDayAt(16, 0),
+      transformEveryDayAt(18, 0),
+    ],
+    generateDescription: (param: Record<string, string>, t: (key: string, unicorn?: object) => string) => {
+      return `${t("pp-daily-report")} ${t(param.level)} ${param.key}`
+    },
+    createAutomation: (schedules: ScheduleOptions[], param: Record<string, string>, description: string, t: (key: string, unicorn: object) => string) => {
+      return {
+        automation: {
+          id: 0,
+          automationName: "pp-daily-report",
+          description: description,
+          executionType: "",
+          jSONParam: JSON.stringify(param),
+          owner: "",
+          manualOperationTimeInSeconds: 300,
+          isActive: true,
+          lastUpdatedTime: "2000-01-01"
+        },
+        schedules: schedules
+      } as AutomationCreationModel
+    }
   },
   {
     id: "pp-weekly-report",
