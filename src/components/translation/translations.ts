@@ -3,349 +3,349 @@ import { Translations } from "../LanguageProvider";
 export const translations: Translations = {
     common: {
         "": {
-            en:"",
-            cn:"",
-            vi:""
+            en: "",
+            cn: "",
+            vi: ""
         },
         "": {
-            en:"",
-            cn:"",
-            vi:""
+            en: "",
+            cn: "",
+            vi: ""
         },
         "cantCreateAutomationFromCustomTemplate": {
-            en:"Can't create automation from custom template",
-            cn:"",
-            vi:""
+            en: "Can't create automation from custom template",
+            cn: "无法从自定义模板创建自动化",
+            vi: "Không thể tạo tự động hóa từ mẫu tùy chỉnh"
         },
         "templateIsNotReadyYetPleaseTryAgainLater": {
-            en:"Template is not ready yet, please try again later",
-            cn:"",
-            vi:""
+            en: "Template is not ready yet, please try again later",
+            cn: "模板尚未准备好，请稍后再试",
+            vi: "Mẫu chưa sẵn sàng, vui lòng thử lại sau"
         },
         "notification": {
-            en:"Notification",
-            cn:"",
-            vi:""
+            en: "Notification",
+            cn: "通知",
+            vi: "Thông báo"
         },
         "schedule": {
-            en:"Schedule",
-            cn:"",
-            vi:""
+            en: "Schedule",
+            cn: "日程安排",
+            vi: "Lịch trình"
         },
         "enableDisable": {
-            en:"Enable/Disable",
-            cn:"",
-            vi:""
+            en: "Enable/Disable",
+            cn: "启用/禁用",
+            vi: "Bật/Tắt"
         },
         "executionCount": {
-            en:"Executions",
-            cn:"",
-            vi:""
+            en: "Executions",
+            cn: "执行次数",
+            vi: "Số lần thực thi"
         },
         "myTemplateDescription": {
-            en:"Control your template and see their statistic",
-            cn:"",
-            vi:""
+            en: "Control your template and see their statistic",
+            cn: "控制您的模板并查看其统计数据",
+            vi: "Kiểm soát mẫu của bạn và xem thống kê của chúng"
         },
         "myTemplateTitle": {
-            en:"Template Management",
-            cn:"",
-            vi:""
+            en: "Template Management",
+            cn: "模板管理",
+            vi: "Quản lý mẫu"
         },
         "manageYourTemplate": {
-            en:"Manage your template",
-            cn:"",
-            vi:""
+            en: "Manage your template",
+            cn: "管理您的模板",
+            vi: "Quản lý mẫu của bạn"
         },
         "createOtherAutomation": {
-            en:"Create other automation",
-            cn:"",
-            vi:""
+            en: "Create other automation",
+            cn: "创建其他自动化",
+            vi: "Tạo tự động hóa khác"
         },
         "createAutomationSuccess": {
-            en:"Create Automation Success",
-            cn:"",
-            vi:""
+            en: "Create Automation Success",
+            cn: "创建自动化成功",
+            vi: "Tạo tự động hóa thành công"
         },
         "createAutomation": {
-            en:"Create Automation",
-            cn:"",
-            vi:""
+            en: "Create Automation",
+            cn: "创建自动化",
+            vi: "Tạo tự động hóa"
         },
         "generateDescription": {
-            en:"Generate Description",
-            cn:"",
-            vi:""
+            en: "Generate Description",
+            cn: "生成描述",
+            vi: "Tạo mô tả"
         },
         "inputSimpleDescription": {
-            en:"Give a simple description for easy understand later",
-            cn:"",
-            vi:""
+            en: "Give a simple description for easy understand later",
+            cn: "提供简单描述以便于日后理解",
+            vi: "Đưa ra mô tả đơn giản để dễ hiểu sau này"
         },
         "description": {
-            en:"Description",
-            cn:"",
-            vi:""
+            en: "Description",
+            cn: "描述",
+            vi: "Mô tả"
         },
         "yourAutomationRunSchedule": {
-            en:"Automation Run Schedule",
-            cn:"",
-            vi:""
+            en: "Automation Run Schedule",
+            cn: "自动化运行计划",
+            vi: "Lịch chạy tự động hóa"
         },
         "key": {
-            en:"Key",
-            cn:"",
-            vi:""
+            en: "Name",
+            cn: "姓名",
+            vi: "Tên"
         },
         "yourAutomationSetup": {
-            en:"Automation Setup",
-            cn:"",
-            vi:""
+            en: "Automation Setup",
+            cn: "自动化设置",
+            vi: "Thiết lập tự động hóa"
         },
         "finalStepDescription": {
-            en:"Review your automation info and complete",
-            cn:"",
-            vi:""
+            en: "Review your automation info and complete",
+            cn: "查看您的自动化信息并完成",
+            vi: "Xem lại thông tin tự động hóa của bạn và hoàn thành"
         },
         "finalStepTitle": {
-            en:"Final Step",
-            cn:"",
-            vi:""
+            en: "Final Step",
+            cn: "最后一步",
+            vi: "Bước cuối cùng"
         },
         "scheduleRunValue": {
-            en:"Run Time",
-            cn:"",
-            vi:""
+            en: "Run Time",
+            cn: "运行时间",
+            vi: "Thời gian chạy"
         },
         "scheduleName": {
-            en:"Schedule Name",
-            cn:"",
-            vi:""
+            en: "Schedule Name",
+            cn: "计划名称",
+            vi: "Tên lịch trình"
         },
         "": {
-            en:"",
-            cn:"",
-            vi:""
+            en: "",
+            cn: "",
+            vi: ""
         },
         "create": {
-            en:"Create",
-            cn:"",
-            vi:""
+            en: "Create",
+            cn: "创建",
+            vi: "Tạo"
         },
         "selectRunTime": {
-            en:"Select run time",
-            cn:"",
-            vi:""
+            en: "Select run time",
+            cn: "选择运行时间",
+            vi: "Chọn thời gian chạy"
         },
         "runTime": {
-            en:"Run time",
-            cn:"",
-            vi:""
+            en: "Run time",
+            cn: "运行时间",
+            vi: "Thời gian chạy"
         },
         "everyDayAt": {
-            en:"Every day at",
-            cn:"",
-            vi:""
+            en: "Every day at",
+            cn: "每天在",
+            vi: "Hàng ngày lúc"
         },
         "selectScheduleType": {
-            en:"Select schedule type",
-            cn:"",
-            vi:""
+            en: "Select schedule type",
+            cn: "选择计划类型",
+            vi: "Chọn loại lịch trình"
         },
         "createSchedule": {
-            en:"Create Schedule",
-            cn:"",
-            vi:""
+            en: "Create Schedule",
+            cn: "创建计划",
+            vi: "Tạo lịch trình"
         },
         "resetScheduleOptions": {
-            en:"Reset schedule",
-            cn:"",
-            vi:""
+            en: "Reset schedule",
+            cn: "重置计划",
+            vi: "Đặt lại lịch trình"
         },
         "useRecommendSchedule": {
-            en:"Use recommened schedule",
-            cn:"",
-            vi:""
+            en: "Use recommened schedule",
+            cn: "使用推荐计划",
+            vi: "Sử dụng lịch trình được đề xuất"
         },
         "scheduleSetupDescription": {
-            en:"Setting time for your automation to run",
-            cn:"",
-            vi:""
+            en: "Setting time for your automation to run",
+            cn: "设置自动化运行的时间",
+            vi: "Thiết lập thời gian cho tự động hóa của bạn chạy"
         },
         "scheduleSetupTitle": {
-            en:"Schedule Setup",
-            cn:"",
-            vi:""
+            en: "Schedule Setup",
+            cn: "计划设置",
+            vi: "Thiết lập lịch trình"
         },
         "wecomRobotConfigUrl": {
-            en:"Wecom robot config URL or key only",
-            cn:"",
-            vi:""
+            en: "Wecom robot config URL or key only",
+            cn: "企业微信机器人配置URL或仅密钥",
+            vi: "URL cấu hình robot Wecom hoặc chỉ khóa"
         },
         "wecomRobotId": {
-            en:"Wecom Robot ID",
-            cn:"",
-            vi:""
+            en: "Wecom Robot ID",
+            cn: "企业微信机器人ID",
+            vi: "ID robot Wecom"
         },
         "select Language": {
-            en:"Please select language",
-            cn:"",
-            vi:""
+            en: "Please select language",
+            cn: "请选择语言",
+            vi: "Vui lòng chọn ngôn ngữ"
         },
         "pleaseInputOrganization": {
-            en:"Please input organization name",
-            cn:"",
-            vi:""
+            en: "Please input organization name",
+            cn: "请输入组织名称",
+            vi: "Vui lòng nhập tên tổ chức"
         },
         "name": {
-            en:"Name",
-            cn:"",
-            vi:""
+            en: "Name",
+            cn: "名称",
+            vi: "Tên"
         },
         "selectOrganizationLevel": {
-            en:"Please select organization level",
-            cn:"",
-            vi:""
+            en: "Please select organization level",
+            cn: "请选择组织级别",
+            vi: "Vui lòng chọn cấp tổ chức"
         },
         "level": {
-            en:"Level",
-            cn:"",
-            vi:""
+            en: "Level",
+            cn: "级别",
+            vi: "Cấp độ"
         },
         "paramaterSetup": {
-            en:"Paramaters Setup",
-            cn:"",
-            vi:""
+            en: "Paramaters Setup",
+            cn: "参数设置",
+            vi: "Thiết lập tham số"
         },
         "save": {
-            en:"Save",
-            cn:"",
-            vi:""
+            en: "Save",
+            cn: "保存",
+            vi: "Lưu"
         },
         "clickHere": {
-            en:"Click here !!!!",
-            cn:"",
-            vi:""
+            en: "Click here !!!!",
+            cn: "点击这里 !!!!",
+            vi: "Nhấp vào đây !!!!"
         },
         "wecomRobotIdHelper": {
-            en:"Don't have Wecom Robot ID? Please follow this tutorial to create one",
-            cn:"",
-            vi:""
+            en: "Don't have Wecom Robot ID? Please follow this tutorial to create one",
+            cn: "没有企业微信机器人ID？请按照本教程创建一个",
+            vi: "Không có ID robot Wecom? Vui lòng làm theo hướng dẫn này để tạo một"
         },
         "workline": {
-            en:"Workline",
-            cn:"",
-            vi:""
+            en: "Workline",
+            cn: "工作线",
+            vi: "Dây chuyền sản xuất"
         },
         workshop: {
-            en:"Workshop",
-            cn:"",
-            vi:""
+            en: "Workshop",
+            cn: "车间",
+            vi: "Phân xưởng"
         },
         department: {
-            en:"Department",
-            cn:"",
-            vi:""
+            en: "Department",
+            cn: "部门",
+            vi: "Phòng ban"
         },
         factory: {
-            en:"Factory",
-            cn:"",
-            vi:""
+            en: "Factory",
+            cn: "工厂",
+            vi: "Nhà máy"
         },
         sendResultToWecom: {
-            en:"Send Result To Wecom",
-            cn:"",
-            vi:""
+            en: "Send Result To Wecom",
+            cn: "发送结果到企业微信",
+            vi: "Gửi kết quả đến Wecom"
         },
         createReportLayout: {
-            en:"Create Report Layout",
-            cn:"",
-            vi:""
+            en: "Create Report Layout",
+            cn: "创建报告布局",
+            vi: "Tạo bố cục báo cáo"
         },
         analyze: {
-            en:"Analyze",
-            cn:"",
-            vi:""
+            en: "Analyze",
+            cn: "分析",
+            vi: "Phân tích"
         },
         collectROSData: {
-            en:"Collect ROS Data",
-            cn:"",
-            vi:""
+            en: "Collect ROS Data",
+            cn: "收集ROS数据",
+            vi: "Thu thập dữ liệu ROS"
         },
         collectFRData: {
-            en:"Collect Fast React Data",
-            cn:"",
-            vi:""
+            en: "Collect Fast React Data",
+            cn: "收集Fast React数据",
+            vi: "Thu thập dữ liệu Fast React"
         },
         collectETSData: {
-            en:"Collect ETS Data",
-            cn:"",
-            vi:""
+            en: "Collect ETS Data",
+            cn: "收集ETS数据",
+            vi: "Thu thập dữ liệu ETS"
         },
         automationSteps: {
-            en:"Automation Steps",
-            cn:"",
-            vi:""
+            en: "Automation Steps",
+            cn: "自动化步骤",
+            vi: "Các bước tự động hóa"
         },
         vietnamese: {
-            en:"Vietnamese",
-            cn:"",
-            vi:""
+            en: "Vietnamese",
+            cn: "越南语",
+            vi: "Tiếng Việt"
         },
         english: {
-            en:"English",
-            cn:"",
-            vi:""
+            en: "English",
+            cn: "英语",
+            vi: "Tiếng Anh"
         },
         chinese: {
-            en:"Chinese",
-            cn:"",
-            vi:""
+            en: "Chinese",
+            cn: "中文",
+            vi: "Tiếng Trung"
         },
         finalStep: {
-            en:"Final Step",
-            cn:"",
-            vi:""
+            en: "Final Step",
+            cn: "最后一步",
+            vi: "Bước cuối cùng"
         },
         configSchedule: {
-            en:"Schedule Configuration",
-            cn:"",
-            vi:""
+            en: "Schedule Configuration",
+            cn: "计划配置",
+            vi: "Cấu hình lịch trình"
         },
         paramSetup: {
-            en:"Paramaters Setup",
-            cn:"",
-            vi:""
+            en: "Paramaters Setup",
+            cn: "参数设置",
+            vi: "Thiết lập tham số"
         },
         preview: {
-            en:"Preview",
-            cn:"",
-            vi:""
+            en: "Preview",
+            cn: "预览",
+            vi: "Xem trước"
         },
         return: {
-            en:"Go back",
-            cn:"",
-            vi:"Quay lại"
+            en: "Go back",
+            cn: "返回",
+            vi: "Quay lại"
         },
         "cutting-report": {
             en: "Cutting Report",
-            cn:"",
-            vi: ""
+            cn: "切割报告",
+            vi: "Báo cáo cắt"
         },
         "cutting-report-description": {
             en: "Production data report for Cutting department",
-            cn:"",
-            vi: ""
+            cn: "切割部门的生产数据报告",
+            vi: "Báo cáo dữ liệu sản xuất cho bộ phận Cắt"
         },
         templateListDescription1: {
             en: "None of above templates meet your need? Please contact IT department to request a new automation",
-            cn: "",
-            vi: "",
+            cn: "以上模板都不能满足您的需求？请联系IT部门申请新的自动化",
+            vi: "Không có mẫu nào ở trên đáp ứng nhu cầu của bạn? Vui lòng liên hệ với phòng IT để yêu cầu một tự động hóa mới",
         },
         templateListDescription2: {
             en: "We have fullfiled many requirements, please see the list below",
-            cn: "",
-            vi: "",
+            cn: "我们已经满足了许多要求，请查看下面的列表",
+            vi: "Chúng tôi đã hoàn thành nhiều yêu cầu, vui lòng xem danh sách dưới đây",
         },
         rpa: {
             en: "RPA",
