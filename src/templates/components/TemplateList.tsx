@@ -4,13 +4,15 @@ import { TemplateCard } from "./TemplateCard";
 import { Search } from "lucide-react";
 import { Template } from "../data/templates";
 import { useLanguage } from "@/components/LanguageProvider";
+import { useToast } from "@/hooks/use-toast";
 
 interface TemplateListProps {
   onSelectTemplate: (id: string) => void;
   templates: Template[]
 }
 export const TemplateList: FC<TemplateListProps> = ({ onSelectTemplate, templates }) => {
-  const {t} = useLanguage()
+  const {t} = useLanguage();
+  const {toast} = useToast();
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -36,7 +38,12 @@ export const TemplateList: FC<TemplateListProps> = ({ onSelectTemplate, template
           <TemplateCard
             key={template.id}
             template={template}
-            onClick={()=>{}}
+            onClick={()=>{
+              toast({
+                title: t("notification"),
+                description: t("cantCreateAutomationFromCustomTemplate")
+              })
+            }}
           />
         ))}
       </div>

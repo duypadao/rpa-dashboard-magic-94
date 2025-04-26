@@ -2,6 +2,341 @@ import { Translations } from "../LanguageProvider";
 
 export const translations: Translations = {
     common: {
+        "": {
+            en:"",
+            cn:"",
+            vi:""
+        },
+        "": {
+            en:"",
+            cn:"",
+            vi:""
+        },
+        "cantCreateAutomationFromCustomTemplate": {
+            en:"Can't create automation from custom template",
+            cn:"",
+            vi:""
+        },
+        "templateIsNotReadyYetPleaseTryAgainLater": {
+            en:"Template is not ready yet, please try again later",
+            cn:"",
+            vi:""
+        },
+        "notification": {
+            en:"Notification",
+            cn:"",
+            vi:""
+        },
+        "schedule": {
+            en:"Schedule",
+            cn:"",
+            vi:""
+        },
+        "enableDisable": {
+            en:"Enable/Disable",
+            cn:"",
+            vi:""
+        },
+        "executionCount": {
+            en:"Executions",
+            cn:"",
+            vi:""
+        },
+        "myTemplateDescription": {
+            en:"Control your template and see their statistic",
+            cn:"",
+            vi:""
+        },
+        "myTemplateTitle": {
+            en:"Template Management",
+            cn:"",
+            vi:""
+        },
+        "manageYourTemplate": {
+            en:"Manage your template",
+            cn:"",
+            vi:""
+        },
+        "createOtherAutomation": {
+            en:"Create other automation",
+            cn:"",
+            vi:""
+        },
+        "createAutomationSuccess": {
+            en:"Create Automation Success",
+            cn:"",
+            vi:""
+        },
+        "createAutomation": {
+            en:"Create Automation",
+            cn:"",
+            vi:""
+        },
+        "generateDescription": {
+            en:"Generate Description",
+            cn:"",
+            vi:""
+        },
+        "inputSimpleDescription": {
+            en:"Give a simple description for easy understand later",
+            cn:"",
+            vi:""
+        },
+        "description": {
+            en:"Description",
+            cn:"",
+            vi:""
+        },
+        "yourAutomationRunSchedule": {
+            en:"Automation Run Schedule",
+            cn:"",
+            vi:""
+        },
+        "key": {
+            en:"Key",
+            cn:"",
+            vi:""
+        },
+        "yourAutomationSetup": {
+            en:"Automation Setup",
+            cn:"",
+            vi:""
+        },
+        "finalStepDescription": {
+            en:"Review your automation info and complete",
+            cn:"",
+            vi:""
+        },
+        "finalStepTitle": {
+            en:"Final Step",
+            cn:"",
+            vi:""
+        },
+        "scheduleRunValue": {
+            en:"Run Time",
+            cn:"",
+            vi:""
+        },
+        "scheduleName": {
+            en:"Schedule Name",
+            cn:"",
+            vi:""
+        },
+        "": {
+            en:"",
+            cn:"",
+            vi:""
+        },
+        "create": {
+            en:"Create",
+            cn:"",
+            vi:""
+        },
+        "selectRunTime": {
+            en:"Select run time",
+            cn:"",
+            vi:""
+        },
+        "runTime": {
+            en:"Run time",
+            cn:"",
+            vi:""
+        },
+        "everyDayAt": {
+            en:"Every day at",
+            cn:"",
+            vi:""
+        },
+        "selectScheduleType": {
+            en:"Select schedule type",
+            cn:"",
+            vi:""
+        },
+        "createSchedule": {
+            en:"Create Schedule",
+            cn:"",
+            vi:""
+        },
+        "resetScheduleOptions": {
+            en:"Reset schedule",
+            cn:"",
+            vi:""
+        },
+        "useRecommendSchedule": {
+            en:"Use recommened schedule",
+            cn:"",
+            vi:""
+        },
+        "scheduleSetupDescription": {
+            en:"Setting time for your automation to run",
+            cn:"",
+            vi:""
+        },
+        "scheduleSetupTitle": {
+            en:"Schedule Setup",
+            cn:"",
+            vi:""
+        },
+        "wecomRobotConfigUrl": {
+            en:"Wecom robot config URL or key only",
+            cn:"",
+            vi:""
+        },
+        "wecomRobotId": {
+            en:"Wecom Robot ID",
+            cn:"",
+            vi:""
+        },
+        "select Language": {
+            en:"Please select language",
+            cn:"",
+            vi:""
+        },
+        "pleaseInputOrganization": {
+            en:"Please input organization name",
+            cn:"",
+            vi:""
+        },
+        "name": {
+            en:"Name",
+            cn:"",
+            vi:""
+        },
+        "selectOrganizationLevel": {
+            en:"Please select organization level",
+            cn:"",
+            vi:""
+        },
+        "level": {
+            en:"Level",
+            cn:"",
+            vi:""
+        },
+        "paramaterSetup": {
+            en:"Paramaters Setup",
+            cn:"",
+            vi:""
+        },
+        "save": {
+            en:"Save",
+            cn:"",
+            vi:""
+        },
+        "clickHere": {
+            en:"Click here !!!!",
+            cn:"",
+            vi:""
+        },
+        "wecomRobotIdHelper": {
+            en:"Don't have Wecom Robot ID? Please follow this tutorial to create one",
+            cn:"",
+            vi:""
+        },
+        "workline": {
+            en:"Workline",
+            cn:"",
+            vi:""
+        },
+        workshop: {
+            en:"Workshop",
+            cn:"",
+            vi:""
+        },
+        department: {
+            en:"Department",
+            cn:"",
+            vi:""
+        },
+        factory: {
+            en:"Factory",
+            cn:"",
+            vi:""
+        },
+        sendResultToWecom: {
+            en:"Send Result To Wecom",
+            cn:"",
+            vi:""
+        },
+        createReportLayout: {
+            en:"Create Report Layout",
+            cn:"",
+            vi:""
+        },
+        analyze: {
+            en:"Analyze",
+            cn:"",
+            vi:""
+        },
+        collectROSData: {
+            en:"Collect ROS Data",
+            cn:"",
+            vi:""
+        },
+        collectFRData: {
+            en:"Collect Fast React Data",
+            cn:"",
+            vi:""
+        },
+        collectETSData: {
+            en:"Collect ETS Data",
+            cn:"",
+            vi:""
+        },
+        automationSteps: {
+            en:"Automation Steps",
+            cn:"",
+            vi:""
+        },
+        vietnamese: {
+            en:"Vietnamese",
+            cn:"",
+            vi:""
+        },
+        english: {
+            en:"English",
+            cn:"",
+            vi:""
+        },
+        chinese: {
+            en:"Chinese",
+            cn:"",
+            vi:""
+        },
+        finalStep: {
+            en:"Final Step",
+            cn:"",
+            vi:""
+        },
+        configSchedule: {
+            en:"Schedule Configuration",
+            cn:"",
+            vi:""
+        },
+        paramSetup: {
+            en:"Paramaters Setup",
+            cn:"",
+            vi:""
+        },
+        preview: {
+            en:"Preview",
+            cn:"",
+            vi:""
+        },
+        return: {
+            en:"Go back",
+            cn:"",
+            vi:"Quay lại"
+        },
+        "cutting-report": {
+            en: "Cutting Report",
+            cn:"",
+            vi: ""
+        },
+        "cutting-report-description": {
+            en: "Production data report for Cutting department",
+            cn:"",
+            vi: ""
+        },
         templateListDescription1: {
             en: "None of above templates meet your need? Please contact IT department to request a new automation",
             cn: "",

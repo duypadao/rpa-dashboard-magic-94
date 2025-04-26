@@ -84,13 +84,13 @@ export const ParameterForm: FC<ParameterFormProps> = ({
             {template.parameters.map((param) => (
               <div key={param.id} className="space-y-2">
                 <Label htmlFor={param.id}>
-                  {param.label}
+                  {t(param.label)}
                   {param.required && <span className="text-destructive ml-1">*</span>}
                 </Label>
                 {param.type === "text" && (
                   <Input
                     id={param.id}
-                    placeholder={param.placeholder}
+                    placeholder={t(param.placeholder)}
                     value={parameters[param.id] || ""}
                     onChange={(e) => handleInputChange(param.id, e.target.value)}
                     required={param.required}
@@ -99,7 +99,7 @@ export const ParameterForm: FC<ParameterFormProps> = ({
                 {param.type === "textarea" && (
                   <Textarea
                     id={param.id}
-                    placeholder={param.placeholder}
+                    placeholder={t(param.placeholder)}
                     value={parameters[param.id] || ""}
                     onChange={(e) => handleInputChange(param.id, e.target.value)}
                     required={param.required}
@@ -111,7 +111,7 @@ export const ParameterForm: FC<ParameterFormProps> = ({
                     onValueChange={(value) => handleInputChange(param.id, value)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={param.placeholder} />
+                      <SelectValue placeholder={t(param.placeholder)} />
                     </SelectTrigger>
                     <SelectContent>
                       {param.options?.map((option) => (

@@ -6,31 +6,41 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart4, CheckCircle, Clock, PlaySquare, XCircle } from "lucide-react";
+import { BarChart4, CheckCircle, Clock, Clock10, PlaySquare, WatchIcon, XCircle } from "lucide-react";
 import { myTemplates } from "../data/myTemplates";
 import { useLanguage } from "@/components/LanguageProvider";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Template } from "../data/templates";
 import { useAxios } from "@/axios/AxiosProvider";
+import { humanizeDateTime } from "@/common";
+import dayjs from "dayjs";
+import { humanizeScheduleOptions, ScheduleOptions } from "../data/scheduleOptions";
 
 
-interface AutomationOverview{
+interface AutomationOverview {
   id: number,
   description: string,
   status: "success" | "failure" | "running" | "notRun",
   executionCount: number,
   successRate: number,
   lastRun: string,
-  isActive: boolean
+  isActive: boolean,
+  schedules: ScheduleOptions[]
 }
-const AUTOMATION_SERVER = "http://localhost:5089";
+const AUTOMATION_SERVER = "http://ros:5089";
 export const TemplateManagement = () => {
   const { t } = useLanguage();
   const axios = useAxios();
+  axios.defaults.withCredentials = true;
   const { data: automation = [], isLoading, isError, isFetched } = useQuery({
     queryKey: ["myTemplate"],
     queryFn: async (): Promise<AutomationOverview[]> => {
-      const { data } = await axios.get(`${AUTOMATION_SERVER}/automation/getUserAutomation`);
+      const { data } = await axios.get(`${AUTOMATION_SERVER}/automation/getUserAutomation`,{
+        withCredentials: true,
+        headers: {
+          Authorization : `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       return data as AutomationOverview[]
     },
     refetchInterval: false
@@ -38,38 +48,32 @@ export const TemplateManagement = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: number, isActive: boolean }) => {
-      const {data} = await axios.postForm(`${AUTOMATION_SERVER}/automation/setActive`,{
-        id,isActive
+      const { data } = await axios.postForm(`${AUTOMATION_SERVER}/automation/setActive`, {
+        id, isActive
       });
       return data;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["myTemplate"],(current: AutomationOverview[])=>{
-        const itemIndex = current.findIndex(z=>z.id === data.id);
+      queryClient.setQueryData(["myTemplate"], (current: AutomationOverview[]) => {
+        const itemIndex = current.findIndex(z => z.id === data.id);
         current[itemIndex].isActive = data.isActive;
         return current;
       })
     }
   })
-  const toggleTemplateStatus = async (id: number,isActive: boolean) => {
+  const toggleTemplateStatus = async (id: number, isActive: boolean) => {
     await mutation.mutateAsync({
-      id,isActive
+      id, isActive
     });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "成功":
-      case "Success":
-      case "Thành công":
+      case "success":
         return "text-green-500";
-      case "失败":
-      case "Failed":
-      case "Thất bại":
+      case "failure":
         return "text-red-500";
-      case "运行中":
-      case "Running":
-      case "Đang chạy":
+      case "running":
         return "text-blue-500";
       default:
         return "text-gray-500";
@@ -78,20 +82,14 @@ export const TemplateManagement = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "成功":
-      case "Success":
-      case "Thành công":
+      case "success":
         return <CheckCircle className="h-4 w-4" />;
-      case "失败":
-      case "Failed":
-      case "Thất bại":
+      case "failure":
         return <XCircle className="h-4 w-4" />;
-      case "运行中":
-      case "Running":
-      case "Đang chạy":
+      case "running":
         return <PlaySquare className="h-4 w-4" />;
       default:
-        return null;
+        return <Clock10 className="h-4 w-4" />;
     }
   };
 
@@ -104,10 +102,11 @@ export const TemplateManagement = () => {
               <TableRow>
                 <TableHead>{t("name")}</TableHead>
                 <TableHead>{t("status")}</TableHead>
-                <TableHead>{t("executions")}</TableHead>
+                <TableHead>{t("executionCount")}</TableHead>
                 <TableHead>{t("successRate")}</TableHead>
                 <TableHead>{t("lastRun")}</TableHead>
                 <TableHead>{t("enableDisable")}</TableHead>
+                <TableHead>{t("schedule")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -119,7 +118,7 @@ export const TemplateManagement = () => {
                       <span className={getStatusColor(at.status)}>
                         {getStatusIcon(at.status)}
                       </span>
-                      <span>{at.status}</span>
+                      <span>{t(at.status)}</span>
                     </div>
                   </TableCell>
                   <TableCell>{at.executionCount}</TableCell>
@@ -131,13 +130,25 @@ export const TemplateManagement = () => {
                   </TableCell>
                   <TableCell className="flex items-center gap-1 text-muted-foreground">
                     <Clock className="h-3 w-3" />
-                    {at.lastRun}
+                    {(at.lastRun ? humanizeDateTime(new Date(at.lastRun), t) : "")}
                   </TableCell>
                   <TableCell>
                     <Switch
                       checked={at.isActive}
-                      onCheckedChange={() => toggleTemplateStatus(at.id,!at.isActive)}
+                      onCheckedChange={() => toggleTemplateStatus(at.id, !at.isActive)}
                     />
+                  </TableCell>
+                  <TableCell>
+                    {humanizeScheduleOptions(at.schedules).map(z => 
+                    <div key={`schedule${at.id}`} className="flex justify-start gap-2 flex-wrap">
+                      <p className="font-semibold">{t(z.type)}</p>
+                      <div className="flex gap-2 flex-wrap">
+                        {z.value.map(v => <Badge key={`scheduleValue${v}`} variant="secondary">
+                          {v}
+                        </Badge>)
+                        }
+                      </div>
+                    </div>)}
                   </TableCell>
                 </TableRow>
               ))}

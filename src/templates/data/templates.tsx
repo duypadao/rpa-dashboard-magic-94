@@ -237,7 +237,7 @@ export const templates: Template[] = [
       },
       {
         id: "key",
-        label: "name",
+        label: "key",
         type: "text",
         placeholder: "pleaseInputOrganization",
         required: true

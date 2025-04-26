@@ -11,10 +11,10 @@ const Preview = ({ template }) => {
         {template.preview ? (
           <Tabs defaultValue={Object.keys(template.preview)[0]}>
             <TabsList className="mb-6">
-              {Object.entries(template.preview).map(([k, v]) => <TabsTrigger value={k}>{t(k)}</TabsTrigger>)}
+              {Object.entries(template.preview).map(([k, v]) => <TabsTrigger key={`tab${k}`} value={k}>{t(k)}</TabsTrigger>)}
             </TabsList>
 
-            {Object.entries(template.preview).map(([k, v]) => <TabsContent value={k}><div>{v as ReactNode}</div></TabsContent>)}
+            {Object.entries(template.preview).map(([k, v]) => <TabsContent  key={`tabContent${k}`} value={k}><div>{v as ReactNode}</div></TabsContent>)}
           </Tabs>
         ) : (
           <div className="w-50 h-50 text-center ">

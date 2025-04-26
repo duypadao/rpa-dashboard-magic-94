@@ -19,15 +19,13 @@ interface FinalStepProps {
   onBack: () => void;
 }
 
-const AUTOMATION_SERVER = "http://localhost:5089";
+const AUTOMATION_SERVER = "http://ros:5089";
 
 const FinalStep = ({ template, schedules, params, onBack }: FinalStepProps) => {
   const [created, setCreated] = useState(false);
   const { toast } = useToast();
   const { t } = useLanguage();
   const axios = useAxios();
-  console.log(schedules);
-  console.log(params);
   const [description, setDescription] = useState<string>("");
   const generateDescription = () => {
     setDescription(template.generateDescription(params, t))
@@ -69,7 +67,7 @@ const FinalStep = ({ template, schedules, params, onBack }: FinalStepProps) => {
         <h1 className="text-xl mb-2">{t("yourAutomationSetup")}</h1>
         <div className="flex flex-wrap gap-2 justify-start">
           {Object.entries(params).map(([k, v]) =>
-            <div>
+            <div key={k}>
               <p className="font-semibold">
                 {t(k)}: <span className="text-primary font-normal">{v}</span>
               </p>

@@ -66,7 +66,7 @@ const CreateAutomation = ({ templateId, onBack }: CreateAutomationProps) => {
         <CardContent>
           <Tabs defaultValue={"preview"} value={tab} onValueChange={onTabChange}>
             <TabsList className="mb-6">
-              {list.map(k => <TabsTrigger value={k} disabled={!canAccessFinalstep && k === "finalStep"}>{t(k)}</TabsTrigger>)}
+              {list.map(k => <TabsTrigger key={`ttrig${k}`} value={k} disabled={!canAccessFinalstep && k === "finalStep"}>{t(k)}</TabsTrigger>)}
             </TabsList>
 
             <TabsContent value={"preview"}>
