@@ -1,3 +1,4 @@
+
 import dayjs from "dayjs";
 
 export const formatDateStr = (dateString: string) => {
@@ -8,7 +9,7 @@ export const formatDateStr = (dateString: string) => {
     }
 };
 
-export const formatDate = (date : Date) => {
+export const formatDate = (date: Date) => {
     try {
         return dayjs(date).format("YYYY-MM-DD");
     } catch (error) {
@@ -16,7 +17,7 @@ export const formatDate = (date : Date) => {
     }
 }
 
-export const formatDateV2 = (date : Date) => {
+export const formatDateV2 = (date: Date) => {
     try {
         return dayjs(date).format("YY-MM-DD");
     } catch (error) {
@@ -66,6 +67,18 @@ export const formatDurationBySecondToFixed = (seconds: number) => {
     return `${hours}h`
 }
 
+export const formatDurationBySecondTranslation = (second, t) => {
+    const h = Math.floor(second / 3600);
+    const m = Math.floor((second % 3600) / 60);
+    const s = (second % 60).toFixed(2);
+
+    let result = '';
+    if (h > 0) result += ` ${h} ${t('hour')} `;
+    if (m > 0) result += ` ${m} ${t('minute')} `;
+    if (h === 0 && m === 0 && s === '0.00') return `0${t('second')}`;
+    return result + ` ${s} ${t('second')}`;
+}
+
 export const formatMonthYear = (date: Date) => {
     try {
         return dayjs(date).format("MMMM. YYYY");
@@ -76,4 +89,10 @@ export const formatMonthYear = (date: Date) => {
 
 export const formatSuccessRate = (failRate) => {
     return ((1 - failRate) * 100).toFixed(1) + '%';
-  };
+};
+
+export const convertDurationToSecond = (duration) => {
+    const [hours, minutes, seconds] = duration.split(":").map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+}
+

@@ -1,5 +1,5 @@
 
-import React, { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { InvoiceHistoryItem } from "./InvoiceHistory";
@@ -17,12 +17,13 @@ import {
   Star
 } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
-import { formatDateStr } from "@/ultis/datetime";
+import { convertDurationToSecond, formatDateStr } from "@/ultis/datetime";
+import { formatDurationBySecondTranslation } from "@//ultis/datetime";
 
 interface AnalyticInsight {
   id: string;
-  title: string;
-  icon: React.ReactNode;
+  title: ReactNode;
+  icon: ReactNode;
   className?: string;
 }
 
@@ -55,22 +56,13 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
       const successRate = totalCount > 0 ? (successCount / totalCount) * 100 : 0;
       const failRate = totalCount > 0 ? (failCount / totalCount) * 100 : 0;
 
-      const durationsInMinutes = invoices.map(inv => {
-        const durationParts = inv.duration.split(' ');
-        let minutes = 0;
-        durationParts.forEach(part => {
-          if (part.includes('m')) {
-            minutes += parseInt(part.replace('m', ''), 10);
-          } else if (part.includes('s')) {
-            minutes += parseInt(part.replace('s', ''), 10) / 60;
-          }
-        });
-        return minutes;
+      const durationsInSecond = invoices.map(inv => {
+        return convertDurationToSecond(inv.duration);
       });
-      const avgDuration = durationsInMinutes.reduce((sum, min) => sum + min, 0) / durationsInMinutes.length;
+      const avgDuration = durationsInSecond.reduce((sum, min) => sum + min, 0) / durationsInSecond.length;
 
       const meanDuration = avgDuration;
-      const variance = durationsInMinutes.reduce((sum, min) => sum + Math.pow(min - meanDuration, 2), 0) / durationsInMinutes.length;
+      const variance = durationsInSecond.reduce((sum, min) => sum + Math.pow(min - meanDuration, 2), 0) / durationsInSecond.length;
       const stdDevDuration = Math.sqrt(variance);
 
       return {
@@ -126,21 +118,12 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
     const bestSuccessDay = dailyStats.reduce((max, curr) => curr.successRate > max.successRate ? curr : max, dailyStats[0] || { date: 'N/A', successRate: 0 });
 
     // New: Overall processing time statistics
-    const allDurationsInMinutes = invoiceData.map(inv => {
-      const durationParts = inv.duration.split(' ');
-      let minutes = 0;
-      durationParts.forEach(part => {
-        if (part.includes('m')) {
-          minutes += parseInt(part.replace('m', ''), 10);
-        } else if (part.includes('s')) {
-          minutes += parseInt(part.replace('s', ''), 10) / 60;
-        }
-      });
-      return minutes;
+    const allDurationsInSeconds = invoiceData.map(inv => {
+      return convertDurationToSecond(inv.duration);
     });
-    const avgProcessingTime = allDurationsInMinutes.reduce((sum, min) => sum + min, 0) / allDurationsInMinutes.length;
-    const minProcessingTime = Math.min(...allDurationsInMinutes);
-    const maxProcessingTime = Math.max(...allDurationsInMinutes);
+    const avgProcessingTime = allDurationsInSeconds.reduce((sum, min) => sum + min, 0) / allDurationsInSeconds.length;
+    const minProcessingTime = Math.min(...allDurationsInSeconds);
+    const maxProcessingTime = Math.max(...allDurationsInSeconds);
 
     // New: Result type distribution
     const totalWarnings = invoiceData.filter(inv => inv.resultType === 'warning').length;
@@ -158,6 +141,7 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
     const supplierByConsistency = [...supplierSuccessRates].sort((a, b) => a.stdDevDuration - b.stdDevDuration);
     const mostConsistentSupplier = supplierByConsistency[0];
     const mostVariableSupplier = supplierByConsistency[supplierByConsistency.length - 1];
+
 
     return {
       supplierGroups,
@@ -187,94 +171,259 @@ const InvoiceAnalytics = ({ invoiceData, isLoading }: InvoiceAnalyticsProps) => 
   const generateInsights = useMemo(() => {
     if (!processedData) return [];
 
+    const highlightClassName = "text-primary";
     const allInsights: AnalyticInsight[] = [
       {
         id: "top-supplier",
-        title: `${processedData.suppliersBySuccessCount[0]?.supplier || 'No supplier'} leads with ${processedData.suppliersBySuccessCount[0]?.successCount || 0} successfully processed invoices this month`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.suppliersBySuccessCount[0]?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.leadsWith")}{" "}
+            <span className={highlightClassName}>
+              {processedData.suppliersBySuccessCount[0]?.successCount || 0} {t("invoice.successfullyProcessedInvoicesThisMonth")}
+            </span>
+          </>
+        ),
         icon: <Star className="h-5 w-5 text-warning" />
       },
       {
         id: "highest-success-rate",
-        title: `${processedData.suppliersBySuccessRate[0]?.supplier || 'No supplier'} has the highest success rate at ${processedData.suppliersBySuccessRate[0]?.successRate.toFixed(1) || 0}%`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.suppliersBySuccessRate[0]?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.hasTheHighestSuccessRateAt")}{" "}
+            <span className={highlightClassName}>
+              {processedData.suppliersBySuccessRate[0]?.successRate.toFixed(1) || 0}%
+            </span>
+          </>
+        ),
         icon: <CheckCircle2 className="h-5 w-5 text-success" />
       },
       {
         id: "fastest-processing",
-        title: `${processedData.suppliersByProcessingTime[0]?.supplier || 'No supplier'} has the fastest average processing time of ${processedData.suppliersByProcessingTime[0]?.avgDuration.toFixed(1) || 0} minutes per invoice`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.suppliersByProcessingTime[0]?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.hasTheFastestAverageProcessingTimeOf")}{" "}
+            <span className={highlightClassName}>
+              {formatDurationBySecondTranslation(processedData.suppliersByProcessingTime[0]?.avgDuration, t)} {t("invoice.perInvoice")}
+            </span>
+          </>
+        ),
         icon: <Clock className="h-5 w-5 text-info" />
       },
       {
         id: "highest-failure-rate",
-        title: `${processedData.suppliersByFailRate[0]?.supplier || 'No supplier'} has the highest failure rate at ${processedData.suppliersByFailRate[0]?.failRate.toFixed(1) || 0}%`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.suppliersByFailRate[0]?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.hasTheHighestFailureRateAt")}{" "}
+            <span className={highlightClassName}>
+              {processedData.suppliersByFailRate[0]?.failRate.toFixed(1) || 0}%
+            </span>
+          </>
+        ),
         icon: <AlertTriangle className="h-5 w-5 text-error" />
       },
       {
         id: "overall-success",
-        title: `Overall invoice processing success rate is ${processedData.overallSuccessRate.toFixed(1)}%`,
+        title: (
+          <>
+            {t("invoice.overallInvoiceProcessingSuccessRateIs")}{" "}
+            <span className={highlightClassName}>
+              {processedData.overallSuccessRate.toFixed(1)}%
+            </span>
+          </>
+        ),
         icon: <BarChart className="h-5 w-5 text-primary" />
       },
       {
         id: "total-invoices",
-        title: `${processedData.totalInvoices} invoices processed in total this month`,
+        title: (
+          <>
+            {t("invoice.totalInvoicesProcessedThisMonth")}{" "}
+            <span className={highlightClassName}>
+              {processedData.totalInvoices}
+            </span>
+          </>
+        ),
         icon: <Activity className="h-5 w-5 text-info" />
       },
       {
         id: "volume-leader",
-        title: `${processedData.suppliersBySuccessCount[0]?.supplier || 'No supplier'} has the highest invoice volume, accounting for ${(processedData.suppliersBySuccessCount[0]?.totalCount / processedData.totalInvoices * 100).toFixed(1) || 0}% of all invoices`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.suppliersBySuccessCount[0]?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.hasTheHighestInvoiceVolumeAccountingFor")}{" "}
+            <span className={highlightClassName}>
+              {(processedData.suppliersBySuccessCount[0]?.totalCount / processedData.totalInvoices * 100).toFixed(1) || 0}%
+            </span>{" "}
+            {t("invoice.ofAllInvoices")}
+          </>
+        ),
         icon: <TrendingUp className="h-5 w-5 text-primary" />
       },
       {
         id: "warning-rate",
-        title: `${processedData.supplierSuccessRates.reduce((max, curr) => {
-          const currWarningRate = curr.warningCount / curr.totalCount;
-          const maxWarningRate = max.warningCount / max.totalCount;
-          return currWarningRate > maxWarningRate ? curr : max;
-        }, processedData.supplierSuccessRates[0]).supplier} has the highest warning rate`,
+        title: (
+          <>
+            {t("invoice.supplier")}{" "}
+            <span className={highlightClassName}>
+              {processedData.supplierSuccessRates.reduce((max, curr) => {
+                const currWarningRate = curr.warningCount / curr.totalCount;
+                const maxWarningRate = max.warningCount / max.totalCount;
+                return currWarningRate > maxWarningRate ? curr : max;
+              }, processedData.supplierSuccessRates[0]).supplier}
+            </span>{" "}
+            {t("invoice.hasTheHighestWarningRate")}
+          </>
+        ),
         icon: <AlertTriangle className="h-5 w-5 text-warning" />
       },
       {
         id: "busiest-day",
-        title: `The busiest day was ${processedData.busiestDay.date} with ${processedData.busiestDay.total} invoices processed`,
+        title: (
+          <>
+            {t("invoice.theBusiestDayWas")}{" "}
+            <span className={highlightClassName}>
+              {processedData.busiestDay.date}
+            </span>{" "}
+            {t("invoice.withInvoicesProcessed")}{" "}
+            <span className={highlightClassName}>
+              {processedData.busiestDay.total}
+            </span>
+          </>
+        ),
         icon: <Activity className="h-5 w-5 text-primary" />
       },
       {
         id: "best-success-day",
-        title: `The day with the highest success rate was ${processedData.bestSuccessDay.date} at ${processedData.bestSuccessDay.successRate.toFixed(1)}%`,
+        title: (
+          <>
+            {t("invoice.theDayWithTheHighestSuccessRateWas")}{" "}
+            <span className={highlightClassName}>
+              {processedData.bestSuccessDay.date}
+            </span>{" "}
+            {t("invoice.atSuccessRate")}{" "}
+            <span className={highlightClassName}>
+              {processedData.bestSuccessDay.successRate.toFixed(1)}%
+            </span>
+          </>
+        ),
         icon: <CheckCircle2 className="h-5 w-5 text-success" />
       },
       {
         id: "processing-time-stats",
-        title: `Average processing time: ${processedData.avgProcessingTime.toFixed(1)} min (fastest: ${processedData.minProcessingTime.toFixed(1)} min, slowest: ${processedData.maxProcessingTime.toFixed(1)} min)`,
+        title: (
+          <>
+            {t("invoice.averageProcessingTime")}{" "}
+            <span className={highlightClassName}>
+            {formatDurationBySecondTranslation(processedData.avgProcessingTime, t)} 
+            </span>{" "}
+            ({t("invoice.fastest")}{" "}
+            <span className={highlightClassName}>
+              {formatDurationBySecondTranslation(processedData.minProcessingTime, t)}
+            </span>
+            , {t("invoice.slowest")}{" "}
+            <span className={highlightClassName}>
+              {formatDurationBySecondTranslation(processedData.maxProcessingTime, t)}
+            </span>)
+          </>
+        ),
         icon: <Clock className="h-5 w-5 text-info" />
       },
       {
         id: "result-distribution",
-        title: `Invoices: ${processedData.successPercentage.toFixed(1)}% success, ${processedData.warningPercentage.toFixed(1)}% warnings, ${processedData.failurePercentage.toFixed(1)}% failures`,
+        title: (
+          <>
+            {t("invoice.invoices")}{" "}
+            <span className={highlightClassName}>
+              {processedData.successPercentage.toFixed(1)}% {t("invoice.success")}
+            </span>,{" "}
+            <span className={highlightClassName}>
+              {processedData.warningPercentage.toFixed(1)}% {t("invoice.warnings")}
+            </span>,{" "}
+            <span className={highlightClassName}>
+              {processedData.failurePercentage.toFixed(1)}% {t("invoice.failures")}
+            </span>
+          </>
+        ),
         icon: <BarChart className="h-5 w-5 text-primary" />
       },
       {
         id: "most-consistent-supplier",
-        title: `${processedData.mostConsistentSupplier?.supplier || 'No supplier'} has the most consistent processing time (std dev: ${processedData.mostConsistentSupplier?.stdDevDuration.toFixed(1) || 0} min)`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.mostConsistentSupplier?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.hasTheMostConsistentProcessingTime")}{" "}
+            <span className={highlightClassName}>
+              {formatDurationBySecondTranslation(processedData.mostConsistentSupplier?.stdDevDuration, t)}
+            </span>
+          </>
+        ),
         icon: <LineChart className="h-5 w-5 text-success" />
       },
       {
         id: "most-variable-supplier",
-        title: `${processedData.mostVariableSupplier?.supplier || 'No supplier'} has the most variable processing time (std dev: ${processedData.mostVariableSupplier?.stdDevDuration.toFixed(1) || 0} min)`,
+        title: (
+          <>
+            <span className={highlightClassName}>
+              {processedData.mostVariableSupplier?.supplier || t("invoice.noSupplier")}
+            </span>{" "}
+            {t("invoice.hasTheMostVariableProcessingTime")}{" "}
+            <span className={highlightClassName}>
+              {formatDurationBySecondTranslation(processedData.mostVariableSupplier?.stdDevDuration, t)}
+            </span>
+          </>
+        ),
         icon: <LineChart className="h-5 w-5 text-error" />
       },
       {
         id: "top-perfect-supplier",
-        title: processedData.topPerfectSupplier 
-          ? `${processedData.topPerfectSupplier.supplier} achieved 100% success with ${processedData.topPerfectSupplier.totalCount} invoices`
-          : "No supplier achieved 100% success with at least 10 invoices",
+        title: (
+          <>
+            {processedData.topPerfectSupplier ? (
+              <>
+                <span className={highlightClassName}>
+                  {processedData.topPerfectSupplier.supplier}
+                </span>{" "}
+                {t("invoice.achieved100PercentSuccessWith")}{" "}
+                <span className={highlightClassName}>
+                  {processedData.topPerfectSupplier.totalCount}
+                </span>{" "}
+                {t("invoice.invoices")}
+              </>
+            ) : (
+              t("invoice.noSupplierAchieved100PercentSuccessWithAtLeast10Invoices")
+            )}
+          </>
+
+        ),
         icon: <Star className="h-5 w-5 text-warning" />
       }
     ];
 
+
+
+
+
+
     // Randomly select 5 insights
     return allInsights
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 8);
+    // .sort(() => Math.random() - 0.5)
+    // .slice(0, 8);
   }, [processedData]);
 
   return (

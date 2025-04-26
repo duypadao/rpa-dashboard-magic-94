@@ -59,28 +59,26 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
   
   const tp = (key) => {
-    // Kiểm tra xem key có tồn tại trong processTranslations không
     if (processTranslations[key]) {
       return processTranslations[key][language] || key;
     }
   
     // Thử loại bỏ số ở cuối key (nếu có)
-    const match = key.match(/^(.+?)(?::\S+|\s+\d+)$/);
+    const match = key.match(/^(.+?)(?::(\S+)|\s+(\d+))$/);
     
     if (match) {
-        const match1 = match[1].trim(); // Phần chữ: "Input Posting Date"
-        const match2 = match[2]; // Phần số: " 0"
+        const match1 = match[1].trim(); 
+        const match2 = match[2] || match[3] || ""; 
         
-        // Kiểm tra xem phần chữ có trong processTranslations không
         if (processTranslations[match1]) {
-            return processTranslations[match1][language] + match2 || key;
+            return (processTranslations[match1][language] || match1) + match2;
         }
     }
   
-    // Nếu vẫn không tìm thấy, trả về key gốc và cảnh báo
     console.warn(`Not found: ${key}`);
     return key;
-  };
+};
+
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t, tp }}>

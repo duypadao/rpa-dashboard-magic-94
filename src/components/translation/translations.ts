@@ -16,17 +16,16 @@ export const translations: Translations = {
             en: "Employee ID",
             cn: "员工编号",
             vi: "Mã nhân viên"
-        },        
+        },
         password: {
             en: "Password",
             cn: "密码",
             vi: "Mật khẩu"
         },
-        
-        "": {
-            en: "",
-            cn: "",
-            vi: ""
+        login: {
+            en: "Login",
+            cn: "登录",
+            vi: "Đăng nhập"
         },
         "": {
             en: "",
@@ -960,6 +959,21 @@ export const translations: Translations = {
             cn: "类型",
             vi: "Loại"
         },
+        hour: {
+            en: "hour",
+            cn: "小时",
+            vi: "giờ"
+        },
+        minute: {
+            en: "minute",
+            cn: "分钟",
+            vi: "phút",
+        },
+        second: {
+            en: "second",
+            cn: "秒",
+            vi: "giây",
+        },
         "{{hours}}h{{seconds}}s": {
             en: "{{hours}}h{{seconds}}s",
             cn: "{{hours}}小时{{seconds}}秒",
@@ -1092,6 +1106,11 @@ export const translations: Translations = {
         }
     },
     invoice: {
+        supplier: {
+            en: "Supplier",
+            cn: "供应商",
+            vi: "Nhà cung cấp"
+        },        
         invoiceOverView: {
             en: "Invoice Overview",
             cn: "发票概览",
@@ -1182,7 +1201,188 @@ export const translations: Translations = {
             cn: "发票处理步骤及其状态的详细可视化。",
             vi: "Trực quan chi tiết các bước xử lý hoá đơn và trạng thái của chúng."
         },
+        noSupplier: {
+            en: "No Supplier",
+            cn: "无供应商",
+            vi: "Không có nhà cung cấp"
+        },
+        hasTheFastestAverageProcessingTimeOf: {
+            en: "has the fastest average processing time of",
+            cn: "具有最快的平均处理时间",
+            vi: "có thời gian xử lý trung bình nhanh nhất là"
+        },
+        perInvoice: {
+            en: "per invoice",
+            cn: "每张发票",
+            vi: "mỗi hóa đơn"
+        },        
+        leadsWith: {
+            en: "leads with",
+            cn: "领先，达到",
+            vi: "dẫn đầu với"
+        },
+        successfullyProcessedInvoicesThisMonth: {
+            en: "successfully processed invoices this month",
+            cn: "本月成功处理的发票",
+            vi: "hoá đơn được xử lý thành công trong tháng này"
+        },
+        hasTheHighestSuccessRateAt: {
+            en: "has the highest success rate at",
+            cn: "成功率最高，达到",
+            vi: "có tỷ lệ thành công cao nhất là"
+        },
+        hasTheHighestFailureRateAt: {
+            en: "has the highest failure rate at",
+            cn: "失败率最高，达到",
+            vi: "có tỷ lệ thất bại cao nhất là"
+        },
+        overallInvoiceProcessingSuccessRateIs: {
+            en: "Overall invoice processing success rate is",
+            cn: "整体发票处理成功率为",
+            vi: "Tổng tỷ lệ xử lý hoá đơn thành công là"
+        },
+        invoicesProcessedInTotalThisMonth: {
+            en: "invoices processed in total this month",
+            cn: "本月处理的发票总数",
+            vi: "hoá đơn được xử lý tổng cộng trong tháng này"
+        },
+        hasTheHighestInvoiceVolumeAccountingFor: {
+            en: "has the highest invoice volume, accounting for",
+            cn: "发票数量最多，占比",
+            vi: "có số lượng hoá đơn cao nhất, chiếm"
+        },
+        ofAllInvoices: {
+            en: "of all invoices",
+            cn: "所有发票中的",
+            vi: "trong tổng số hoá đơn"
+        },
+        hasTheHighestWarningRate: {
+            en: "has the highest warning rate",
+            cn: "警告率最高",
+            vi: "có tỷ lệ cảnh báo cao nhất"
+        },
+        theBusiestDayWas: {
+            en: "The busiest day was",
+            cn: "最繁忙的一天是",
+            vi: "Ngày bận rộn nhất là"
+        },
+        with: {
+            en: "with",
+            cn: "处理了",
+            vi: "với"
+        },
+        invoicesProcessed: {
+            en: "invoices processed",
+            cn: "张发票",
+            vi: "hoá đơn được xử lý"
+        },
+        theDayWithTheHighestSuccessRateWas: {
+            en: "The day with the highest success rate was",
+            cn: "成功率最高的一天是",
+            vi: "Ngày có tỷ lệ thành công cao nhất là"
+        },
+        at: {
+            en: "at",
+            cn: "达到",
+            vi: "là"
+        },
+        averageProcessingTime: {
+            en: "Average processing time",
+            cn: "平均处理时间",
+            vi: "Thời gian xử lý trung bình"
+        },
+        fastest: {
+            en: "fastest",
+            cn: "最快",
+            vi: "nhanh nhất"
+        },
+        slowest: {
+            en: "slowest",
+            cn: "最慢",
+            vi: "chậm nhất"
+        },
+        min: {
+            en: "min",
+            cn: "分钟",
+            vi: "phút"
+        },
+        invoices: {
+            en: "Invoices",
+            cn: "发票",
+            vi: "Hóa đơn"
+        },
+        success: {
+            en: "success",
+            cn: "成功",
+            vi: "thành công"
+        },
+        warnings: {
+            en: "warnings",
+            cn: "警告",
+            vi: "cảnh báo"
+        },
+        failures: {
+            en: "failures",
+            cn: "失败",
+            vi: "thất bại"
+        },
+        hasTheMostConsistentProcessingTimeStdDev: {
+            en: "has the most consistent processing time (lowest standard deviation)",
+            cn: "具有最一致的处理时间（标准差最低）",
+            vi: "có thời gian xử lý ổn định nhất (độ lệch chuẩn thấp nhất)"
+        },
+        hasTheMostVariableProcessingTimeStdDev: {
+            en: "has the most variable processing time (highest standard deviation)",
+            cn: "具有最不稳定的处理时间（标准差最高）",
+            vi: "có thời gian xử lý biến động lớn nhất (độ lệch chuẩn cao nhất)"
+        },
+        achieved100SuccessWith: {
+            en: "achieved 100% success with",
+            cn: "以100%成功率完成了",
+            vi: "đạt tỷ lệ thành công 100% với"
+        },
+        noSupplierAchieved100SuccessWithAtLeast10Invoices: {
+            en: "No supplier achieved 100% success with at least 10 invoices",
+            cn: "没有供应商以至少10张发票达到100%成功率",
+            vi: "Không có nhà cung cấp nào đạt 100% thành công với ít nhất 10 hoá đơn"
+        },
+        totalInvoicesProcessedThisMonth: {
+            en: "Total invoices processed this month",
+            cn: "本月处理的发票总数",
+            vi: "Tổng số hoá đơn được xử lý trong tháng này"
+        },
+        withInvoicesProcessed: {
+            en: "with invoices processed",
+            cn: "已处理发票",
+            vi: "với số hoá đơn đã xử lý"
+        },
+        atSuccessRate: {
+            en: "at success rate",
+            cn: "成功率",
+            vi: "với tỉ lệ thành công"
+        },
+        hasTheMostConsistentProcessingTime: {
+            en: "has the most consistent processing time",
+            cn: "具有最稳定的处理时间",
+            vi: "có thời gian xử lý ổn định nhất"
+        },
+        hasTheMostVariableProcessingTime: {
+            en: "has the most variable processing time",
+            cn: "具有最不稳定的处理时间",
+            vi: "có thời gian xử lý biến động lớn nhất"
+        },
+        achieved100PercentSuccessWith: {
+            en: "achieved 100% success with",
+            cn: "在...方面达到了100%的成功率",
+            vi: "đạt được tỉ lệ thành công 100% với"
+        },
+        noSupplierAchieved100PercentSuccessWithAtLeast10Invoices: {
+            en: "no supplier achieved 100% success with at least 10 invoices",
+            cn: "没有供应商在至少10张发票上实现100%的成功率",
+            vi: "không có nhà cung cấp nào đạt được tỉ lệ thành công 100% với ít nhất 10 hoá đơn"
+        }        
     },
+
     mspo: {
         rundays: {
             en: "Run Days",
