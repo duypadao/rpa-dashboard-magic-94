@@ -21,9 +21,15 @@ async getMspoRobot(): Promise<Robot | undefined> {
     }
 },
 
-async getMspoSummary(): Promise<MspoSummary | undefined> {
+async getMspoSummary(date?: Date): Promise<MspoSummary | undefined> {
     try {
-        const response = await fetch(`${API_BASE_URL}/robots/mspo/summary`);
+        let url = `${API_BASE_URL}/robots/mspo/summary`;
+
+        const formattedDate = formatDate(date ?? new Date()) // Format date as YYYY-MM-DD
+            url += `?date=${formattedDate}`;
+        
+        const response = await fetch(url);
+        //const response = await fetch(`${API_BASE_URL}/robots/mspo/summary`);
         
         if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

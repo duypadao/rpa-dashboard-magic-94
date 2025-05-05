@@ -43,8 +43,8 @@ const MspoDetail = () => {
     data: mspoSummary, 
     isLoading: summaryLoading,
   } = useQuery({
-    queryKey: ['mspoSummary'],
-    queryFn: () => mspoApiService.getMspoSummary(),
+    queryKey: ['mspoSummary', filterDate],
+    queryFn: () => mspoApiService.getMspoSummary(filterDate),
   });
 
   // Fetch mspo overview data with date filter

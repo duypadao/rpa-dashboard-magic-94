@@ -44,8 +44,8 @@ const InvoiceDetail = () => {
     data: invoiceSummary,
     isLoading: summaryLoading
   } = useQuery({
-    queryKey: ['invoiceSummary'],
-    queryFn: () => invoiceApiService.getInvoiceSummary(),
+    queryKey: ['invoiceSummary', filterDate],
+    queryFn: () => invoiceApiService.getInvoiceSummary(filterDate),
   });
 
   // Fetch invoice history data

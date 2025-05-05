@@ -39,9 +39,13 @@ export const invoiceApiService = {
   },
   
   // Fetch invoice overview data
-  async getInvoiceSummary(): Promise<InvoiceSummary | undefined> {
+  async getInvoiceSummary(date?: Date): Promise<InvoiceSummary | undefined> {
     try {
-      const response = await fetch(`${API_BASE_URL}/robots/invoice/summary`);
+      let url = `${API_BASE_URL}/robots/invoice/summary`;
+      const formattedDate = formatDate(date ?? new Date()) // Format date as YYYY-MM-DD
+              url += `?date=${formattedDate}`;
+      const response = await fetch(url);
+      //const response = await fetch(`${API_BASE_URL}/robots/invoice/summary`);
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

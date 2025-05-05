@@ -1424,7 +1424,91 @@ export const translations: Translations = {
             cn: "MSPO 处理分析",
             vi: "Phân tích xử lý MSPO"
         },
-
+        totalOrdersProcessed: {
+            en: "orders have been processed",
+            cn: "已处理订单数",
+            vi: "đơn hàng đã được xử lý"
+          },
+          totalOrderChangesProcessed: {
+            en: "order changes have been processed",
+            cn: "订单变更已处理",
+            vi: "lần thay đổi đơn hàng đã được xử lý"
+          },
+          busiestDayWith: {
+            en: "was the busiest day with",
+            cn: "是最繁忙的一天，共有",
+            vi: "là ngày bận rộn nhất với"
+          },
+          totalActivities: {
+            en: "total activities",
+            cn: "项活动",
+            vi: "hoạt động"
+          },
+          averageOrderChanges: {
+            en: "On average,",
+            cn: "平均每天",
+            vi: "Trung bình mỗi ngày"
+          },
+          perDay: {
+            en: "order changes are processed per day",
+            cn: "处理订单变更",
+            vi: "lần thay đổi đơn hàng được xử lý"
+          },
+          mostRecentActivity: {
+            en: "Most recent activity was on",
+            cn: "最近的活动发生于",
+            vi: "Hoạt động gần nhất vào ngày"
+          },
+          at: {
+            en: "at",
+            cn: "时间",
+            vi: "lúc"
+          },
+          poNumber: {
+            en: "Purchase Order",
+            cn: "采购订单",
+            vi: "Đơn đặt hàng"
+          },
+          appears: {
+            en: "appears",
+            cn: "出现",
+            vi: "xuất hiện"
+          },
+          timesInData: {
+            en: "times in the data",
+            cn: "次于数据中",
+            vi: "lần trong dữ liệu"
+          },
+          totalDetailRecordsProcessed: {
+            en: "detail records have been processed",
+            cn: "已处理明细记录",
+            vi: "bản ghi chi tiết đã được xử lý"
+          },
+          purchaseOrders: {
+            en: "purchase orders",
+            cn: "采购订单",
+            vi: "đơn mua hàng"
+          },
+          salesOrders: {
+            en: "sales orders",
+            cn: "销售订单",
+            vi: "đơn bán hàng"
+          },
+          deliveryorders: {
+            en: "delivery orders",
+            cn: "发货单",
+            vi: "phiếu giao hàng"
+          },
+          and: {
+            en: "and",
+            cn: "和",
+            vi: "và"
+          },
+          haveBeenProcessed: {
+            en: "have been processed",
+            cn: "已被处理",
+            vi: "đã được xử lý"
+          }
     },
 
 
