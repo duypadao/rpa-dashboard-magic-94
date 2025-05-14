@@ -31,7 +31,7 @@ const RobotCommonInfo = ({ robot }: RobotCommonInfoProps) => {
       </Button>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{robot.name}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t(robot.name)}</h1>
           <p className="text-muted-foreground">{t(robot.description)}</p>
         </div>
         <Button variant="outline" className="gap-2" onClick={handleInform}>

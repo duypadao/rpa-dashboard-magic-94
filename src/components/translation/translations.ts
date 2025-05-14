@@ -12,6 +12,61 @@ export const translations: Translations = {
             cn: "网格视图",
             vi: "Chế độ xem lưới"
         },
+        "UtilityRobots": {
+            "en": "Utility Robots",
+            "cn": "实用机器人",
+            "vi": "Robot tiện ích",
+        },
+        invoiceRobot: {
+            en: "SAP Invoice Creator (22 sub robots)",
+            cn: "SAP发票创建器（22个子机器人）",
+            vi: "SAP Hóa Đơn Tạo Tạo (22 robot con)"
+        },
+        mspoRobot: {
+            en: "MS PO Downloader",
+            cn: "MS PO 下载器",
+            vi: "Trình Tải MS PO"
+        },
+        adidasPOQCRobot: {
+            en: "Adidas PO Scraper (QCSystem)",
+            cn: "Adidas PO 抓取器 (QC系统)",
+            vi: "Trình Quét PO Adidas (Hệ Thống QC)"
+        },
+        adidasPOZQRobot: {
+            en: "Adidas PO Scraper (ZhaoQing)",
+            cn: "Adidas PO 抓取器 (肇庆)",
+            vi: "Trình Quét PO Adidas (ZhaoQing)"
+        },
+        UqMCDRobot: {
+            en: "SAP to Uniqlo Sync (MCD)",
+            cn: "SAP 到 Uniqlo 同步 (MCD)",
+            vi: "Đồng bộ SAP với Uniqlo (MCD)"
+        },
+        UqProdRobot: {
+            en: "SAP to Uniqlo Sync (Production)",
+            cn: "SAP 到 Uniqlo 同步 (生产)",
+            vi: "Đồng bộ SAP với Uniqlo (Sản xuất)"
+        },
+        socialMediaScraperRobot: {
+            en: "Social Media Scraper",
+            cn: "社交媒体爬虫",
+            vi: "Công cụ quét mạng xã hội"
+        },
+        outlookBotRobot: {
+            en: "Outlook Bot",
+            cn: "Outlook 机器人",
+            vi: "Bot Outlook"
+        },
+        fileSystemWatcherRobot: {
+            en: "File System Watcher",
+            cn: "文件系统监视器",
+            vi: "Trình giám sát hệ thống file"
+        },
+
+
+
+
+
 
 
 

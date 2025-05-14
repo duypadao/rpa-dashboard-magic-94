@@ -10,9 +10,9 @@ import { RPARobotContextProvider } from "./rpaContext";
 import StatusCard from "@/components/StatusCard";
 import { formatSecond } from "@/common";
 const baseRobots = [
-  { "name": "Social Media Scraper", "workerId": "7667DDC7-2C1F-441F-91D6-DCC1F8026EA4".toLowerCase(), description: "socialMediaScraperDescription" },
-  { "name": "Outlook Bot", "workerId": "B9E73B70-1B46-4AC7-8217-B6CAC9F0088F".toLowerCase(), description: "outlookBotDescription" },
-  { "name": "File System Watcher", "workerId": "A6F7221D-E4E3-4585-BF8D-1FF64D5B5F23".toLowerCase(), description: "fileSystemWatcherDescription" }
+  { "name": "socialMediaScraperRobot", "workerId": "7667DDC7-2C1F-441F-91D6-DCC1F8026EA4".toLowerCase(), description: "socialMediaScraperDescription" },
+  { "name": "outlookBotRobot", "workerId": "B9E73B70-1B46-4AC7-8217-B6CAC9F0088F".toLowerCase(), description: "outlookBotDescription" },
+  { "name": "fileSystemWatcherRobot", "workerId": "A6F7221D-E4E3-4585-BF8D-1FF64D5B5F23".toLowerCase(), description: "fileSystemWatcherDescription" }
 ]
 
 export const UtilityRobots = ({ searchTerm, statusFilter, view }) => {

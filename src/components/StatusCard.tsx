@@ -97,7 +97,7 @@ const StatusCard = ({ robot, className, style, onClick, footer = null, showLastR
     >
       <CardHeader className="p-4 pb-0">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-base font-medium">{robot.name}</CardTitle>
+          <CardTitle className="text-base font-medium">{t(robot.name)}</CardTitle>
           <StatusBadge status={robot.status} />
         </div>
       </CardHeader>

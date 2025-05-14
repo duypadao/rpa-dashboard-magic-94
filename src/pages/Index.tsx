@@ -118,7 +118,7 @@ const RobotInsights = () => {
 
       insights.push({
         id: "longest-running",
-        title: `${longestRunningRobot.name} ${t('hasTheLongestRuntime')}`,
+        title: `${t(longestRunningRobot.name)} ${t('hasTheLongestRuntime')}`,
         description: `${t('optimizeRobotProcessFlow')}`,
         type: "optimization",
         severity: "medium",
