@@ -89,8 +89,8 @@ const RobotInsights = () => {
     if (runningRobots.length > 0) {
       insights.push({
         id: "success-rate",
-        title: `${runningRobots.length} robots running successfully`,
-        description: "Most robots are operating normally without issues",
+        title: `${runningRobots.length} ${t('robotsRunningSuccessfully')}`,
+        description: t('mostRobotsOperatingNormally'),
         type: "optimization",
         severity: "low"
       });
@@ -99,8 +99,8 @@ const RobotInsights = () => {
     if (failingRobots.length > 0) {
       insights.push({
         id: "failing-robots",
-        title: `${failingRobots.length} robots are experiencing errors`,
-        description: "Attention required for robots in error state",
+        title: `${failingRobots.length} ${t('robotsExperiencingErrors')}`,
+        description: t('attentionRequiredForErrorRobots'),
         type: "anomaly",
         severity: "high",
         robot: failingRobots[0]?.name
@@ -118,8 +118,8 @@ const RobotInsights = () => {
 
       insights.push({
         id: "longest-running",
-        title: `${longestRunningRobot.name} has the longest runtime`,
-        description: `Consider optimizing this robot's process flow for better efficiency`,
+        title: `${longestRunningRobot.name} ${t('hasTheLongestRuntime')}`,
+        description: `${t('optimizeRobotProcessFlow')}`,
         type: "optimization",
         severity: "medium",
         robot: longestRunningRobot.name
@@ -128,8 +128,8 @@ const RobotInsights = () => {
       // Predict workload based on current status
       insights.push({
         id: "workload-prediction",
-        title: "Predicted increased workload for Invoice Processing",
-        description: "Based on historical data, expect 15% more invoices next week",
+        title: t('predictedIncreasedWorkload'),
+        description: t('expectedMoreInvoices'),
         type: "prediction",
         severity: "medium"
       });
@@ -316,7 +316,7 @@ const Index = () => {
               ) : (
                 <LayoutGrid className="h-4 w-4 mr-2" />
               )}
-              {view === "grid" ? "List View" : "Grid View"}
+              {view === "grid" ? t('List View') : t('Grid View')}
             </Button>
           </div>
         </div>

@@ -2,6 +2,19 @@ import { Translations } from "../LanguageProvider";
 
 export const translations: Translations = {
     common: {
+        "List View": {
+            en: "List View",
+            cn: "列表视图",
+            vi: "Chế độ xem danh sách"
+        },
+        "Grid View": {
+            en: "Grid View",
+            cn: "网格视图",
+            vi: "Chế độ xem lưới"
+        },
+
+
+
         loginTitle: {
             en: "RPA Control Room",
             cn: "RPA控制室",
@@ -858,6 +871,31 @@ export const translations: Translations = {
             cn: "{{diffMins}}分钟前",
             vi: "{{diffMins}} phút trước"
         },
+        "yesterday": {
+            "en": "yesterday",
+            "cn": "昨天",
+            "vi": "hôm qua"
+        },
+        "{{diffDays}} {{day_plural}} ago": {
+            "en": "{{diffDays}} days ago ",
+            "cn": "{{diffDays}}天前 ",
+            "vi": "{{diffDays}} ngày trước "
+        },
+        "at": {
+            "en": "at",
+            "cn": "在",
+            "vi": "lúc"
+        },
+        "day": {
+            "en": "day",
+            "cn": "天",
+            "vi": "ngày"
+        },
+        "days": {
+            "en": "days",
+            "cn": "天",
+            "vi": "ngày"
+        },
         lastRunTime: {
             en: "Last Run Time",
             cn: "上次运行时间",
@@ -1103,14 +1141,107 @@ export const translations: Translations = {
             en: "Analyze Robot Tasks",
             cn: "分析机器人任务",
             vi: "Phân tích công việc của từng robot"
+        },
+        smartAnalysis: {
+            en: "Smart analysis from robot operations",
+            cn: "来自机器人操作的智能分析",
+            vi: "Phân tích thông minh từ hoạt động của robot"
+        },
+
+        hasTheLongestRuntime: {
+            en: "has the longest runtime",
+            cn: "具有最长的运行时间",
+            vi: "có thời gian xử lý lâu nhất"
+        },
+        robotsRunningSuccessfully: {
+            en: "robots running successfully",
+            cn: "机器人运行成功",
+            vi: "robot chạy thành công"
+        },
+        mostRobotsOperatingNormally: {
+            en: "Most robots are operating normally without issues",
+            cn: "大多数机器人运行正常，没有问题",
+            vi: "Hầu hết robot đang hoạt động bình thường, không gặp sự cố"
+        },
+        robotsExperiencingErrors: {
+            en: "robots are experiencing errors",
+            cn: "机器人出现错误",
+            vi: "robot đang gặp lỗi"
+        },
+        attentionRequiredForErrorRobots: {
+            en: "Attention required for robots in error state",
+            cn: "需要关注处于错误状态的机器人",
+            vi: "Cần chú ý đến các robot đang trong trạng thái lỗi"
+        },
+        optimizeRobotProcessFlow: {
+            en: "Consider optimizing this robot process flow for better efficiency",
+            cn: "请考虑优化该机器人的流程以提高效率",
+            vi: "Hãy cân nhắc tối ưu luồng xử lý của robot này để đạt hiệu quả tốt hơn"
+        },
+        predictedIncreasedWorkload: {
+            en: "Predicted increased workload for Invoice Processing",
+            cn: "预测发票处理工作量将增加",
+            vi: "Dự đoán khối lượng công việc xử lý hóa đơn sẽ tăng"
+        },
+        expectedMoreInvoices: {
+            en: "Based on historical data, expect 10% more invoices next week",
+            cn: "根据历史数据，预计下周发票数量将增加10%",
+            vi: "Dựa trên dữ liệu lịch sử, dự kiến tuần tới số lượng hóa đơn sẽ tăng 10%"
+        },
+        //robots info description
+        sapInvoiceCreator: {
+            en: "Processes invoice PDFs and create SAP invoice on T-code MIR7 (for GPD department).",
+            cn: "处理发票PDF并在T-code MIR7上创建SAP发票（适用于GPD部门）。",
+            vi: "Xử lý PDF hóa đơn và tạo hóa đơn SAP trên T-code MIR7 (cho bộ phận GPD)."
+        },
+        mspoDownloader: {
+            en: "Download PO from the Mark & Spencer customer website (for SDD department).",
+            cn: "从马莎百货客户网站下载采购订单（适用于SDD部门）。",
+            vi: "Tải đơn đặt hàng từ trang web khách hàng Mark & Spencer (dành cho bộ phận SDD)."
+        },
+        adidasPoScraperQC: {
+            en: "Fetches Adidas PO information on Info Nexus website, processes it, and prepares structured data (for QC system).",
+            cn: "在 Info Nexus 网站上获取 Adidas 的采购订单信息，处理后生成结构化数据（用于 QC 系统）。",
+            vi: "Lấy thông tin đơn đặt hàng Adidas trên trang Info Nexus, xử lý và chuẩn bị dữ liệu có cấu trúc (cho hệ thống QC)."
+        },
+        adidasPoScraperZQ: {
+            en: "Fetches Adidas PO information on Info Nexus website, based off (for ZQ site).",
+            cn: "基于 Info Nexus 网站获取 Adidas 的采购订单信息（用于 ZQ 网站）。",
+            vi: "Lấy thông tin đơn đặt hàng Adidas trên trang Info Nexus, dựa trên (cho trang ZQ)."
+        },
+        sapToUniqloSyncMCD: {
+            en: "Extracts data from SAP, formats it, and uploads structured information to Uniqlo's server.",
+            cn: "从 SAP 提取数据，进行格式化，并将结构化信息上传到优衣库服务器。",
+            vi: "Trích xuất dữ liệu từ SAP, định dạng lại và tải thông tin đã được cấu trúc lên máy chủ của Uniqlo."
+        },
+        sapToUniqloSyncProduction: {
+            en: "Collect data from share folder, formats it, and uploads structured information to Uniqlo's server.",
+            cn: "从共享文件夹收集数据，进行格式化，并将结构化信息上传到优衣库服务器。",
+            vi: "Thu thập dữ liệu từ thư mục chia sẻ, định dạng lại và tải thông tin đã được cấu trúc lên máy chủ của Uniqlo."
+        },
+        socialMediaScraperDescription: {
+            en: "Scan and trace company product sales information by keyword on social media platforms, consolidate the data, and generate reports (for SDO department).",
+            cn: "根据关键字在社交媒体平台上扫描并追踪公司产品销售信息，汇总数据并生成报告（用于SDO部门）。",
+            vi: "Quét, truy vết thông tin bán sản phẩm công ty theo từ khoá trên các trang mạng xã hội, tổng hợp thông tin và tạo báo cáo (bộ phận SDO)."
+        },
+        outlookBotDescription: {
+            en: "Automatically checks new emails, filters by subject or keyword, and extracts information from the email content or attachments.",
+            cn: "自动检查新邮件，根据主题或关键词进行筛选，并提取邮件内容或附件中的信息。",
+            vi: "Tự động kiểm tra email mới, lọc theo chủ đề (subject) hoặc keyword, trích xuất thông tin nội dung email hoặc file đính kèm."
+        },
+        fileSystemWatcherDescription: {
+            en: "Automatically scans, monitors, and identifies files in the shared drive, extracts data, and performs specialized tasks such as generating reports, sending notifications, or pushing data into systems.",
+            cn: "自动扫描、监控并识别共享驱动器中的文件，提取数据，并执行如生成报告、发送通知或将数据推送到系统中的专门任务。",
+            vi: "Tự động quét, kiểm tra, xác định các file trong ổ chung, trích xuất dữ liệu, thực hiện các tác vụ chuyên biệt như tạo báo cáo, gửi thông báo hay đẩy dữ liệu vào hệ thống."
         }
+
     },
     invoice: {
         supplier: {
             en: "Supplier",
             cn: "供应商",
             vi: "Nhà cung cấp"
-        },        
+        },
         invoiceOverView: {
             en: "Invoice Overview",
             cn: "发票概览",
@@ -1215,7 +1346,7 @@ export const translations: Translations = {
             en: "per invoice",
             cn: "每张发票",
             vi: "mỗi hóa đơn"
-        },        
+        },
         leadsWith: {
             en: "leads with",
             cn: "领先，达到",
@@ -1380,7 +1511,7 @@ export const translations: Translations = {
             en: "no supplier achieved 100% success with at least 10 invoices",
             cn: "没有供应商在至少10张发票上实现100%的成功率",
             vi: "không có nhà cung cấp nào đạt được tỉ lệ thành công 100% với ít nhất 10 hoá đơn"
-        }        
+        }
     },
 
     mspo: {
@@ -1428,87 +1559,87 @@ export const translations: Translations = {
             en: "orders have been processed",
             cn: "已处理订单数",
             vi: "đơn hàng đã được xử lý"
-          },
-          totalOrderChangesProcessed: {
+        },
+        totalOrderChangesProcessed: {
             en: "order changes have been processed",
             cn: "订单变更已处理",
             vi: "lần thay đổi đơn hàng đã được xử lý"
-          },
-          busiestDayWith: {
+        },
+        busiestDayWith: {
             en: "was the busiest day with",
             cn: "是最繁忙的一天，共有",
             vi: "là ngày bận rộn nhất với"
-          },
-          totalActivities: {
+        },
+        totalActivities: {
             en: "total activities",
             cn: "项活动",
             vi: "hoạt động"
-          },
-          averageOrderChanges: {
+        },
+        averageOrderChanges: {
             en: "On average,",
             cn: "平均每天",
             vi: "Trung bình mỗi ngày"
-          },
-          perDay: {
+        },
+        perDay: {
             en: "order changes are processed per day",
             cn: "处理订单变更",
             vi: "lần thay đổi đơn hàng được xử lý"
-          },
-          mostRecentActivity: {
+        },
+        mostRecentActivity: {
             en: "Most recent activity was on",
             cn: "最近的活动发生于",
             vi: "Hoạt động gần nhất vào ngày"
-          },
-          at: {
+        },
+        at: {
             en: "at",
             cn: "时间",
             vi: "lúc"
-          },
-          poNumber: {
+        },
+        poNumber: {
             en: "Purchase Order",
             cn: "采购订单",
             vi: "Đơn đặt hàng"
-          },
-          appears: {
+        },
+        appears: {
             en: "appears",
             cn: "出现",
             vi: "xuất hiện"
-          },
-          timesInData: {
+        },
+        timesInData: {
             en: "times in the data",
             cn: "次于数据中",
             vi: "lần trong dữ liệu"
-          },
-          totalDetailRecordsProcessed: {
+        },
+        totalDetailRecordsProcessed: {
             en: "detail records have been processed",
             cn: "已处理明细记录",
             vi: "bản ghi chi tiết đã được xử lý"
-          },
-          purchaseOrders: {
+        },
+        purchaseOrders: {
             en: "purchase orders",
             cn: "采购订单",
             vi: "đơn mua hàng"
-          },
-          salesOrders: {
+        },
+        salesOrders: {
             en: "sales orders",
             cn: "销售订单",
             vi: "đơn bán hàng"
-          },
-          deliveryorders: {
+        },
+        deliveryorders: {
             en: "delivery orders",
             cn: "发货单",
             vi: "phiếu giao hàng"
-          },
-          and: {
+        },
+        and: {
             en: "and",
             cn: "和",
             vi: "và"
-          },
-          haveBeenProcessed: {
+        },
+        haveBeenProcessed: {
             en: "have been processed",
             cn: "已被处理",
             vi: "đã được xử lý"
-          }
+        }
     },
 
 

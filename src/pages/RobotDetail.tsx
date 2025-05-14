@@ -43,13 +43,13 @@ const RobotDetail = () => {
   }, [robot]);
 
   // Fetch insights with React Query
-  const { 
-    data: insights = [], 
-    isLoading: insightsLoading 
-  } = useQuery({
-    queryKey: ['insights'],
-    queryFn: apiService.getInsights,
-  });
+  // const { 
+  //   data: insights = [], 
+  //   isLoading: insightsLoading 
+  // } = useQuery({
+  //   queryKey: ['insights'],
+  //   queryFn: apiService.getInsights,
+  // });
 
   // Check if current robot is the Invoice Processing Robot
   const isInvoiceRobot = useMemo(() => {
@@ -141,11 +141,11 @@ const RobotDetail = () => {
             </CardContent>
           </Card>
         </TabsContent>
-        {isInvoiceRobot && (
+        {/* {isInvoiceRobot && (
           <TabsContent value="insights" className="animate-fade-in">
             <AiInsights insights={insights} isLoading={insightsLoading} />
           </TabsContent>
-        )}
+        )} */}
       </Tabs>
     </>
   );

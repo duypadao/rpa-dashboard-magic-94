@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { BrainCircuit, AlertTriangle, LineChart, Lightbulb } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export interface Insight {
   id: string;
@@ -24,6 +25,7 @@ interface AiInsightsProps {
 }
 
 const AiInsights = ({ insights, isLoading = false }: AiInsightsProps) => {
+  const { t } = useLanguage();
   const getInsightIcon = (type: string) => {
     switch (type) {
       case "anomaly":
@@ -56,10 +58,10 @@ const AiInsights = ({ insights, isLoading = false }: AiInsightsProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <BrainCircuit className="h-5 w-5 mr-2 text-primary" />
-            <CardTitle>AI Insights</CardTitle>
+            <CardTitle>{t('aiInsights')}</CardTitle>
           </div>
         </div>
-        <CardDescription>Smart analysis from robot operations</CardDescription>
+        <CardDescription>{t('smartAnalysis')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
         {isLoading ? (

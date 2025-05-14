@@ -86,14 +86,14 @@ export function humanizeDateTime(date: Date, t: (key: string, unicorn?: object) 
 
             // Yesterday
             if (diffDays === 1) {
-                const timeStr = includeTime ? ` at ${formatTime(dateObj)}` : '';
-                return `yesterday${timeStr}`;
+                const timeStr = includeTime ? t('at') + ' ' + formatTime(dateObj) : '';
+                return t('yesterday') + timeStr;
             }
 
             // Within the last week
             if (diffDays < 7) {
-                const timeStr = includeTime ? ` at ${formatTime(dateObj)}` : '';
-                return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago${timeStr}`;
+                const timeStr = includeTime ? t('at') + ' ' + formatTime(dateObj) : '';
+                return t('{{diffDays}} {{day_plural}} ago', { diffDays, day_plural: diffDays === 1 ? t('day') : t('days') }) + timeStr;
             }
         }
 
@@ -140,14 +140,14 @@ export function humanizeDateTime(date: Date, t: (key: string, unicorn?: object) 
 
         // Yesterday
         if (diffDays === 1) {
-            const timeStr = includeTime ? ` at ${formatTime(dateObj)}` : '';
-            return `yesterday${timeStr}`;
+            const timeStr = includeTime ? t('at') + ' ' + formatTime(dateObj) : '';
+            return t('yesterday') + timeStr;
         }
 
         // Within the last week
         if (diffDays < 7) {
-            const timeStr = includeTime ? ` at ${formatTime(dateObj)}` : '';
-            return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago${timeStr}`;
+            const timeStr = includeTime ? t('at') + ' ' + formatTime(dateObj) : '';
+            return t('{{diffDays}} {{day_plural}} ago', { diffDays, day_plural: diffDays === 1 ? t('day') : t('days') }) + timeStr;
         }
     }
 
@@ -155,7 +155,7 @@ export function humanizeDateTime(date: Date, t: (key: string, unicorn?: object) 
     const formattedDate = formatDate(dateObj);
 
     if (includeTime) {
-        return `${formattedDate} at ${formatTime(dateObj)}`;
+        return `${formattedDate} ${t('at')} ${formatTime(dateObj)}`;
     }
 
     return formattedDate;
